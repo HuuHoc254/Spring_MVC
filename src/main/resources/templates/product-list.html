@@ -47,41 +47,43 @@
         </div>
     </form>
 
-    <table class="table table-hover mt-3">
+	<table class="table table-hover mt-3">
         <thead>
         <tr>
             <th scope="col" class="text-center">Số thứ tự</th>
             <th scope="col">Mã sản phẩm</th>
             <th scope="col">Tên sản phẩm</th>
+            <th th:if = "${isAdmin}" scope="col">Giá mua</th>
             <th scope="col">Giá bán</th>
-            <th scope="col">Giá mua</th>
             <th scope="col" class="text-center">Số lượng tồn kho</th>
-            <th scope="col" >Hành động</th>
+            <th th:if = "${isAdmin}" scope="col" >Hành động</th>
         </tr>
         </thead>
         <tbody>
-    <tr th:each="prod, index : ${products}">
-        <th scope="row" class="text-center" th:text="${index.index + 1}"></th>
-        <td th:text="${prod.productCode}"></td>
-        <td th:text="${prod.productName}"></td>
-		<td th:text="${prod.salePrice}"></td>
-		<td th:text="${prod.purchasePrice}"></td>
-        <td class="text-center" th:text="${prod.inventoryQuantity}"></td>
-        <td><button class="btn btn-primary">Chỉnh sửa</button>
-        <button class="btn btn-primary" onclick="">Xóa</button>
-        </td>
-    </tr>
-</tbody>
+		    <tr th:if = "${products.size() != 0}" th:each="prod, index : ${products}">
+		        <th scope="row" class="text-center" th:text=" ${index.index + 1 + (currentPage - 1) *3}"></th>
+		        <td th:text="${prod.productCode}"></td>
+		        <td th:text="${prod.productName}"></td>
+				<td th:if = "${isAdmin}" th:text="${#numbers.formatDecimal(prod.purchasePrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+				<td th:text="${#numbers.formatDecimal(prod.salePrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+		        <td class="text-center" th:text="${prod.inventoryQuantity}"></td>
+		        <td th:if = "${isAdmin}"><button class="btn btn-primary">Chỉnh sửa</button>
+		        <button class="btn btn-primary" onclick="">Xóa</button>
+		        </td>
+		    </tr>
+		    <tr th:if= "${products.size() == 0}" >
+		    	<td colspan = "7" class="text-center"> Không tìm thấy sản phẩm!</td>
+		    </tr>
+		</tbody>
     </table>
-    <nav aria-label="Page navigation example " class="d-flex justify-content-center">
+    
+    <nav th:if = "${products.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
         <ul class="pagination">
             <li th:each="i : ${pageNumbers}" class="page-item">
                 <a class="page-link" href="#" th:text="${i}" th:onclick="'javascript:submitForm(' + ${i} + ')'"></a>
             </li>
         </ul>
     </nav>
-
-
 </div>
 
 <script th:inline="javascript">

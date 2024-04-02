@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.ProductEntity;
 import com.example.demo.model.request.SearchRequest;
-import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.ProductMapper;
 import com.example.demo.service.IProductService;
 import java.util.List;
 import java.util.Map;
@@ -11,15 +11,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService implements IProductService {
+	
 	@Autowired
-	private ProductRepository productRepository;
+	private ProductMapper productMapper;
 
 	@Override
 	public List<ProductEntity> searchProduct(SearchRequest searchRequest) {
-		List<Map<String, Object>> map = productRepository.search(
+		List<Map<String, Object>> map = productMapper.search(
 													  searchRequest.getProductCode()
 													, searchRequest.getProductName()
-													, searchRequest.getPageNumber());
+													, (searchRequest.getPageNumber() - 1) * 3);
 		return map.stream().map(m ->{
 			return convertMapToProduct(m);
 		}).toList();
@@ -28,7 +29,7 @@ public class ProductService implements IProductService {
 	@Override
 	public int countSearch(SearchRequest request) {
 		// TODO Auto-generated method stub
-		return productRepository.countSearch(request.getProductCode(), request.getProductName());
+		return productMapper.countSearch(request.getProductCode(), request.getProductName());
 	}
 
 	private ProductEntity convertMapToProduct(Map<String,Object> map){

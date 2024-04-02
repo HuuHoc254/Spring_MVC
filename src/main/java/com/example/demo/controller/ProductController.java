@@ -24,21 +24,28 @@ public class ProductController {
     
     @GetMapping
     private String showProducts(Model model){
-	    List<Integer> pageNumbers = new ArrayList<>();
-	    for (int i = 1; i <= 3; i++) {
-	        pageNumbers.add(i);
-	    }
-	    List<ProductEntity> products = productService.searchProduct(new SearchRequest(null,null,1)); 
+    	SearchRequest searchRequest = new SearchRequest(null,null,1);
+    	int totalRecord = productService.countSearch(searchRequest);
+        List<Integer> pageNumbers = new ArrayList<>();
+        int totalPage = totalRecord / 3;
+        if(totalRecord % 3 != 0) totalPage++;
+        for (int i = 1; i <= totalPage; i++) {
+            pageNumbers.add(i);
+        }
+	    List<ProductEntity> products = productService.searchProduct(searchRequest); 
 	    model.addAttribute("products", products);
+	    model.addAttribute("isAdmin", false);
+	    model.addAttribute("currentPage", 1);
 	    model.addAttribute("pageNumbers",pageNumbers);
-	    model.addAttribute("searchRequest", new SearchRequest());
+	    model.addAttribute("searchRequest", searchRequest);
+	    
 	    return "product-list";
     }
     
     @PostMapping
     private String searchProduct(Model model, @ModelAttribute SearchRequest searchRequest,  @RequestParam(defaultValue = "1") int page){
+    	String message = null;
     	searchRequest.setPageNumber(page);
-        List<ProductEntity> products = productService.searchProduct(searchRequest);
         int totalRecord = productService.countSearch(searchRequest);
         List<Integer> pageNumbers = new ArrayList<>();
         int totalPage = totalRecord / 3;
@@ -46,10 +53,18 @@ public class ProductController {
         for (int i = 1; i <= totalPage; i++) {
             pageNumbers.add(i);
         }
+        List<ProductEntity> products = productService.searchProduct(searchRequest);
+        model.addAttribute("isAdmin", false);
         model.addAttribute("searchRequest", searchRequest);
+        model.addAttribute("currentPage", page);
         model.addAttribute("products", products);
         model.addAttribute("searchRequest",searchRequest);
         model.addAttribute("pageNumbers",pageNumbers);
         return "product-list";
+    }
+    
+    @GetMapping("/insert")
+    private String showFormInsert(Model model){
+	    return "product-add";
     }
 }
