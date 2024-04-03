@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Product Insert</title>
+    <title>Product Update</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,28 +10,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div class="container mt-3">
-	
-	<div class="row" th:if = "${message !=null }">
-		<div class="col-3"></div>
-		<div class="col-5 mb-3 text-danger" th:text= "${message}"></div>
-	</div>
-    <form th:action="@{/product/insert}" th:method="post" th:object="${insertProductRequest}">
-    	
+<div class="container mt-3 ">
+    <form th:action="@{/product/update}" th:method="post" th:object="${updateProductRequest}">
+    	<input type="hidden" name = "productId" th:value = "${product.productId}">
+    	<input type="hidden" name = "version" th:value = "${product.version}">
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
                 <label class="">Mã sản phẩm</label>
             </div>
-
-            <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="productCode" placeholder="Nhập mã sản phẩm" th:value="${insertProductRequest.productCode}" 
-                	th:classappend="${mapErrors.get('productCode') != null ? 'is-invalid' : ''}">
+            <div class="col-6">
+                <input class="form-control border-dark shadow-none" type="text" name="productCode" th:value = "${product.productCode}">
             </div>
-
-            <div th:if="${mapErrors.get('productCode') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('productCode')}"></div>
-    		</div>
         </div>
 
         <div class="row input-group mb-3">
@@ -39,41 +29,27 @@
             <div class="col-2 mt-1">
                 <label class="">Tên sản phẩm</label>
             </div>
-            
-            <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="productName" placeholder="Nhập tên sản phẩm"  th:value="${insertProductRequest.productName}"
-                	th:classappend="${mapErrors.get('productName') != null ? 'is-invalid' : ''}">
+            <div class="col-6">
+                <input class="form-control border-dark shadow-none" type="text" name="productName"  th:value = "${product.productName}">
             </div>
-            
-            <div th:if="${mapErrors.get('productCode') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('productName')}"></div>
-    		</div>
         </div>
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
                 <label class="">Giá mua vào</label>
             </div>
-            <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="number" name="purchasePrice" placeholder="Nhập giá mua vào"  th:value="${insertProductRequest.purchasePrice}"
-                	th:classappend="${mapErrors.get('purchasePrice') != null ? 'is-invalid' : ''}">
+            <div class="col-6">
+                <input class="form-control border-dark shadow-none" type="text" name="purchasePrice"  th:value = "${product.purchasePrice}">
             </div>
-            <div th:if="${mapErrors.get('purchasePrice') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('purchasePrice')}"></div>
-    		</div>
         </div>
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
                 <label class="">Giá bán ra</label>
             </div>
-            <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="number" name="salePrice" placeholder="Nhập giá bán ra" th:value="${insertProductRequest.salePrice}"
-                	th:classappend="${mapErrors.get('salePrice') != null ? 'is-invalid' : ''}">
+            <div class="col-6">
+                <input class="form-control border-dark shadow-none" type="text" name="salePrice"  th:value = "${product.salePrice}">
             </div>
-            <div th:if="${mapErrors.get('salePrice') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('salePrice')}"></div>
-    		</div>
         </div>
         
         <div class="row input-group">
@@ -81,8 +57,8 @@
             <div class="col-2 mt-1">
                 <label class="">Số lượng tồn kho</label>
             </div>
-            <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="number" min="0" name="inventoryQuantity" placeholder="Nhập số lượng" th:value="${insertProductRequest.inventoryQuantity}">
+            <div class="col-6">
+                <input class="form-control border-dark shadow-none" disabled="disabled" type="number" th:value = "${product.inventoryQuantity}">
             </div>
         </div>
 

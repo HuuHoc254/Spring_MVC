@@ -18,7 +18,7 @@
                 <label class="">Mã sản phẩm</label>
             </div>
             <div class="col-6">
-                <input class="form-control border-dark shadow-none" type="text" name="productCode" placeholder="Nhập mã sản phẩm" th:value="${searchRequest.productCode}">
+                <input class="form-control border-dark shadow-none" type="text" id="productCode" name="productCode" placeholder="Nhập mã sản phẩm">
             </div>
         </div>
 
@@ -28,7 +28,7 @@
                 <label class="">Tên sản phẩm</label>
             </div>
             <div class="col-6">
-                <input class="form-control border-dark shadow-none" type="text" name="productName" placeholder="Nhập tên sản phẩm" th:value="${searchRequest.productName}">
+                <input class="form-control border-dark shadow-none" type="text" id="productName" name="productName" placeholder="Nhập tên sản phẩm">
             </div>
         </div>
 
@@ -37,7 +37,7 @@
             <div class="col-3">
                 <div class="row">
                     <div class="col-6">
-                        <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
+                        <button type="submit" class="btn btn-primary" th:onclick="'search('+${currentPage} +')'"> Tìm kiếm</button>
                     </div>
                     <div class="col-6">
                         <button type="reset" class="btn btn-primary"> Clear</button>
@@ -67,8 +67,13 @@
 				<td th:if = "${isAdmin}" th:text="${#numbers.formatDecimal(prod.purchasePrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
 				<td th:text="${#numbers.formatDecimal(prod.salePrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
 		        <td class="text-center" th:text="${prod.inventoryQuantity}"></td>
-		        <td th:if = "${isAdmin}"><button class="btn btn-primary">Chỉnh sửa</button>
-		        <button class="btn btn-primary" onclick="">Xóa</button>
+		        <td th:if = "${isAdmin}">
+		        	<a th:href="@{'/product/update/' + ${prod.productId}}" class="text-decoration-none text-light">
+		        		<button class="btn btn-primary">Chỉnh sửa</button>
+	        		</a>
+			        <a th:href="@{'/product/delete/' + ${prod.productId}}" class="text-decoration-none text-light" >
+			        	<button class="btn btn-primary delete-btn" onclick="return confirm('Bạn có muốn xóa sản phẩm này không?')">Xóa</button>
+		        	</a>
 		        </td>
 		    </tr>
 		    <tr th:if= "${products.size() == 0}" >
@@ -83,7 +88,7 @@
                 <a class="page-link" href="#" th:text="${i}" th:onclick="'javascript:submitForm(' + ${i} + ')'"></a>
             </li>
         </ul>
-    </nav>
+    </nav>.
 </div>
 
 <script th:inline="javascript">
@@ -93,7 +98,27 @@
         form.submit();
     }
 </script>
-
+<script >
+	function search(pageNumber){
+	var searchRequest = {
+		        productCode: document.getElementById("productCode").value,
+		        productName: document.getElementById("productName").value,
+		        page: pageNumber
+		    };
+		    localStorage.setItem('searchRequest', JSON.stringify(searchRequest));
+	}
+	document.addEventListener('DOMContentLoaded', function () {
+	    var searchRequest = localStorage.getItem('searchRequest');
+	    if (searchRequest) {
+	        searchRequest = JSON.parse(searchRequest);
+	        document.getElementById("productCode").value = searchRequest.productCode;
+	        document.getElementById("productName").value = searchRequest.productName;
+	        var form = document.getElementById("searchForm");
+	        form.action = '/product?page=' + searchRequest.page;
+	        form.submit();
+	    }
+	});
+</script>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

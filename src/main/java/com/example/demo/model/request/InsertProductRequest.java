@@ -5,16 +5,18 @@ public class InsertProductRequest {
     private String  productName;
     private Double purchasePrice;
     private Double salePrice;
+    private Integer inventoryQuantity;
     
     
 	public InsertProductRequest() {
 	}
 	
-	public InsertProductRequest(String productCode, String productName, Double purchasePrice, Double salePrice) {
+	public InsertProductRequest(String productCode, String productName, Double purchasePrice, Double salePrice, Integer inventoryQuantity) {
 		this.productCode = productCode;
 		this.productName = productName;
 		this.purchasePrice = purchasePrice;
 		this.salePrice = salePrice;
+		this.inventoryQuantity = inventoryQuantity;
 	}
 	
 	public String getProductCode() {
@@ -44,6 +46,14 @@ public class InsertProductRequest {
 
 	public void setSalePrice(Double salePrice) {
 		this.salePrice = salePrice;
+	}
+	
+	public Integer getInventoryQuantity() {
+		return inventoryQuantity;
+	}
+
+	public void setInventoryQuantity(Integer inventoryQuantity) {
+		this.inventoryQuantity = inventoryQuantity;
 	}
 	
     
