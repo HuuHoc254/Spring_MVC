@@ -19,7 +19,7 @@
 	        </if>
 	    </where>
 	</select>
-	
+
 	<select id="search" resultType="java.util.Map">
 	    SELECT 
 	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity
@@ -37,6 +37,7 @@
 	    LIMIT 3
 	    OFFSET #{offset}
 	</select>
+
 	<select id="getProductById" resultType="java.util.Map">
 	    SELECT 
 	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity, version
@@ -47,6 +48,7 @@
 	    	AND product_id = #{productId} 
 	    </where>
 	</select>
+
 	<select id="existsByProductCode" resultType="int">
 	    SELECT 
 	    	COUNT(*)
@@ -56,6 +58,7 @@
 	    	product_code = #{productCode} 
 	    </where>
 	</select>
+
 	<select id="existsByProductName" resultType="int">
 	    SELECT 
 	    	COUNT(*)
@@ -65,11 +68,49 @@
 	    	product_name = #{productName}
 	    </where>
 	</select>
+
 	<insert id="insertProduct">
 		INSERT INTO 
 				products( product_code, product_name, purchase_price, sale_price, inventory_quantity)
 		VALUES
 				(#{productCode},#{productName},#{purchasePrice},#{salePrice},#{inventoryQuantity})
 	</insert>
+
+	<select id="existsByProductCodeNotId" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	products
+	    <where>
+	    		product_code = #{productCode}
+	    	AND product_id != #{productId}
+	    </where>
+	</select>
+	
+	<select id="existsByProductNameNotId" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	products
+	    <where>
+	    		product_name = #{productName}
+	    	AND product_id != #{productId}
+	    </where>
+	</select>
+
+	<update id="updateProduct">
+		UPDATE
+			products
+		SET
+				product_code 	= #{productCode}
+			, 	product_name 	= #{productName}
+			, 	purchase_price 	= #{purchasePrice}
+			, 	sale_price 		= #{salePrice}
+			, 	version 		= #{version} + 1
+		<where>
+				product_id 		= #{productId}
+			AND	version 		= #{version}
+		</where>
+	</update>
 	
   </mapper>

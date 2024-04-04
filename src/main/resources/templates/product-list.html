@@ -11,14 +11,14 @@
 </head>
 <body>
 <div class="container mt-3">
-    <form id="searchForm" th:action="@{/product}" th:method="post" th:object="${searchRequest}">
+    <form id="searchForm" th:action="@{/product}" th:method="GET">
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
                 <label class="">Mã sản phẩm</label>
             </div>
             <div class="col-6">
-                <input class="form-control border-dark shadow-none" type="text" id="productCode" name="productCode" placeholder="Nhập mã sản phẩm">
+                <input class="form-control border-dark shadow-none" type="text" id="productCode" name="productCode" placeholder="Nhập mã sản phẩm" th:value = "${productCode}">
             </div>
         </div>
 
@@ -28,7 +28,7 @@
                 <label class="">Tên sản phẩm</label>
             </div>
             <div class="col-6">
-                <input class="form-control border-dark shadow-none" type="text" id="productName" name="productName" placeholder="Nhập tên sản phẩm">
+                <input class="form-control border-dark shadow-none" type="text" id="productName" name="productName" placeholder="Nhập tên sản phẩm" th:value = "${productName}">
             </div>
         </div>
 
@@ -37,16 +37,20 @@
             <div class="col-3">
                 <div class="row">
                     <div class="col-6">
-                        <button type="submit" class="btn btn-primary" th:onclick="'search('+${currentPage} +')'"> Tìm kiếm</button>
+                        <button type="submit" class="btn btn-primary" onclick="saveSearchValues()"> Tìm kiếm</button>
                     </div>
                     <div class="col-6">
-                        <button type="reset" class="btn btn-primary"> Clear</button>
+                        <button type="reset" class="btn btn-primary" onclick="clearLocalStorage()"> Clear</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-
+	<div class= "row">
+		<a href="/product/insert" class="text-decoration-none text-light">
+		<button class="btn btn-primary " type="button"> Thêm mới</button>
+		</a>
+	</div>
 	<table class="table table-hover mt-3">
         <thead>
         <tr>
@@ -85,40 +89,48 @@
     <nav th:if = "${products.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
         <ul class="pagination">
             <li th:each="i : ${pageNumbers}" class="page-item">
-                <a class="page-link" href="#" th:text="${i}" th:onclick="'javascript:submitForm(' + ${i} + ')'"></a>
+                <a class="page-link" th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}" th:text="${i}"></a>
             </li>
         </ul>
-    </nav>.
+    </nav>
 </div>
 
-<script th:inline="javascript">
-    function submitForm(pageNumber) {
-        var form = document.getElementById("searchForm");
-        form.action = '/product?page=' + pageNumber;
-        form.submit();
+<script>
+    // Hàm lấy giá trị của currentPage từ URL
+    function getCurrentPageFromURL() {
+        // Lấy query params từ URL
+        var urlParams = new URLSearchParams(window.location.search);
+        
+        // Lấy giá trị của tham số "page" từ query params
+        var currentPage = urlParams.get('page');
+        
+        // Trả về giá trị của currentPage hoặc mặc định là 1 nếu không có
+        return currentPage ? parseInt(currentPage) : 1;
+    }
+
+    // Function lưu giá trị vào localStorage
+    function saveSearchValues() {
+        var currentPage = getCurrentPageFromURL(); // Lấy giá trị của currentPage từ URL
+        var productCode = document.getElementById('productCode').value; // Lấy giá trị của productCode
+        var productName = document.getElementById('productName').value; // Lấy giá trị của productName
+
+        // Lưu giá trị vào localStorage
+        localStorage.setItem('currentPage', currentPage);
+        localStorage.setItem('productCode', productCode);
+        localStorage.setItem('productName', productName);
+    }
+ // Khi trang được load, lấy giá trị của currentPage từ URL và lưu vào localStorage
+    window.onload = function() {
+        var currentPage = getCurrentPageFromURL();
+        localStorage.setItem('currentPage', currentPage);
+    };
+ // Function xóa hết dữ liệu trong localStorage
+    function clearLocalStorage() {
+        localStorage.clear(); // Xóa hết dữ liệu trong localStorage
+        window.location.href = '/product';
     }
 </script>
-<script >
-	function search(pageNumber){
-	var searchRequest = {
-		        productCode: document.getElementById("productCode").value,
-		        productName: document.getElementById("productName").value,
-		        page: pageNumber
-		    };
-		    localStorage.setItem('searchRequest', JSON.stringify(searchRequest));
-	}
-	document.addEventListener('DOMContentLoaded', function () {
-	    var searchRequest = localStorage.getItem('searchRequest');
-	    if (searchRequest) {
-	        searchRequest = JSON.parse(searchRequest);
-	        document.getElementById("productCode").value = searchRequest.productCode;
-	        document.getElementById("productName").value = searchRequest.productName;
-	        var form = document.getElementById("searchForm");
-	        form.action = '/product?page=' + searchRequest.page;
-	        form.submit();
-	    }
-	});
-</script>
+
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

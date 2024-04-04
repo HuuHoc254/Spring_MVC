@@ -11,17 +11,23 @@
 </head>
 <body>
 <div class="container mt-3 ">
-    <form th:action="@{/product/update}" th:method="post" th:object="${updateProductRequest}">
-    	<input type="hidden" name = "productId" th:value = "${product.productId}">
-    	<input type="hidden" name = "version" th:value = "${product.version}">
+    <form th:action="@{/product/update}+'/'+${updateProductRequest.productId}" th:method="post" th:object="${updateProductRequest}">
+    	<input type="hidden" name = "productId" th:value = "${updateProductRequest.productId}">
+    	<input type="hidden" name = "version" th:value = "${updateProductRequest.version}">
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
                 <label class="">Mã sản phẩm</label>
             </div>
-            <div class="col-6">
-                <input class="form-control border-dark shadow-none" type="text" name="productCode" th:value = "${product.productCode}">
+            <div class="col-5">
+                <input class="form-control border-dark shadow-none" type="text" name="productCode" th:value = "${updateProductRequest.productCode}"
+                	th:classappend="${mapErrors.get('productCode') != null ? 'is-invalid' : ''}">
             </div>
+            
+            <div th:if="${mapErrors.get('productCode') != null}" class="col-4">
+    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('productCode')}"></div>
+    		</div>
+    		
         </div>
 
         <div class="row input-group mb-3">
@@ -29,27 +35,40 @@
             <div class="col-2 mt-1">
                 <label class="">Tên sản phẩm</label>
             </div>
-            <div class="col-6">
-                <input class="form-control border-dark shadow-none" type="text" name="productName"  th:value = "${product.productName}">
+            <div class="col-5">
+                <input class="form-control border-dark shadow-none" type="text" name="productName"  th:value = "${updateProductRequest.productName}"
+                	th:classappend="${mapErrors.get('productName') != null ? 'is-invalid' : ''}">
             </div>
+            
+            <div th:if="${mapErrors.get('productName') != null}" class="col-4">
+    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('productName')}"></div>
+    		</div>
         </div>
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
                 <label class="">Giá mua vào</label>
             </div>
-            <div class="col-6">
-                <input class="form-control border-dark shadow-none" type="text" name="purchasePrice"  th:value = "${product.purchasePrice}">
+            <div class="col-5">
+                <input class="form-control border-dark shadow-none" type="text" name="purchasePrice"  th:value = "${updateProductRequest.purchasePrice}"
+                	th:classappend="${mapErrors.get('purchasePrice') != null ? 'is-invalid' : ''}">
             </div>
+            <div th:if="${mapErrors.get('purchasePrice') != null}" class="col-4">
+    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('purchasePrice')}"></div>
+    		</div>
         </div>
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
                 <label class="">Giá bán ra</label>
             </div>
-            <div class="col-6">
-                <input class="form-control border-dark shadow-none" type="text" name="salePrice"  th:value = "${product.salePrice}">
+            <div class="col-5">
+                <input class="form-control border-dark shadow-none" type="text" name="salePrice"  th:value = "${updateProductRequest.salePrice}"
+            		th:classappend="${mapErrors.get('salePrice') != null ? 'is-invalid' : ''}">
             </div>
+            <div th:if="${mapErrors.get('salePrice') != null}" class="col-4">
+    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('salePrice')}"></div>
+    		</div>
         </div>
         
         <div class="row input-group">
@@ -57,8 +76,8 @@
             <div class="col-2 mt-1">
                 <label class="">Số lượng tồn kho</label>
             </div>
-            <div class="col-6">
-                <input class="form-control border-dark shadow-none" disabled="disabled" type="number" th:value = "${product.inventoryQuantity}">
+            <div class="col-5">
+                <input class="form-control border-dark shadow-none" readonly="readonly" name="inventoryQuantity" type="number" th:value = "${updateProductRequest.inventoryQuantity}">
             </div>
         </div>
 
@@ -67,7 +86,7 @@
             <div class="col-3">
                 <div class="row">
                     <div class="col-6">
-                        <button type="submit" class="btn btn-primary"> Thêm mới</button>
+                        <button type="submit" class="btn btn-primary"> Chỉnh sửa</button>
                     </div>
                     <div class="col-6">
                         <a href="/product" class="text-decoration-none text-light"><button type="button" class="btn btn-primary">Hủy</button></a>
@@ -77,6 +96,31 @@
         </div>
     </form>
 </div>
+
+<script>
+    // Function kiểm tra localStorage có chứa giá trị productCode và productName không
+    function checkLocalStorage() {
+        var productCode = localStorage.getItem('productCode'); // Lấy giá trị của productCode từ localStorage
+        var productName = localStorage.getItem('productName'); // Lấy giá trị của productName từ localStorage
+        var currenPage = localStorage.getItem('currentPage'); // Lấy giá trị của currentPage từ localStorage
+       
+        if (currenPage == null){
+        	currenPage = 1;
+        }
+        
+        var url = '/product?page=' + currenPage;
+        
+        if (productCode != null) {
+            url += '&productCode=' + productCode ;
+        }
+        
+        if (productName != null) {
+            url += '&productName=' + productName ;
+        }
+        
+        window.location.href = url;
+    }
+</script>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

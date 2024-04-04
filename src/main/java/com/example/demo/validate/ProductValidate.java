@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.example.demo.model.request.InsertProductRequest;
+import com.example.demo.model.request.UpdateProductRequest;
 import com.example.demo.service.IProductService;
 
 @Component
@@ -45,6 +46,39 @@ public class ProductValidate {
         }
         if(insertProductRequest.getInventoryQuantity()==null) {
         	insertProductRequest.setInventoryQuantity(0);
+        }
+        return mapErrors;
+    }
+	
+	public Map<String,String> validateUpdateProduct(UpdateProductRequest updateProductRequest) {
+        Map<String, String> mapErrors = new HashMap<String, String>();
+        boolean check = false;
+        if(updateProductRequest.getProductCode() == "") {
+        	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
+        }else {
+	        check = productService.existsByProductCodeNotId(updateProductRequest.getProductCode(),updateProductRequest.getProductId());
+	        if ( check ) {
+	            mapErrors.put("productCode", "Mã sản phẩm đã tồn tại!.");
+	        }
+        }
+
+        if(updateProductRequest.getProductName()== "") {
+        	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
+        }else {
+	        check = productService.existsByProductNameNotId(updateProductRequest.getProductName(),updateProductRequest.getProductId());
+	        if ( check ) {
+	        	mapErrors.put("productName", "Tên sản phẩm đã tồn tại!.");
+	        }
+        }
+
+        if(updateProductRequest.getPurchasePrice()== null) {
+        	mapErrors.put("purchasePrice", "Không được để trống giá mua vào!.");
+        }
+
+        if(updateProductRequest.getSalePrice()== null) {
+        	mapErrors.put("salePrice", "Không được để trống giá bán ra!.");
+        } else if (updateProductRequest.getSalePrice()<= updateProductRequest.getPurchasePrice()) {
+        	mapErrors.put("salePrice", "Giá bán phải lớn hơn giá mua!.");
         }
         return mapErrors;
     }

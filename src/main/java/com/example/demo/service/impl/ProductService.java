@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.ProductEntity;
 import com.example.demo.model.request.InsertProductRequest;
 import com.example.demo.model.request.SearchRequest;
+import com.example.demo.model.request.UpdateProductRequest;
 import com.example.demo.repository.ProductMapper;
 import com.example.demo.service.IProductService;
 import java.util.List;
@@ -17,20 +18,23 @@ public class ProductService implements IProductService {
 	private ProductMapper productMapper;
 
 	@Override
-	public List<ProductEntity> searchProduct(SearchRequest searchRequest) {
+	public List<ProductEntity> searchProduct( String 	productCode
+											, String 	productName
+											, int		page) {
 		List<Map<String, Object>> map = productMapper.search(
-													  searchRequest.getProductCode()
-													, searchRequest.getProductName()
-													, (searchRequest.getPageNumber() - 1) * 3);
+													 productCode
+													, productName
+													, (page - 1) * 3);
 		return map.stream().map(m ->{
 			return convertMapToProduct(m);
 		}).toList();
 	}
 
 	@Override
-	public int countSearch(SearchRequest request) {
+	public int countSearch(String 	productCode
+						 , String 	productName) {
 		// TODO Auto-generated method stub
-		return productMapper.countSearch(request.getProductCode(), request.getProductName());
+		return productMapper.countSearch(productCode,productName);
 	}
 
 	private ProductEntity convertMapToProduct(Map<String,Object> map){
@@ -65,10 +69,29 @@ public class ProductService implements IProductService {
 
 	@Override
 	public boolean insertProduct(InsertProductRequest insertProductRequest) {
-		return productMapper.insertProduct(   insertProductRequest.getProductCode()
-											, insertProductRequest.getProductName()
-											, insertProductRequest.getPurchasePrice()
-											, insertProductRequest.getSalePrice()
-											, insertProductRequest.getInventoryQuantity()) > 0;
+		return productMapper.insertProduct(insertProductRequest.getProductCode()
+										 , insertProductRequest.getProductName()
+										 , insertProductRequest.getPurchasePrice()
+										 , insertProductRequest.getSalePrice()
+										 , insertProductRequest.getInventoryQuantity()) > 0;
+	}
+
+	@Override
+	public boolean existsByProductCodeNotId(String productCode, Integer productId) {
+		return productMapper.existsByProductCodeNotId(productCode,productId) > 0;
+	}
+	@Override
+	public boolean existsByProductNameNotId(String productName, Integer productId) {
+		return productMapper.existsByProductNameNotId(productName,productId) > 0;
+	}
+
+	@Override
+	public boolean updateProduct(UpdateProductRequest updateProductRequest) {
+		return productMapper.updateProduct(updateProductRequest.getProductId()   
+										 , updateProductRequest.getProductCode()
+										 , updateProductRequest.getProductName()
+										 , updateProductRequest.getPurchasePrice()
+										 , updateProductRequest.getSalePrice()
+										 , updateProductRequest.getVersion()) > 0;
 	}
 }

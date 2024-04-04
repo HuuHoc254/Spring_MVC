@@ -94,13 +94,37 @@
                         <button type="submit" class="btn btn-primary"> Thêm mới</button>
                     </div>
                     <div class="col-6">
-                        <a href="/product" class="text-decoration-none text-light"><button type="button" class="btn btn-primary">Hủy</button></a>
+                        <button type="button" onclick="checkLocalStorage()" class="btn btn-primary">Hủy</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
+<script>
+    // Function kiểm tra localStorage có chứa giá trị productCode và productName không
+    function checkLocalStorage() {
+        var productCode = localStorage.getItem('productCode'); // Lấy giá trị của productCode từ localStorage
+        var productName = localStorage.getItem('productName'); // Lấy giá trị của productName từ localStorage
+        var currenPage = localStorage.getItem('currentPage'); // Lấy giá trị của currentPage từ localStorage
+       
+        if (currenPage == null){
+        	currenPage = 1;
+        }
+        
+        var url = '/product?page=' + currenPage;
+        
+        if (productCode != null) {
+            url += '&productCode=' + productCode ;
+        }
+        
+        if (productName != null) {
+            url += '&productName=' + productName ;
+        }
+        
+        window.location.href = url;
+    }
+</script>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
