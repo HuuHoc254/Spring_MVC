@@ -10,7 +10,7 @@
 	    FROM
 	    	products
 	    <where>
-	    	1 = 1
+	    	is_deleted = false
 	        <if test="productCode != null">
 	            AND product_code LIKE CONCAT(#{productCode}, '%')
 	        </if>
@@ -26,7 +26,7 @@
 	    FROM
 	    	products
 	    <where>
-	    	1 = 1
+	    	is_deleted = false
 	        <if test="productCode != null">
 	            AND product_code LIKE CONCAT(#{productCode}, '%')
 	        </if>
@@ -112,5 +112,13 @@
 			AND	version 		= #{version}
 		</where>
 	</update>
-	
+	<update id="deleteProduct">
+		UPDATE
+			products
+		SET
+				is_deleted 	= TRUE
+		<where>
+				product_id 		= #{productId}
+		</where>
+	</update>
   </mapper>

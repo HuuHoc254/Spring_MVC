@@ -53,20 +53,16 @@ public class ProductController {
     	session.setAttribute("currentPage", page);
     	
         int totalRecord = productService.countSearch( productCode, productName );
-        List<Integer> pageNumbers = new ArrayList<>();
-        int totalPage = totalRecord / 3;
-        if(totalRecord % 3 != 0) totalPage++;
-        for (int i = 1; i <= totalPage; i++) {
-            pageNumbers.add(i);
-        }
-
+        int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
         List<ProductEntity> products = productService.searchProduct(productCode, productName, page);
         model.addAttribute("isAdmin", true);
         model.addAttribute("productCode", productCode);
         model.addAttribute("productName", productName);
         model.addAttribute("currentPage", page);
         model.addAttribute("products", products);
-        model.addAttribute("pageNumbers",pageNumbers);
+        model.addAttribute("totalPage",totalPage);
+        model.addAttribute("message", session.getAttribute("message"));
+        session.removeAttribute("message");
         return "product-list";
     }
 
@@ -122,12 +118,36 @@ public class ProductController {
     	
     	Map<String, String> mapErrors = validate.validateUpdateProduct(updateProductRequest);
 		if( mapErrors.size() == 0 && productService.updateProduct(updateProductRequest)) {
-			model.addAttribute("message", "Cập nhật sản phẩm thành công!");
+			session.setAttribute("message", "Cập nhật sản phẩm thành công!");
 			return search;
 		}
     	model.addAttribute("updateProductRequest",updateProductRequest); 
     	model.addAttribute("mapErrors",mapErrors);	
     	return "product-update";	
+    }
+    
+    @GetMapping("/delete/{productId}")
+    private String deleteProduct( HttpServletRequest request
+    							, Model model
+    							, @PathVariable("productId") int productId){
+    	HttpSession session = request.getSession();
+    	boolean check = productService.deleteProduct(productId);
+    	if (check) {
+    		session.setAttribute("message", "Đã xóa sản phẩm thành công!");
+    	}else {
+    		session.setAttribute("message", "Xóa sản phẩm thất bại, đã có lỗi s!");
+    	}
+    	String pCodeSearch = (String) session.getAttribute("productCode");
+    	String pNameSearch = (String) session.getAttribute("productName");
+    	int page = (int) session.getAttribute("currentPage");
+    	String search = "redirect:/product?page="+page;
+    	if(pCodeSearch!=null) {
+    		search += "&productCode="+pCodeSearch;
+    	}
+    	if(pNameSearch!=null) {
+    		search += "&productName="+pNameSearch;
+    	}
+	    return search;
     }
 
 }

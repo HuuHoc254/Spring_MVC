@@ -32,4 +32,5 @@ public interface ProductMapper {
 					, Double purchasePrice
 					, Double salePrice
 					, Integer version);
+	int deleteProduct(int productId);
 }

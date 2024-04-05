@@ -1,42 +1,84 @@
-//package com.example.demo.entity;
-//
-//import jakarta.persistence.*;
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.NoArgsConstructor;
-//import lombok.Setter;
-//
-//import java.util.List;
-//
-//@Setter
-//@Getter
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Entity
-//@Table(name = "account")
-//public class AccountEntity {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Integer accountId;
-//    @Column(name = "account_name")
-//    private String accountName;
-//    @Column(name = "full_name")
-//    private String fullName;
-//    @Column(name = "password")
-//    private String password;
-//    @Column(name = "phone_number")
-//    private String phoneNumber;
-//    @ManyToOne
-//    @JoinColumn(name = "role_id")
-//    private RoleEntity role;
-//    @Column (name = "is_online", columnDefinition = "BOOLEAN DEFAULT FALSE")
-//    private Boolean isOnline;
-//    @Column( columnDefinition = "INT DEFAULT 0")
-//    private Integer version;
-//    @Column( columnDefinition = "BOOLEAN DEFAULT FALSE")
-//    private Boolean isDeleted;
-//    @OneToMany(mappedBy = "account",fetch = FetchType.EAGER)
-//    private List<CustomerEntity> customerList;
-//    @OneToMany(mappedBy = "account",fetch = FetchType.EAGER)
-//    private List<OrderEntity> orderList;
-//}
+package com.example.demo.entity;
+
+public class AccountEntity {   
+    private Integer accountId;
+    private String accountName;
+    private String fullName;
+    private String password;
+    private String phoneNumber;
+    private RoleEntity role;
+    private Boolean isOnline;
+    private Integer version;
+    private Boolean isDeleted;
+	public AccountEntity(Integer accountId, String accountName, String fullName, String password, String phoneNumber,
+			RoleEntity role, Boolean isOnline, Integer version, Boolean isDeleted) {
+		this.accountId = accountId;
+		this.accountName = accountName;
+		this.fullName = fullName;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.role = role;
+		this.isOnline = isOnline;
+		this.version = version;
+		this.isDeleted = isDeleted;
+	}
+	public AccountEntity() {
+	}
+	public Integer getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(Integer accountId) {
+		this.accountId = accountId;
+	}
+	public String getAccountName() {
+		return accountName;
+	}
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public RoleEntity getRole() {
+		return role;
+	}
+	public void setRole(RoleEntity role) {
+		this.role = role;
+	}
+	public Boolean getIsOnline() {
+		return isOnline;
+	}
+	public void setIsOnline(Boolean isOnline) {
+		this.isOnline = isOnline;
+	}
+	public Integer getVersion() {
+		return version;
+	}
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+    
+	
+    
+}

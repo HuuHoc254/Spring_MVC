@@ -94,4 +94,9 @@ public class ProductService implements IProductService {
 										 , updateProductRequest.getSalePrice()
 										 , updateProductRequest.getVersion()) > 0;
 	}
+
+	@Override
+	public boolean deleteProduct(int productId) {
+		return productMapper.deleteProduct(productId) > 0;
+	}
 }
