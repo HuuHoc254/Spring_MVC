@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="container mt-3 ">
-    <form th:action="@{/product/update}+'/'+${updateProductRequest.productId}" th:method="post" th:object="${updateProductRequest}">
+    <form th:action="@{/admin/product/update}+'/'+${updateProductRequest.productId}" th:method="post" th:object="${updateProductRequest}">
     	<input type="hidden" name = "productId" th:value = "${updateProductRequest.productId}">
     	<input type="hidden" name = "version" th:value = "${updateProductRequest.version}">
         <div class="row input-group mb-3">

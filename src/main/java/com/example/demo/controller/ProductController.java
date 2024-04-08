@@ -4,6 +4,7 @@ import com.example.demo.entity.ProductEntity;
 import com.example.demo.model.request.InsertProductRequest;
 import com.example.demo.model.request.SearchRequest;
 import com.example.demo.model.request.UpdateProductRequest;
+import com.example.demo.security.UserDetailImpl;
 import com.example.demo.service.IProductService;
 import com.example.demo.validate.ProductValidate;
 
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,29 +22,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping
 public class ProductController {
+	private final String ADMIN = "ROLE_ADMIN";
+	
     @Autowired
     private IProductService productService;
 
     @Autowired
     private ProductValidate validate;
 
-    @GetMapping
+    @GetMapping("/product")
     private String searchProduct(HttpServletRequest request
     							, Model model
     							, @RequestParam(defaultValue = "") String productCode
     							, @RequestParam(defaultValue = "") String productName
     							, @RequestParam(defaultValue = "1") int page
     							){
+    	UserDetailImpl userDetail = (UserDetailImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	HttpSession session = request.getSession();
     	if( productCode != "") {
     		session.setAttribute("productCode", productCode);
@@ -49,13 +53,13 @@ public class ProductController {
     	if( productName != "") {
     		session.setAttribute("productName", productName);
     	}
-
+    	
     	session.setAttribute("currentPage", page);
     	
         int totalRecord = productService.countSearch( productCode, productName );
         int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
         List<ProductEntity> products = productService.searchProduct(productCode, productName, page);
-        model.addAttribute("isAdmin", true);
+        model.addAttribute("isAdmin", userDetail.getAuthorities().toString().contains(ADMIN));
         model.addAttribute("productCode", productCode);
         model.addAttribute("productName", productName);
         model.addAttribute("currentPage", page);
@@ -65,15 +69,15 @@ public class ProductController {
         session.removeAttribute("message");
         return "product-list";
     }
-
-    @GetMapping("/insert")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/product/insert")
     private String showFormInsert(Model model){
     	model.addAttribute("insertProductRequest",new InsertProductRequest());
     	model.addAttribute("mapErrors",new HashMap<String, String>());
 	    return "product-add";
     }
 
-    @PostMapping("/insert")
+    @PostMapping("/admin/product/insert")
     private String insertProduct(Model model, @ModelAttribute InsertProductRequest insertProductRequest){
     	Map<String, String> mapErrors = validate.validateInsertProduct(insertProductRequest);
     	if(mapErrors.size() == 0) {
@@ -90,7 +94,7 @@ public class ProductController {
     	
     }
 
-    @GetMapping("/update/{productId}")
+    @GetMapping("/admin/product/update/{productId}")
     private String showFormUpdate(Model model, @PathVariable("productId") int productId){
     	ProductEntity product = productService.getProductById(productId);
     	model.addAttribute("mapErrors",new HashMap<String, String>());
@@ -126,7 +130,7 @@ public class ProductController {
     	return "product-update";	
     }
     
-    @GetMapping("/delete/{productId}")
+    @GetMapping("/admin/product/delete/{productId}")
     private String deleteProduct( HttpServletRequest request
     							, Model model
     							, @PathVariable("productId") int productId){

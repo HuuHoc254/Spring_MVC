@@ -20,7 +20,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
         public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
         AccountEntity account =  accountService.findByAccountName(accountName);
         if (account==null) { 
-        	new UsernameNotFoundException("Account Not Found with accountName: " + accountName);
+        	new  UsernameNotFoundException("Account Not Found with accountName: " + accountName);
+        	return null;
     	}
         return UserDetailImpl.convertAccountEntityToAccountDetail(account);
     }

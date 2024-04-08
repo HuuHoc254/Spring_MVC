@@ -2,7 +2,6 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.ProductEntity;
 import com.example.demo.model.request.InsertProductRequest;
-import com.example.demo.model.request.SearchRequest;
 import com.example.demo.model.request.UpdateProductRequest;
 import com.example.demo.repository.ProductMapper;
 import com.example.demo.service.IProductService;

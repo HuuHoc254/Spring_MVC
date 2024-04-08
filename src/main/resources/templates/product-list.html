@@ -47,7 +47,7 @@
         </div>
     </form>
 	<div class= "row">
-		<a href="/product/insert" class="text-decoration-none text-light">
+		<a href="/admin/product/insert" class="text-decoration-none text-light">
 		<button class="btn btn-primary " type="button"> Thêm mới</button>
 		</a>
 	</div>
@@ -72,10 +72,10 @@
 				<td th:text="${#numbers.formatDecimal(prod.salePrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
 		        <td class="text-center" th:text="${prod.inventoryQuantity}"></td>
 		        <td th:if = "${isAdmin}">
-		        	<a th:href="@{'/product/update/' + ${prod.productId}}" class="text-decoration-none text-light">
+		        	<a th:href="@{'/admin/product/update/' + ${prod.productId}}" class="text-decoration-none text-light">
 		        		<button class="btn btn-primary">Chỉnh sửa</button>
 	        		</a>
-			        <a th:href="@{'/product/delete/' + ${prod.productId}}" class="text-decoration-none text-light" >
+			        <a th:href="@{'/admin/product/delete/' + ${prod.productId}}" class="text-decoration-none text-light" >
 			        	<button class="btn btn-primary delete-btn" onclick="return confirm('Bạn có muốn xóa sản phẩm này không?')">Xóa</button>
 		        	</a>
 		        </td>

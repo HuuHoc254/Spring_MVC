@@ -1,12 +1,12 @@
 package com.example.demo.repository;
 
-import org.apache.ibatis.annotations.Mapper;
+import java.util.Map;
 
-import com.example.demo.entity.AccountEntity;
+import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AccountMapper {
 
-	AccountEntity findByAccountName(String accountName);
+	Map<String, Object> findByAccountName(String accountName);
     
 }

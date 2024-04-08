@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.example.demo.repository.AccountMapper" >
+	<select id="findByAccountName" resultType="java.util.Map">
+	    SELECT
+	    	  a.account_id 
+	    	, a.account_name
+	    	, a.password
+	    	, a.is_deleted
+	    	, r.role_id
+	    	, r.role_name
+	    FROM
+	    	account a
+	    JOIN
+	    	role r ON r.role_id = a.role_id 
+	    <where>
+	    		account_name = #{accountName}
+	    </where>
+	</select>
+  </mapper>
