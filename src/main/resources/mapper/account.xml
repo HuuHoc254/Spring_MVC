@@ -17,7 +17,59 @@
 	    JOIN
 	    	role r ON r.role_id = a.role_id 
 	    <where>
-	    		account_name = #{accountName}
+    		account_name = #{accountName}
 	    </where>
+	</select>
+
+	<update id="setOnline">
+		UPDATE
+			account
+		SET
+			is_online = NOT is_online
+		<where>
+			account_id = #{accountId}
+		</where>
+	</update>
+
+	<select id="countSearch" resultType="int">
+	   	SELECT 
+	   		COUNT(*)
+	    FROM
+	    	account
+	    <where>
+	    	is_deleted = false
+	        <if test="accountName != null">
+	            AND account_name LIKE CONCAT(#{accountName}, '%')
+	        </if>
+	        <if test="fullName != null">
+	            AND full_name LIKE CONCAT(#{fullName}, '%')
+	        </if>
+	        <if test="phoneNumber != null">
+	            AND phone_number LIKE CONCAT(#{phoneNumber}, '%')
+	        </if>
+	    </where>
+	</select>
+
+	<select id="search" resultType="java.util.Map">
+	    SELECT 
+	    	account_id, account_name, full_name, phone_number, is_online
+	    FROM
+	    	account
+	    <where>
+	    	is_deleted = false
+	        <if test="accountName != null">
+	            AND account_name LIKE CONCAT(#{accountName}, '%')
+	        </if>
+	        <if test="fullName != null">
+	            AND full_name LIKE CONCAT(#{fullName}, '%')
+	        </if>
+	        <if test="phoneNumber != null">
+	            AND phone_number LIKE CONCAT(#{phoneNumber}, '%')
+	        </if>
+	    </where>
+	    ORDER BY
+    	 	SUBSTRING_INDEX(full_name, ' ', -1)
+	    LIMIT 3
+	    OFFSET #{offset}
 	</select>
   </mapper>

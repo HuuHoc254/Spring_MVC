@@ -66,6 +66,7 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("totalPage",totalPage);
         model.addAttribute("message", session.getAttribute("message"));
+        model.addAttribute("url","product");
         session.removeAttribute("message");
         return "product-list";
     }

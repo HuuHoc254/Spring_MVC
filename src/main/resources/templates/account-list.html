@@ -1,36 +1,46 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Product List</title>
+    <title>Account List</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
 </head>
 <body>
 <th:block th:insert="~{navbar.html :: navbar}">
 </th:block>
 <div class="container-fluid mt-3">
-    <form id="searchForm" th:action="@{/product}" th:method="GET">
+    <form id="searchForm" th:action="@{/admin/account}" th:method="GET">
         <div class="row input-group mb-3">
             <div class="col-xl-2 col-md-1"></div>
             <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
-                <label class="">Mã sản phẩm</label>
+                <label class="">Tên đăng nhập</label>
             </div>
             <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="text" id="productCode" name="productCode" placeholder="Nhập mã sản phẩm" th:value = "${productCode}">
+                <input class="form-control border-dark shadow-none" type="text" id="accountName" name="accountName" placeholder="Nhập tên đăng nhập" th:value = "${accountName}">
             </div>
         </div>
-
+        <div class="row input-group mb-3">
+            <div class="col-xl-2 col-md-1"></div>
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Tên nhân viên</label>
+            </div>
+             <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="text" id="fullName" name="fullName" placeholder="Nhập tên nhân viên" th:value = "${fullName}">
+            </div>
+        </div>
+        
         <div class="row input-group">
             <div class="col-xl-2 col-md-1"></div>
             <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
-                <label class="">Tên sản phẩm</label>
+                <label class="">Số điện thoại</label>
             </div>
-            <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="text" id="productName" name="productName" placeholder="Nhập tên sản phẩm" th:value = "${productName}">
+             <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="text" id="phoneNumber" name="phoneNumber" placeholder="Nhập số điện thoại" th:value = "${phoneNumber}">
             </div>
         </div>
 
@@ -50,7 +60,7 @@
     </form>
 	<div class= "row m-3">
 		<div class="col-xl-2 col-0"></div>
-		<a href="/admin/product/insert" class="text-decoration-none text-light">
+		<a href="/admin/account/insert" class="text-decoration-none text-light">
 		<button class="btn btn-primary " type="button"> Thêm mới</button>
 		</a>
 	</div>
@@ -58,43 +68,41 @@
         <thead>
         <tr class="bg-dark text-light">
             <th scope="col" class="text-center">Số thứ tự</th>
-            <th scope="col">Mã sản phẩm</th>
-            <th scope="col">Tên sản phẩm</th>
-            <th th:if = "${isAdmin}" scope="col">Giá mua</th>
-            <th scope="col">Giá bán</th>
-            <th scope="col" class="text-center">Số lượng tồn kho</th>
-            <th th:if = "${isAdmin}" scope="col" colspan="2" >Hành động</th>
+            <th scope="col">Tên đăng nhập</th>
+            <th scope="col">Tên nhân viên</th>
+            <th scope="col">Số điện thoại</th>
+            <th scope="col">Trạng thái hoạt động</th>
+            <th scope="col" colspan="2" >Hành động</th>
         </tr>
         </thead>
         <tbody>
-		    <tr th:if = "${products.size() != 0}" th:each="prod, index : ${products}">
+		    <tr th:if = "${accounts.size() != 0}" th:each="account, index : ${accounts}">
 		        <th scope="row" class="text-center" th:text=" ${index.index + 1 + (currentPage - 1) *3}"></th>
-		        <td th:text="${prod.productCode}"></td>
-		        <td th:text="${prod.productName}"></td>
-				<td th:if = "${isAdmin}" th:text="${#numbers.formatDecimal(prod.purchasePrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-				<td th:text="${#numbers.formatDecimal(prod.salePrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-		        <td class="text-center" th:text="${prod.inventoryQuantity}"></td>
-		        <td th:if = "${isAdmin}">
-		        	<a th:href="@{'/admin/product/update/' + ${prod.productId}}" class="text-decoration-none text-light">
+		        <td th:text="${account.accountName}"></td>
+		        <td th:text="${account.fullName}"></td>
+		        <td th:text="${account.phoneNumber}"></td>
+		        <td th:id="${ 'status' + account.accountId}" th:text="${account.isOnline ? 'Online' : 'Offline'}"> </td>
+		        <td>
+		        	<a th:href="@{'/admin/account/update/' + ${account.accountId}}" class="text-decoration-none text-light">
 		        		<button class="btn btn-primary">Chỉnh sửa</button>
 	        		</a>
 	        	</td>
-	        	<td th:if = "${isAdmin}">
-			        <a th:href="@{'/admin/product/delete/' + ${prod.productId}}" class="text-decoration-none text-light" >
-			        	<button class="btn btn-primary delete-btn" onclick="return confirm('Bạn có muốn xóa sản phẩm này không?')">Xóa</button>
+	        	<td>
+			        <a th:href="@{'/admin/account/delete/' + ${account.accountId}}" class="text-decoration-none text-light" >
+			        	<button class="btn btn-primary delete-btn" onclick="return confirm('Bạn có muốn xóa nhân viên này không?')">Xóa</button>
 		        	</a>
 		        </td>
 		    </tr>
-		    <tr th:if= "${products.size() == 0}" >
-		    	<td colspan = "7" class="text-center"> Không tìm thấy sản phẩm!</td>
+		    <tr th:if= "${accounts.size() == 0}" >
+		    	<td colspan = "6" class="text-center"> Không tìm nhân viên!</td>
 		    </tr>
 		</tbody>
     </table>
     
-    <nav th:if = "${products.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
+    <nav th:if = "${accounts.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
         <ul class="pagination">
         	<li class="page-item" th:if="${currentPage != 1}" >
-		      <a th:href="@{'/product?page=' +${currentPage - 1} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}" 
+		      <a th:href="@{'/admin/account?page=' +${currentPage - 1} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}" 
 		      	class="page-link" aria-label="Previous">
 		        <span aria-hidden="true">&laquo;</span>
 		      </a>
@@ -102,7 +110,7 @@
    			 <th:block th:if="${totalPage <= 8}" th:each="i : ${#numbers.sequence(1, totalPage)}" >
    			 	<li class="page-item" th:if="${i != currentPage}">
 	                <a class="page-link" aria-current="page" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
@@ -122,23 +130,23 @@
 	               	<div class="page-link"  th:if="${i == totalPage-1 }">...</div>
 	               	<a  th:if="${i == totalPage}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
    			 </th:block>
 
-			<th:block th:if="${totalPage > 8 and currentPage > totalPage - 4 }"  th:each="i : ${#numbers.sequence(1, totalPage)}">
-				<li class="page-item" th:classappend="${i == currentPage ? 'active' : '' }">
+			<th:block th:if="${totalPage > 8 and currentPage > totalPage - 4 }" th:each="i : ${#numbers.sequence(1, totalPage)}">
+				<li class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
 	               	<a  th:if="${i == 1}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+						th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == 2 }">...</div>
 	               	<a  th:if="${i > totalPage-5}"
 	                	class="page-link" 
-	                	th:href="@{ i != currentPage ? '/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' } : '#'}"
+						th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
@@ -148,13 +156,13 @@
             	<li  class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
 	               	<a  th:if="${i == 1}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
 	                 	th:text="${i}">
 	               	</a>
-	               	<div class="page-link" th:if="${i == 2 }">...</div>
+	               	<div class="page-link"  th:if="${i == 2 }">...</div>
 	               	<a  th:if="${ i == currentPage -1 }"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<a  th:if="${ i == currentPage }"
@@ -164,20 +172,20 @@
 	               	</a>
 	               	<a  th:if="${i == currentPage + 1 }"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
 	                 	th:text="${i}">
 	               	</a>
-	               	<div class="page-link" th:if="${i == totalPage -1 }">...</div>
+	               	<div class="page-link"  th:if="${i == totalPage -1 }">...</div>
 	               	<a  th:if="${i == totalPage}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
 	                 	th:text="${i}">
 	               	</a>
-           		</li>
+            	</li>
             </th:block>
             
             <li th:if="${currentPage != totalPage}">
-        		<a  th:href="@{'/product?page=' +${currentPage + 1} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}" 
+        		<a  th:href="@{'/admin/account?page=' +${{currentPage + 1}} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
         			class="page-link" aria-label="Next">
         			<span aria-hidden="true">&raquo;</span>
         		</a>
@@ -211,13 +219,15 @@
     // Function lưu giá trị vào localStorage
     function saveSearchValues() {
         var currentPage = getCurrentPageFromURL(); // Lấy giá trị của currentPage từ URL
-        var productCode = document.getElementById('productCode').value;
-        var productName = document.getElementById('productName').value;
+        var accountName = document.getElementById('accountName').value;
+        var fullName = document.getElementById('fullName').value;
+        var phoneNumber = document.getElementById('phoneNumber').value;
 
         // Lưu giá trị vào localStorage
         localStorage.setItem('currentPage', currentPage);
-        localStorage.setItem('productCode', productCode);
-        localStorage.setItem('productName', productName);
+        localStorage.setItem('accountName', accountName);
+        localStorage.setItem('fullName', fullName);
+        localStorage.setItem('phoneNumber', phoneNumber);
     }
  // Khi trang được load, lấy giá trị của currentPage từ URL và lưu vào localStorage
     window.onload = function() {
@@ -227,8 +237,9 @@
  // Function xóa hết dữ liệu trong localStorage
     function clearLocalStorage() {
         localStorage.clear();
-        window.location.href = '/product';
+        window.location.href = '/admin/account';
     }
+
 </script>
 
 
