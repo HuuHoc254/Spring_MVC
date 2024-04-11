@@ -20,6 +20,17 @@
     		account_name = #{accountName}
 	    </where>
 	</select>
+	
+	<select id="findById" resultType="java.util.Map">
+	    SELECT 
+	    	account_id, account_name, full_name, phone_number , version
+	    FROM
+	    	account
+	    <where>
+	    		is_deleted = FALSE
+	    	AND account_id = #{accountId} 
+	    </where>
+	</select>
 
 	<update id="setOnline">
 		UPDATE
@@ -72,4 +83,78 @@
 	    LIMIT 3
 	    OFFSET #{offset}
 	</select>
+
+	<select id="existsByAccountName" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	account
+	    <where>
+	    	account_name = #{accountName} 
+	    </where>
+	</select>
+
+	<select id="existsByPhoneNumber" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	account
+	    <where>
+	    	phone_number = #{phoneNumber}
+	    </where>
+	</select>
+
+	<select id="existsByAccountNameNotId" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	account
+	    <where>
+	    	account_name = #{accountName}
+    	AND account_id != #{accountId} 
+	    </where>
+	</select>
+
+	<select id="existsByPhoneNumberNotId" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	account
+	    <where>
+	    	phone_number = #{phoneNumber}
+	    AND account_id != #{accountId} 
+	    </where>
+	</select>
+	
+	<insert id="insertAccount">
+		INSERT INTO 
+				account( account_name, password, full_name, phone_number, role_id)
+		VALUES
+				(#{accountName},#{password},#{fullName},#{phoneNumber},2)
+	</insert>
+
+	<update id="updateAccount">
+		UPDATE
+			account
+		SET
+				account_name 	= #{accountName}
+			, 	password 		= #{password}
+			, 	full_name 		= #{fullName}
+			, 	phone_number 	= #{phoneNumber}
+			, 	version 		= #{version} + 1
+		<where>
+				account_id 		= #{accountId}
+			AND	version 		= #{version}
+		</where>
+	</update>
+
+	<update id="deleteAccount">
+		UPDATE
+			account
+		SET
+				is_deleted 	= TRUE
+		<where>
+				account_id 		= #{accountId}
+		</where>
+	</update>
   </mapper>

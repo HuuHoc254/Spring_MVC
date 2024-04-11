@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.example.demo.repository.CustomerMapper" >
+
+	<select id="findById" resultType="java.util.Map">
+	    SELECT 
+	    	customer_id, customer_name, address, phone_number ,administrator_id , version
+	    FROM
+	    	customer
+	    <where>
+	    		is_deleted = FALSE
+	    	AND customer_id = #{customerId} 
+	    </where>
+	</select>
+
+	<select id="countSearch" resultType="int">
+	   	SELECT 
+	   		COUNT(*)
+	    FROM
+	    	customer
+	    <where>
+	    	is_deleted = false
+	        <if test="customerName != null">
+	            AND customer_name LIKE CONCAT(#{customerName}, '%')
+	        </if>
+	        <if test="phoneNumber != null">
+	            AND phone_number LIKE CONCAT(#{phoneNumber}, '%')
+	        </if>
+	    </where>
+	</select>
+
+	<select id="search" resultType="java.util.Map">
+	    SELECT 
+	    	customer_id, customer_name, address, phone_number ,administrator_id
+	    FROM
+	    	customer
+	    <where>
+	    	is_deleted = false
+	        <if test="customerName != null">
+	            AND customer_name LIKE CONCAT(#{customerName}, '%')
+	        </if>
+	        <if test="phoneNumber != null">
+	            AND phone_number LIKE CONCAT(#{phoneNumber}, '%')
+	        </if>
+	    </where>
+	    ORDER BY
+    	 	SUBSTRING_INDEX(customer_name, ' ', -1)
+	    LIMIT 3
+	    OFFSET #{offset}
+	</select>
+
+	<select id="existsByPhoneNumber" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	customer
+	    <where>
+	    	phone_number = #{phoneNumber}
+	    </where>
+	</select>
+
+	<select id="existsByPhoneNumberNotId" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	customer
+	    <where>
+	    	phone_number = #{phoneNumber}
+	    AND customer_id != #{customerId} 
+	    </where>
+	</select>
+	
+	<insert id="insertCustomer">
+		INSERT INTO 
+				customer( customer_name, phone_number, address, administrator_id)
+		VALUES
+				(#{customerName},#{phoneNumber},#{address},#{accountId})
+	</insert>
+
+	<update id="updateCustomer">
+		UPDATE
+			customer
+		SET
+				customer_name 		= #{accountName}
+			, 	phone_number 		= #{phoneNumber}
+			, 	address 			= #{address}
+			, 	administrator_id 	= #{accountId}
+			, 	version 			= #{version} + 1
+		<where>
+				customer_id 		= #{customerId}
+			AND	version 		= #{version}
+		</where>
+	</update>
+
+	<update id="deleteCustomer">
+		UPDATE
+			customer
+		SET
+				is_deleted 	= TRUE
+		<where>
+				customer_id 		= #{customerId}
+		</where>
+	</update>
+  </mapper>

@@ -20,4 +20,28 @@ public interface AccountMapper {
 									, String phoneNumber
 									, int offset
 									);
+
+	Map<String, Object> findById(int accountId);
+
+	int existsByAccountName(String accountName);
+
+	int existsByPhoneNumber(String phoneNumber);
+
+	int insertAccount(String accountName
+					, String password
+					, String fullName
+					, String phoneNumber);
+
+	int existsByAccountNameNotId(String accountName, Integer accountId);
+
+	int existsByPhoneNumberNotId(String phoneNumber, Integer accountId);
+
+	int updateAccount(Integer accountId
+					, String accountName
+					, String fullName
+					, String password
+					, String phoneNumber
+					, Integer version);
+
+	int deleteAccount(int accountId);
 }

@@ -38,12 +38,13 @@ public class SecurityConfig {
 					                		.loginPage("/login")
 					                		.usernameParameter("accountName")
 					                		.passwordParameter("password")
+					                		.defaultSuccessUrl("/product")
          		).logout(logout -> logout
                         .logoutUrl("/logout") // URL để thực hiện logout
                         .logoutSuccessUrl("/login?logout") // URL sau khi logout thành công
                         .invalidateHttpSession(true) // Xóa session sau khi logout
                 ).exceptionHandling(exceptionHandlingConfigurer -> 
-                exceptionHandlingConfigurer.accessDeniedPage("/403.html")
+                exceptionHandlingConfigurer.accessDeniedPage("/login/403")
             );
         return http.build();
     }

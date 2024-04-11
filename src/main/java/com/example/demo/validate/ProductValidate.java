@@ -2,10 +2,12 @@ package com.example.demo.validate;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.example.demo.model.request.InsertProductRequest;
-import com.example.demo.model.request.UpdateProductRequest;
+
+import com.example.demo.model.request.InsertProduct;
+import com.example.demo.model.request.UpdateProduct;
 import com.example.demo.service.IProductService;
 
 @Component
@@ -14,7 +16,7 @@ public class ProductValidate {
 	@Autowired
     private IProductService productService;
 
-	public Map<String,String> validateInsertProduct(InsertProductRequest insertProductRequest) {
+	public Map<String,String> validateInsertProduct(InsertProduct insertProductRequest) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
         if(insertProductRequest.getProductCode() == "") {
@@ -50,7 +52,7 @@ public class ProductValidate {
         return mapErrors;
     }
 	
-	public Map<String,String> validateUpdateProduct(UpdateProductRequest updateProductRequest) {
+	public Map<String,String> validateUpdateProduct(UpdateProduct updateProductRequest) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
         if(updateProductRequest.getProductCode() == "") {

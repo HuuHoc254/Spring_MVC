@@ -1,11 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.ProductEntity;
-import com.example.demo.model.request.InsertProductRequest;
-import com.example.demo.model.request.SearchRequest;
-import com.example.demo.model.request.UpdateProductRequest;
-
 import java.util.List;
+
+import com.example.demo.entity.ProductEntity;
+import com.example.demo.model.request.InsertProduct;
+import com.example.demo.model.request.UpdateProduct;
 
 public interface IProductService {
 	List<ProductEntity> searchProduct(String productCode
@@ -16,9 +15,10 @@ public interface IProductService {
 	ProductEntity getProductById(int productId);
 	boolean existsByProductCode(String productCode);
 	boolean existsByProductName(String productName);
-	boolean insertProduct(InsertProductRequest insertProductRequest);
+	boolean insertProduct(InsertProduct insertProductRequest);
 	boolean existsByProductCodeNotId(String productCode, Integer productId);
 	boolean existsByProductNameNotId(String productName, Integer productId);
-	boolean updateProduct(UpdateProductRequest updateProductRequest);
+	boolean updateProduct(UpdateProduct updateProductRequest);
 	boolean deleteProduct(int productId);
+	boolean isAdmin();
 }

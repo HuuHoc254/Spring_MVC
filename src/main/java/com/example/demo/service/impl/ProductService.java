@@ -1,18 +1,22 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ProductEntity;
-import com.example.demo.model.request.InsertProductRequest;
-import com.example.demo.model.request.UpdateProductRequest;
-import com.example.demo.repository.ProductMapper;
-import com.example.demo.service.IProductService;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.ProductEntity;
+import com.example.demo.model.request.InsertProduct;
+import com.example.demo.model.request.UpdateProduct;
+import com.example.demo.repository.ProductMapper;
+import com.example.demo.security.UserDetailImpl;
+import com.example.demo.service.IProductService;
 
 @Service
 public class ProductService implements IProductService {
-	
+	private final String ADMIN = "ROLE_ADMIN";
 	@Autowired
 	private ProductMapper productMapper;
 
@@ -67,7 +71,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public boolean insertProduct(InsertProductRequest insertProductRequest) {
+	public boolean insertProduct(InsertProduct insertProductRequest) {
 		return productMapper.insertProduct(insertProductRequest.getProductCode()
 										 , insertProductRequest.getProductName()
 										 , insertProductRequest.getPurchasePrice()
@@ -85,7 +89,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public boolean updateProduct(UpdateProductRequest updateProductRequest) {
+	public boolean updateProduct(UpdateProduct updateProductRequest) {
 		return productMapper.updateProduct(updateProductRequest.getProductId()   
 										 , updateProductRequest.getProductCode()
 										 , updateProductRequest.getProductName()
@@ -97,5 +101,10 @@ public class ProductService implements IProductService {
 	@Override
 	public boolean deleteProduct(int productId) {
 		return productMapper.deleteProduct(productId) > 0;
+	}
+	@Override
+	public boolean isAdmin() {
+		UserDetailImpl userDetail = (UserDetailImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return userDetail.getAuthorities().toString().contains(ADMIN);
 	}
 }

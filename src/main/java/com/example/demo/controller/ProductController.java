@@ -1,19 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ProductEntity;
-import com.example.demo.model.request.InsertProductRequest;
-import com.example.demo.model.request.SearchRequest;
-import com.example.demo.model.request.UpdateProductRequest;
-import com.example.demo.security.UserDetailImpl;
-import com.example.demo.service.IProductService;
-import com.example.demo.validate.ProductValidate;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +14,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.example.demo.entity.ProductEntity;
+import com.example.demo.model.request.InsertProduct;
+import com.example.demo.model.request.UpdateProduct;
+import com.example.demo.service.IProductService;
+import com.example.demo.validate.ProductValidate;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping
 public class ProductController {
-	private final String ADMIN = "ROLE_ADMIN";
 	
     @Autowired
     private IProductService productService;
@@ -45,7 +40,6 @@ public class ProductController {
     							, @RequestParam(defaultValue = "") String productName
     							, @RequestParam(defaultValue = "1") int page
     							){
-    	UserDetailImpl userDetail = (UserDetailImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	HttpSession session = request.getSession();
     	if( productCode != "") {
     		session.setAttribute("productCode", productCode);
@@ -59,7 +53,7 @@ public class ProductController {
         int totalRecord = productService.countSearch( productCode, productName );
         int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
         List<ProductEntity> products = productService.searchProduct(productCode, productName, page);
-        model.addAttribute("isAdmin", userDetail.getAuthorities().toString().contains(ADMIN));
+        model.addAttribute("isAdmin", productService.isAdmin());
         model.addAttribute("productCode", productCode);
         model.addAttribute("productName", productName);
         model.addAttribute("currentPage", page);
@@ -68,30 +62,31 @@ public class ProductController {
         model.addAttribute("message", session.getAttribute("message"));
         model.addAttribute("url","product");
         session.removeAttribute("message");
-        return "product-list";
+        return "product/product-list";
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     @GetMapping("/admin/product/insert")
     private String showFormInsert(Model model){
-    	model.addAttribute("insertProductRequest",new InsertProductRequest());
+    	model.addAttribute("insertProductRequest",new InsertProduct());
     	model.addAttribute("mapErrors",new HashMap<String, String>());
-	    return "product-add";
+    	model.addAttribute("isAdmin", productService.isAdmin());
+	    return "product/product-add";
     }
 
     @PostMapping("/admin/product/insert")
-    private String insertProduct(Model model, @ModelAttribute InsertProductRequest insertProductRequest){
+    private String insertProduct(Model model, @ModelAttribute InsertProduct insertProductRequest){
     	Map<String, String> mapErrors = validate.validateInsertProduct(insertProductRequest);
     	if(mapErrors.size() == 0) {
-    		model.addAttribute("insertProductRequest", new InsertProductRequest());
+    		model.addAttribute("insertProductRequest", new InsertProduct());
     		if(productService.insertProduct(insertProductRequest)) {
     			model.addAttribute("message", "Thêm mới sản phẩm thành công!");
     		};
     	} else {
     		model.addAttribute("insertProductRequest",insertProductRequest);
     	}
-
+    	model.addAttribute("isAdmin", productService.isAdmin());
     	model.addAttribute("mapErrors",mapErrors);	
-    	return "product-add";
+    	return "product/product-add";
     	
     }
 
@@ -100,13 +95,14 @@ public class ProductController {
     	ProductEntity product = productService.getProductById(productId);
     	model.addAttribute("mapErrors",new HashMap<String, String>());
     	model.addAttribute("updateProductRequest", product);
-	    return "product-update";
+    	model.addAttribute("isAdmin", productService.isAdmin());
+	    return "product/product-update";
     }
     
-    @PostMapping("/update/{productId}")
+    @PostMapping("admin/product/update/{productId}")
     private String updateProduct( HttpServletRequest request
     							, Model model
-    							, @ModelAttribute UpdateProductRequest updateProductRequest
+    							, @ModelAttribute UpdateProduct updateProductRequest
     							, @PathVariable int productId
     							){
     	HttpSession session = request.getSession();
@@ -127,8 +123,9 @@ public class ProductController {
 			return search;
 		}
     	model.addAttribute("updateProductRequest",updateProductRequest); 
-    	model.addAttribute("mapErrors",mapErrors);	
-    	return "product-update";	
+    	model.addAttribute("mapErrors",mapErrors);
+    	model.addAttribute("isAdmin", productService.isAdmin());
+    	return "product/product-update";	
     }
     
     @GetMapping("/admin/product/delete/{productId}")
