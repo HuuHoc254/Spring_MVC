@@ -1,17 +1,17 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
-public class AccountEntity {   
+public class Account {   
     private Integer accountId;
     private String accountName;
     private String fullName;
     private String password;
     private String phoneNumber;
-    private RoleEntity role;
+    private Role role;
     private Boolean isOnline;
     private Integer version;
     private Boolean isDeleted;
-	public AccountEntity(Integer accountId, String accountName, String fullName, String password, String phoneNumber,
-			RoleEntity role, Boolean isOnline, Integer version, Boolean isDeleted) {
+	public Account(Integer accountId, String accountName, String fullName, String password, String phoneNumber,
+			Role role, Boolean isOnline, Integer version, Boolean isDeleted) {
 		this.accountId = accountId;
 		this.accountName = accountName;
 		this.fullName = fullName;
@@ -22,7 +22,7 @@ public class AccountEntity {
 		this.version = version;
 		this.isDeleted = isDeleted;
 	}
-	public AccountEntity() {
+	public Account() {
 	}
 	public Integer getAccountId() {
 		return accountId;
@@ -54,10 +54,10 @@ public class AccountEntity {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public RoleEntity getRole() {
+	public Role getRole() {
 		return role;
 	}
-	public void setRole(RoleEntity role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
 	public Boolean getIsOnline() {

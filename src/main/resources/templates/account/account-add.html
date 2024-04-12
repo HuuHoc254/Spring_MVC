@@ -31,8 +31,7 @@
                 	th:classappend="${mapErrors.get('accountName') != null ? 'is-invalid' : ''}">
             </div>
 
-            <div th:if="${mapErrors.get('accountName') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('accountName')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('accountName') != null}" th:text= "${mapErrors.get('accountName')}">
     		</div>
         </div>
 
@@ -47,8 +46,7 @@
                 	th:classappend="${mapErrors.get('password') != null ? 'is-invalid' : ''}">
             </div>
             
-            <div th:if="${mapErrors.get('password') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('password')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('password') != null}" th:text= "${mapErrors.get('password')}">
     		</div>
         </div>
         
@@ -63,8 +61,7 @@
                 	th:classappend="${mapErrors.get('confirmPassword') != null ? 'is-invalid' : ''}">
             </div>
             
-            <div th:if="${mapErrors.get('confirmPassword') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('confirmPassword')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('confirmPassword') != null}" th:text= "${mapErrors.get('confirmPassword')}">
     		</div>
         </div>
         
@@ -79,8 +76,7 @@
                 	th:classappend="${mapErrors.get('fullName') != null ? 'is-invalid' : ''}">
             </div>
             
-            <div th:if="${mapErrors.get('fullName') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('fullName')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('fullName') != null}"  th:text= "${mapErrors.get('fullName')}">
     		</div>
         </div>
       
@@ -95,8 +91,7 @@
                 	th:classappend="${mapErrors.get('phoneNumber') != null ? 'is-invalid' : ''}">
             </div>
             
-            <div th:if="${mapErrors.get('phoneNumber') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('phoneNumber')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('phoneNumber') != null}"  th:text= "${mapErrors.get('phoneNumber')}">
     		</div>
         </div>
         

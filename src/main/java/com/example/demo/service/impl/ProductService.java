@@ -4,24 +4,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.ProductEntity;
-import com.example.demo.model.request.InsertProduct;
-import com.example.demo.model.request.UpdateProduct;
+import com.example.demo.dto.InsertProduct;
+import com.example.demo.dto.UpdateProduct;
+import com.example.demo.model.Product;
 import com.example.demo.repository.ProductMapper;
-import com.example.demo.security.UserDetailImpl;
 import com.example.demo.service.IProductService;
 
 @Service
 public class ProductService implements IProductService {
-	private final String ADMIN = "ROLE_ADMIN";
 	@Autowired
 	private ProductMapper productMapper;
 
 	@Override
-	public List<ProductEntity> searchProduct( String 	productCode
+	public List<Product> searchProduct( String 	productCode
 											, String 	productName
 											, int		page) {
 		List<Map<String, Object>> map = productMapper.search(
@@ -40,8 +37,8 @@ public class ProductService implements IProductService {
 		return productMapper.countSearch(productCode,productName);
 	}
 
-	private ProductEntity convertMapToProduct(Map<String,Object> map){
-		ProductEntity product = new ProductEntity();
+	private Product convertMapToProduct(Map<String,Object> map){
+		Product product = new Product();
 		product.setProductId( (Integer) map.get("product_id"));
 		product.setProductCode( (String) map.get("product_code"));
 		product.setProductName( (String) map.get("product_name"));
@@ -55,7 +52,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public ProductEntity getProductById(int productId) {
+	public Product getProductById(int productId) {
 		return convertMapToProduct(productMapper.getProductById(productId));
 	}
 
@@ -66,7 +63,6 @@ public class ProductService implements IProductService {
 
 	@Override
 	public boolean existsByProductName(String productName) {
-		// TODO Auto-generated method stub
 		return productMapper.existsByProductName(productName) > 0;
 	}
 
@@ -101,10 +97,5 @@ public class ProductService implements IProductService {
 	@Override
 	public boolean deleteProduct(int productId) {
 		return productMapper.deleteProduct(productId) > 0;
-	}
-	@Override
-	public boolean isAdmin() {
-		UserDetailImpl userDetail = (UserDetailImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return userDetail.getAuthorities().toString().contains(ADMIN);
 	}
 }

@@ -4,38 +4,34 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.AccountEntity;
-import com.example.demo.entity.RoleEntity;
-import com.example.demo.model.request.InsertAccount;
-import com.example.demo.model.request.UpdateAccount;
+import com.example.demo.dto.InsertAccount;
+import com.example.demo.dto.UpdateAccount;
+import com.example.demo.model.Account;
+import com.example.demo.model.Role;
 import com.example.demo.repository.AccountMapper;
-import com.example.demo.security.UserDetailImpl;
 import com.example.demo.service.IAccountService;
 
 @Service
 public class AccountService implements IAccountService {
-
-	private final String ADMIN = "ROLE_ADMIN";
 	@Autowired
 	AccountMapper accountMapper;
 	@Autowired
 	PasswordEncoder encoder;
 
 	@Override
-	public AccountEntity findByAccountName(String accountName) {
+	public Account findByAccountName(String accountName) {
 		Map<String, Object> map = accountMapper.findByAccountName(accountName);
 		if (map == null) {
 			return null;	
 		}
-		return convertToEntity(map);
+		return convertTo(map);
 	}
-	private AccountEntity convertToEntity(Map<String, Object> map) {
-		AccountEntity account = new AccountEntity();
-		RoleEntity role = new RoleEntity();
+	private Account convertTo(Map<String, Object> map) {
+		Account account = new Account();
+		Role role = new Role();
 		account.setAccountId((Integer) map.get("account_id"));
 		account.setAccountName((String) map.get("account_name"));
 		account.setFullName((String) map.get("full_name"));
@@ -54,28 +50,24 @@ public class AccountService implements IAccountService {
 		return accountMapper.setOnline(accountId) > 0;
 	}
 	@Override
-	public List<AccountEntity> searchAccount(String accountName, String fullName, String phoneNumber, int page) {
+	public List<Account> searchAccount(String accountName, String fullName, String phoneNumber, int page) {
 		 List<Map<String, Object>> map = accountMapper.search(accountName
 				 											, fullName
 				 											, phoneNumber
 				 											, (page - 1) * 3
 				 											  );
 		 return map.stream().map(m ->{
-				return convertToEntity(m);
+				return convertTo(m);
 			}).toList(); 
 	}
 	@Override
 	public int countSearch(String accountName, String fullName, String phoneNumber) {
 		return accountMapper.countSearch(accountName, fullName, phoneNumber);
 	}
+
 	@Override
-	public boolean isAdmin() {
-		UserDetailImpl userDetail = (UserDetailImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return userDetail.getAuthorities().toString().contains(ADMIN);
-	}
-	@Override
-	public AccountEntity getAccountById(int accountId) {
-		return convertToEntity(accountMapper.findById(accountId));
+	public Account getAccountById(int accountId) {
+		return convertTo(accountMapper.findById(accountId));
 	}
 	@Override
 	public boolean existsByAccountName(String accountName) {
@@ -99,7 +91,7 @@ public class AccountService implements IAccountService {
 		return accountMapper.existsByAccountNameNotId(accountName, accountId) > 0;
 	}
 	@Override
-	public boolean existsByphoneNumberNotId(String phoneNumber, Integer accountId) {
+	public boolean existsByPhoneNumberNotId(String phoneNumber, Integer accountId) {
 		return accountMapper.existsByPhoneNumberNotId(phoneNumber, accountId) > 0;
 	}
 	@Override

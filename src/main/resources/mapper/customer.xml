@@ -7,7 +7,7 @@
 
 	<select id="findById" resultType="java.util.Map">
 	    SELECT 
-	    	customer_id, customer_name, address, phone_number ,administrator_id , version
+	    	customer_id, customer_name, address, phone_number ,administrator_id as account_id , version
 	    FROM
 	    	customer
 	    <where>
@@ -34,20 +34,26 @@
 
 	<select id="search" resultType="java.util.Map">
 	    SELECT 
-	    	customer_id, customer_name, address, phone_number ,administrator_id
+	    	  c.customer_id
+	    	, c.customer_name
+	    	, c.address
+	    	, c.phone_number
+	    	, a.account_id
+	    	, a.full_name
 	    FROM
-	    	customer
+	    	customer c 
+	    JOIN account a ON a.account_id = c.administrator_id
 	    <where>
-	    	is_deleted = false
+	    	c.is_deleted = false
 	        <if test="customerName != null">
-	            AND customer_name LIKE CONCAT(#{customerName}, '%')
+	            AND c.customer_name LIKE CONCAT(#{customerName}, '%')
 	        </if>
 	        <if test="phoneNumber != null">
-	            AND phone_number LIKE CONCAT(#{phoneNumber}, '%')
+	            AND c.phone_number LIKE CONCAT(#{phoneNumber}, '%')
 	        </if>
 	    </where>
 	    ORDER BY
-    	 	SUBSTRING_INDEX(customer_name, ' ', -1)
+    	 	SUBSTRING_INDEX(c.customer_name, ' ', -1)
 	    LIMIT 3
 	    OFFSET #{offset}
 	</select>
@@ -84,14 +90,13 @@
 		UPDATE
 			customer
 		SET
-				customer_name 		= #{accountName}
+				customer_name 		= #{customerName}
 			, 	phone_number 		= #{phoneNumber}
 			, 	address 			= #{address}
-			, 	administrator_id 	= #{accountId}
 			, 	version 			= #{version} + 1
 		<where>
 				customer_id 		= #{customerId}
-			AND	version 		= #{version}
+			AND	version 			= #{version}
 		</where>
 	</update>
 

@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.model.request.InsertAccount;
-import com.example.demo.model.request.UpdateAccount;
+import com.example.demo.dto.InsertAccount;
+import com.example.demo.dto.UpdateAccount;
 import com.example.demo.service.IAccountService;
 
 @Component
@@ -83,7 +83,7 @@ public class AccountValidate {
         if(updateAccount.getPhoneNumber()== "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại!");
         } else {
-	        check = accountService.existsByphoneNumberNotId(updateAccount.getPhoneNumber(), updateAccount.getAccountId());
+	        check = accountService.existsByPhoneNumberNotId(updateAccount.getPhoneNumber(), updateAccount.getAccountId());
 	        if ( check ) {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }

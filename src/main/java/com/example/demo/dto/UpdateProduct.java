@@ -1,22 +1,18 @@
-package com.example.demo.model.response;
+package com.example.demo.dto;
 
-public class Product {
-
+public class UpdateProduct {
 	private Integer productId;
-	private String productCode;
-    private String productName;
-    private String purchasePrice;
-    private String salePrice;
+    private String  productCode;
+    private String  productName;
+    private Double purchasePrice;
+    private Double salePrice;
     private Integer inventoryQuantity;
     private Integer version;
-    private Boolean isDeleted;
-    
-	public Product() {
+
+	public UpdateProduct() {
 	}
 
-	public Product(Integer productId, String productCode, String productName, String purchasePrice, String salePrice,
-			Integer inventoryQuantity, Integer version, Boolean isDeleted) {
-		super();
+	public UpdateProduct(Integer productId, String productCode, String productName, Double purchasePrice, Double salePrice,Integer inventoryQuantity, Integer version) {
 		this.productId = productId;
 		this.productCode = productCode;
 		this.productName = productName;
@@ -24,7 +20,6 @@ public class Product {
 		this.salePrice = salePrice;
 		this.inventoryQuantity = inventoryQuantity;
 		this.version = version;
-		this.isDeleted = isDeleted;
 	}
 
 	public Integer getProductId() {
@@ -51,19 +46,19 @@ public class Product {
 		this.productName = productName;
 	}
 
-	public String getPurchasePrice() {
+	public Double getPurchasePrice() {
 		return purchasePrice;
 	}
 
-	public void setPurchasePrice(String purchasePrice) {
+	public void setPurchasePrice(Double purchasePrice) {
 		this.purchasePrice = purchasePrice;
 	}
 
-	public String getSalePrice() {
+	public Double getSalePrice() {
 		return salePrice;
 	}
 
-	public void setSalePrice(String salePrice) {
+	public void setSalePrice(Double salePrice) {
 		this.salePrice = salePrice;
 	}
 
@@ -82,14 +77,5 @@ public class Product {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
-	
 
 }

@@ -1,4 +1,4 @@
-package com.example.demo.model.request;
+package com.example.demo.dto;
 
 public class InsertProduct {
     private String  productCode;
@@ -6,8 +6,7 @@ public class InsertProduct {
     private Double purchasePrice;
     private Double salePrice;
     private Integer inventoryQuantity;
-    
-    
+
 	public InsertProduct() {
 	}
 	
@@ -18,7 +17,7 @@ public class InsertProduct {
 		this.salePrice = salePrice;
 		this.inventoryQuantity = inventoryQuantity;
 	}
-	
+
 	public String getProductCode() {
 		return productCode;
 	}
@@ -47,7 +46,7 @@ public class InsertProduct {
 	public void setSalePrice(Double salePrice) {
 		this.salePrice = salePrice;
 	}
-	
+
 	public Integer getInventoryQuantity() {
 		return inventoryQuantity;
 	}
@@ -55,6 +54,5 @@ public class InsertProduct {
 	public void setInventoryQuantity(Integer inventoryQuantity) {
 		this.inventoryQuantity = inventoryQuantity;
 	}
-	
-    
+
 }

@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.entity.ProductEntity;
-import com.example.demo.model.request.InsertProduct;
-import com.example.demo.model.request.UpdateProduct;
+import com.example.demo.dto.InsertProduct;
+import com.example.demo.dto.UpdateProduct;
+import com.example.demo.model.Product;
 import com.example.demo.service.IProductService;
+import com.example.demo.service.impl.AuthService;
 import com.example.demo.validate.ProductValidate;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,8 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping
 public class ProductController {
+	@Autowired
+	private AuthService authService;
 	
     @Autowired
     private IProductService productService;
@@ -41,6 +44,9 @@ public class ProductController {
     							, @RequestParam(defaultValue = "1") int page
     							){
     	HttpSession session = request.getSession();
+    	if(page < 1) {
+    		page = 1;
+    	}
     	if( productCode != "") {
     		session.setAttribute("productCode", productCode);
     	}
@@ -52,8 +58,8 @@ public class ProductController {
     	
         int totalRecord = productService.countSearch( productCode, productName );
         int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
-        List<ProductEntity> products = productService.searchProduct(productCode, productName, page);
-        model.addAttribute("isAdmin", productService.isAdmin());
+        List<Product> products = productService.searchProduct(productCode, productName, page);
+        model.addAttribute("isAdmin", authService.isAdmin());
         model.addAttribute("productCode", productCode);
         model.addAttribute("productName", productName);
         model.addAttribute("currentPage", page);
@@ -69,7 +75,7 @@ public class ProductController {
     private String showFormInsert(Model model){
     	model.addAttribute("insertProductRequest",new InsertProduct());
     	model.addAttribute("mapErrors",new HashMap<String, String>());
-    	model.addAttribute("isAdmin", productService.isAdmin());
+    	model.addAttribute("isAdmin", authService.isAdmin());
 	    return "product/product-add";
     }
 
@@ -84,7 +90,7 @@ public class ProductController {
     	} else {
     		model.addAttribute("insertProductRequest",insertProductRequest);
     	}
-    	model.addAttribute("isAdmin", productService.isAdmin());
+    	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("mapErrors",mapErrors);	
     	return "product/product-add";
     	
@@ -92,10 +98,10 @@ public class ProductController {
 
     @GetMapping("/admin/product/update/{productId}")
     private String showFormUpdate(Model model, @PathVariable("productId") int productId){
-    	ProductEntity product = productService.getProductById(productId);
+    	Product product = productService.getProductById(productId);
     	model.addAttribute("mapErrors",new HashMap<String, String>());
     	model.addAttribute("updateProductRequest", product);
-    	model.addAttribute("isAdmin", productService.isAdmin());
+    	model.addAttribute("isAdmin", authService.isAdmin());
 	    return "product/product-update";
     }
     
@@ -124,7 +130,7 @@ public class ProductController {
 		}
     	model.addAttribute("updateProductRequest",updateProductRequest); 
     	model.addAttribute("mapErrors",mapErrors);
-    	model.addAttribute("isAdmin", productService.isAdmin());
+    	model.addAttribute("isAdmin", authService.isAdmin());
     	return "product/product-update";	
     }
     

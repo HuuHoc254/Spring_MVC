@@ -1,4 +1,4 @@
-package com.example.demo.model.request;
+package com.example.demo.dto;
 
 public class InsertAccount {
     private String  accountName;
@@ -6,11 +6,9 @@ public class InsertAccount {
     private String  confirmPassword;
     private String  fullName;
     private String  phoneNumber;
-    
-    
+
 	public InsertAccount() {
 	}
-
 
 	public InsertAccount(String accountName, String password, String confirmPassword, String fullName,
 			String phoneNumber) {
@@ -70,7 +68,5 @@ public class InsertAccount {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	
-	
-    
+
 }

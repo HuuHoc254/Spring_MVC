@@ -2,19 +2,21 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.entity.AccountEntity;
+import com.example.demo.dto.InsertCustomer;
+import com.example.demo.dto.UpdateCustomer;
+import com.example.demo.model.Customer;
 
 public interface ICustomerService {
-	List<AccountEntity> searchAccount(String customerName
-									, String phoneNumber
-									, int page );
-	int countSearch(  String customerName
-					, String phoneNumber);
-	boolean isAdmin();
-	AccountEntity getCustomerById(int customerId);
-	boolean existsByphoneNumber(String phoneNumber);
-//	boolean insertCustomer(InsertCustomer insertAccountRequest);
-	boolean existsByphoneNumberNotId(String phoneNumber, Integer customerId);
-//	boolean updateAccount(UpdateAccount updateAccount);
+	List<Customer> searchCustomer(String 	customerName
+								, String 	phoneNumber
+								, int 		page );
+	int countSearch(  String 	customerName
+					, String 	phoneNumber
+					);
+	Customer getCustomerById(int customerId);
+	boolean existsByPhoneNumber(String phoneNumber);
+	boolean existsByPhoneNumberNotId(String phoneNumber, Integer customerId);
 	boolean deleteCustomer(int customerId);
+	boolean insertCustomer(InsertCustomer insertCustomer);
+	boolean updateCustomer(UpdateCustomer updateCustomer);
 }

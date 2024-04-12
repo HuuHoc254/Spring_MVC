@@ -1,73 +1,85 @@
-//package com.example.demo.service.impl;
-//
-//import java.util.List;
-//import java.util.Map;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import com.example.demo.entity.AccountEntity;
-//import com.example.demo.entity.Customer;
-//import com.example.demo.entity.RoleEntity;
-//import com.example.demo.repository.CustomerMapper;
-//import com.example.demo.service.ICustomerService;
-//
-//@Service
-//public class CustomerService implements ICustomerService {
-//	@Autowired
-//	private CustomerMapper customerMapper;
-//
-//	private Customer convertToEntity(Map<String, Object> map) {
-//		Customer customer = new Customer();
-//		AccountEntity account = new AccountEntity();
-//		account.setAccountId((Integer) map.get("account_id"));
-//		account.setFullName((String) map.get("full_name"));
-//		customer.setAccount(account);
-//		customer.setA((String) map.get("account_name"));
-//		customer.setAddress((String) map.get("phone_number"));
-//		customer.setAddress((String) map.get("address"));
-//		return account;
-//	}
-//
-//	@Override
-//	public List<AccountEntity> searchAccount(String customerName, String phoneNumber, int page) {
-//		return customerMapper.search(customerName, phoneNumber, page);
-//	}
-//
-//	@Override
-//	public int countSearch(String customerName, String phoneNumber) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	@Override
-//	public boolean isAdmin() {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//
-//	@Override
-//	public AccountEntity getCustomerById(int customerId) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public boolean existsByphoneNumber(String phoneNumber) {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean existsByphoneNumberNotId(String phoneNumber, Integer customerId) {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean deleteCustomer(int customerId) {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//
-//}
+package com.example.demo.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.dto.InsertCustomer;
+import com.example.demo.dto.UpdateCustomer;
+import com.example.demo.model.Account;
+import com.example.demo.model.Customer;
+import com.example.demo.repository.CustomerMapper;
+import com.example.demo.service.ICustomerService;
+
+@Service
+public class CustomerService implements ICustomerService {
+	@Autowired
+	private CustomerMapper customerMapper;
+
+	private Customer convertToEntity(Map<String, Object> map) {
+		Customer customer = new Customer();
+		Account account = new Account();
+		account.setAccountId((Integer) map.get("account_id"));
+		account.setFullName((String) map.get("full_name"));
+		customer.setAccount(account);
+		customer.setCustomerId((Integer) map.get("customer_id"));
+		customer.setCustomerName((String) map.get("customer_name"));
+		customer.setPhoneNumber((String) map.get("phone_number"));
+		customer.setAddress((String) map.get("address"));
+		customer.setVersion((Integer) map.get("version"));
+		return customer;
+	}
+
+	@Override
+	public List<Customer> searchCustomer(String customerName, String phoneNumber, int page) {
+		List<Map<String,Object>> customers = customerMapper.search(customerName, phoneNumber, (page - 1) * 3);
+		return customers.stream().map(m-> {return convertToEntity(m);}).toList();
+	}
+
+	@Override
+	public int countSearch(String customerName, String phoneNumber) {
+		return customerMapper.countSearch(customerName, phoneNumber);
+	}
+
+	@Override
+	public Customer getCustomerById(int customerId) {
+		return convertToEntity(customerMapper.findById(customerId));
+	}
+
+	@Override
+	public boolean existsByPhoneNumber(String phoneNumber) {
+		return customerMapper.existsByPhoneNumber(phoneNumber) > 0;
+	}
+
+	@Override
+	public boolean existsByPhoneNumberNotId(String phoneNumber, Integer customerId) {
+		return customerMapper.existsByPhoneNumberNotId(phoneNumber, customerId) > 0;
+	}
+
+	@Override
+	public boolean deleteCustomer(int customerId) {
+		return customerMapper.deleteCustomer(customerId) > 0;
+	}
+
+	@Override
+	public boolean insertCustomer(InsertCustomer insertCustomer) {
+		return customerMapper.insertCustomer( insertCustomer.getCustomerName()
+											, insertCustomer.getPhoneNumber()
+											, insertCustomer.getAddress()
+											, insertCustomer.getAccountId()
+											) >0;
+	}
+
+	@Override
+	public boolean updateCustomer(UpdateCustomer updateCustomer) {
+		return customerMapper.updateCustomer( updateCustomer.getCustomerId()
+											, updateCustomer.getCustomerName()
+											, updateCustomer.getPhoneNumber()
+											, updateCustomer.getAddress()
+											, updateCustomer.getVersion()
+											) >0;
+	}
+
+}

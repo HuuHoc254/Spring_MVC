@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.model.request.InsertProduct;
-import com.example.demo.model.request.UpdateProduct;
+import com.example.demo.dto.InsertProduct;
+import com.example.demo.dto.UpdateProduct;
 import com.example.demo.service.IProductService;
 
 @Component

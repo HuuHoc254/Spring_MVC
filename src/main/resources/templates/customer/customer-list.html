@@ -74,19 +74,21 @@
 		        <td th:text="${customer.phoneNumber}"></td>
 		        <td th:text="${customer.address}"></td>
 		        <td th:text="${customer.account.fullName}"></td>
-		        <td>
-		        	<a th:href="@{'/customer/update/' + ${customer.customerId}}" class="text-decoration-none text-light">
-		        		<button class="btn btn-primary">Chỉnh sửa</button>
-	        		</a>
-	        	</td>
-	        	<td>
-			        <a th:href="@{'/customer/delete/' + ${customer.customerId}}" class="text-decoration-none text-light" >
-			        	<button class="btn btn-primary delete-btn" onclick="return confirm('Bạn có muốn xóa nhân viên này không?')">Xóa</button>
-		        	</a>
-		        </td>
+		        <th:block th:if="${accountId == customer.account.accountId or isAdmin}">
+			        <td>
+			        	<a th:href="@{'/customer/update/' + ${customer.customerId}}" class="text-decoration-none text-light">
+			        		<button class="btn btn-primary">Chỉnh sửa</button>
+		        		</a>
+		        	</td>
+		        	<td>
+				        <a th:href="@{'/customer/delete/' + ${customer.customerId}}" class="text-decoration-none text-light" >
+				        	<button class="btn btn-primary delete-btn" onclick="return confirm('Bạn có muốn xóa khách hàng này không?')">Xóa</button>
+			        	</a>
+			        </td>
+		        </th:block>
 		    </tr>
 		    <tr th:if= "${customers.size() == 0}" >
-		    	<td colspan = "7" class="text-center"> Không tìm nhân viên!</td>
+		    	<td colspan = "7" class="text-center"> Không tìm khách hàng!</td>
 		    </tr>
 		</tbody>
     </table>

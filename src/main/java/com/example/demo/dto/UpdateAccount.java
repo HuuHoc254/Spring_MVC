@@ -1,4 +1,4 @@
-package com.example.demo.model.request;
+package com.example.demo.dto;
 
 public class UpdateAccount {
 	private Integer accountId;
@@ -8,11 +8,9 @@ public class UpdateAccount {
     private String fullName;
     private String phoneNumber;
     private Integer version;
-    
-    
+
 	public UpdateAccount() {
 	}
-
 
 	public UpdateAccount(Integer accountId, String accountName, String password, String confirmPassword,
 			String fullName, String phoneNumber, Integer version) {
@@ -25,7 +23,6 @@ public class UpdateAccount {
 		this.phoneNumber = phoneNumber;
 		this.version = version;
 	}
-
 
 	public Integer getAccountId() {
 		return accountId;
@@ -51,49 +48,40 @@ public class UpdateAccount {
 		return password;
 	}
 
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
 
-
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
-
 
 	public String getFullName() {
 		return fullName;
 	}
 
-
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-
 
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
 
 	public Integer getVersion() {
 		return version;
 	}
 
-
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	
+
 }

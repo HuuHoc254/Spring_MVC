@@ -10,6 +10,9 @@
             <li class="nav-item" th:if="${isAdmin}" th:classappend="${url== 'account' ? 'active' : ''}">
               <a class="nav-link" href="/admin/account">Account</a>
             </li>
+            <li class="nav-item" th:classappend="${url== 'customer' ? 'active' : ''}">
+              <a class="nav-link" href="/customer">Customer</a>
+            </li>
             <li class="nav-item" th:classappend="${url== 'order' ? 'active' : ''}">
               <a class="nav-link" href="#" >Order</a>
             </li>

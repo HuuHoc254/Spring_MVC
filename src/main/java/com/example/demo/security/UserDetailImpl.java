@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.demo.entity.AccountEntity;
+import com.example.demo.model.Account;
 
 public class UserDetailImpl implements UserDetails {
     private Integer accountId;
@@ -29,7 +29,7 @@ public class UserDetailImpl implements UserDetails {
 	public UserDetailImpl() {
 	}
 
-	public static UserDetailImpl convertAccountEntityToAccountDetail(AccountEntity account){
+	public static UserDetailImpl convertAccountEntityToAccountDetail(Account account){
 
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(account.getRole().getRoleName()));
         return new UserDetailImpl(

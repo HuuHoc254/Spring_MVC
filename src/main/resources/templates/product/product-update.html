@@ -14,21 +14,20 @@
 </th:block>
 <div class="container mt-3 ">
  <h2 class=" mt-3 mb-3 text-center"> Cập nhật sản phẩm</h2>
-    <form th:action="@{/admin/product/update}+'/'+${updateProductRequest.productId}" th:method="post" th:object="${updateProductRequest}">
-    	<input type="hidden" name = "productId" th:value = "${updateProductRequest.productId}">
-    	<input type="hidden" name = "version" th:value = "${updateProductRequest.version}">
+    <form th:action="@{/admin/product/update}+'/'+${updateProduct.productId}" th:method="post" th:object="${updateProduct}">
+    	<input type="hidden" name = "productId" th:value = "${updateProduct.productId}">
+    	<input type="hidden" name = "version" th:value = "${updateProduct.version}">
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
                 <label class="">Mã sản phẩm</label>
             </div>
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="productCode" th:value = "${updateProductRequest.productCode}"
+                <input class="form-control border-dark shadow-none" type="text" name="productCode" th:value = "${updateProduct.productCode}"
                 	th:classappend="${mapErrors.get('productCode') != null ? 'is-invalid' : ''}">
             </div>
             
-            <div th:if="${mapErrors.get('productCode') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('productCode')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('productCode') != null}" th:text= "${mapErrors.get('productCode')}">
     		</div>
     		
         </div>
@@ -39,12 +38,11 @@
                 <label class="">Tên sản phẩm</label>
             </div>
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="productName"  th:value = "${updateProductRequest.productName}"
+                <input class="form-control border-dark shadow-none" type="text" name="productName"  th:value = "${updateProduct.productName}"
                 	th:classappend="${mapErrors.get('productName') != null ? 'is-invalid' : ''}">
             </div>
             
-            <div th:if="${mapErrors.get('productName') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('productName')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('productName') != null}" th:text= "${mapErrors.get('productName')}" >
     		</div>
         </div>
         <div class="row input-group mb-3">
@@ -53,11 +51,10 @@
                 <label class="">Giá mua vào</label>
             </div>
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="purchasePrice"  th:value = "${updateProductRequest.purchasePrice}"
+                <input class="form-control border-dark shadow-none" type="number" name="purchasePrice"  th:value = "${updateProduct.purchasePrice}"
                 	th:classappend="${mapErrors.get('purchasePrice') != null ? 'is-invalid' : ''}">
             </div>
-            <div th:if="${mapErrors.get('purchasePrice') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('purchasePrice')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('purchasePrice') != null}" th:text= "${mapErrors.get('purchasePrice')}">
     		</div>
         </div>
         <div class="row input-group mb-3">
@@ -66,11 +63,10 @@
                 <label class="">Giá bán ra</label>
             </div>
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="salePrice"  th:value = "${updateProductRequest.salePrice}"
+                <input class="form-control border-dark shadow-none" type="number" name="salePrice"  th:value = "${updateProduct.salePrice}"
             		th:classappend="${mapErrors.get('salePrice') != null ? 'is-invalid' : ''}">
             </div>
-            <div th:if="${mapErrors.get('salePrice') != null}" class="col-4">
-    			<div class="mt-2 text-danger" th:text= "${mapErrors.get('salePrice')}"></div>
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('salePrice') != null}" th:text= "${mapErrors.get('salePrice')}" >
     		</div>
         </div>
         
@@ -80,7 +76,7 @@
                 <label class="">Số lượng tồn kho</label>
             </div>
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" readonly="readonly" name="inventoryQuantity" type="number" th:value = "${updateProductRequest.inventoryQuantity}">
+                <input class="form-control border-dark shadow-none" readonly="readonly" name="inventoryQuantity" type="number" th:value = "${updateProduct.inventoryQuantity}">
             </div>
         </div>
 

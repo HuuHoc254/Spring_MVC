@@ -1,15 +1,15 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
-public class RoleEntity {
+public class Role {
     private Integer roleId;
     private String roleName;
 
-    public RoleEntity(Integer roleId, String roleName) {
+    public Role(Integer roleId, String roleName) {
 		this.roleId = roleId;
 		this.roleName = roleName;
 	}
 
-	public RoleEntity() {
+	public Role() {
 	}
 
 	public Integer getRoleId() {

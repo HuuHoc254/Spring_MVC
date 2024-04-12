@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Product Update</title>
+    <title>Account Update</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,7 +15,7 @@
 <div class="container mt-3 ">
  <h2 class=" mt-3 mb-3 text-center"> Cập nhật nhân viên</h2>
     <form th:action="@{/admin/account/update}+'/'+${updateAccount.accountId}" th:method="post" th:object="${updateAccount}">
-    	<input type="hidden" name = "productId" th:value = "${updateAccount.accountId}">
+    	<input type="hidden" name = "accountId" th:value = "${updateAccount.accountId}">
     	<input type="hidden" name = "version" th:value = "${updateAccount.version}">
         <div class="row input-group mb-3">
             <div class="col-1"></div>

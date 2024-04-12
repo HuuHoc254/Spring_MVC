@@ -2,17 +2,17 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.entity.ProductEntity;
-import com.example.demo.model.request.InsertProduct;
-import com.example.demo.model.request.UpdateProduct;
+import com.example.demo.dto.InsertProduct;
+import com.example.demo.dto.UpdateProduct;
+import com.example.demo.model.Product;
 
 public interface IProductService {
-	List<ProductEntity> searchProduct(String productCode
+	List<Product> searchProduct(String productCode
 									, String productName
 									, int page );
     int countSearch( String productCode
 				   , String productName );
-	ProductEntity getProductById(int productId);
+	Product getProductById(int productId);
 	boolean existsByProductCode(String productCode);
 	boolean existsByProductName(String productName);
 	boolean insertProduct(InsertProduct insertProductRequest);
@@ -20,5 +20,4 @@ public interface IProductService {
 	boolean existsByProductNameNotId(String productName, Integer productId);
 	boolean updateProduct(UpdateProduct updateProductRequest);
 	boolean deleteProduct(int productId);
-	boolean isAdmin();
 }

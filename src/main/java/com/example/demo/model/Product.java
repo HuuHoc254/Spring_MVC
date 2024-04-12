@@ -1,6 +1,6 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
-public class ProductEntity {
+public class Product {
    
     private Integer productId;
     private String productCode;
@@ -12,10 +12,10 @@ public class ProductEntity {
     private Boolean isDeleted;
     
     
-	public ProductEntity() {
+	public Product() {
 	}
 	
-	public ProductEntity(Integer productId, String productCode, String productName, Double purchasePrice,
+	public Product(Integer productId, String productCode, String productName, Double purchasePrice,
 			Double salePrice, Integer inventoryQuantity, Integer version, Boolean isDeleted) {
 		this.productId = productId;
 		this.productCode = productCode;
