@@ -73,22 +73,22 @@ public class ProductController {
 
     @GetMapping("/admin/product/insert")
     private String showFormInsert(Model model){
-    	model.addAttribute("insertProductRequest",new InsertProduct());
+    	model.addAttribute("insertProduct",new InsertProduct());
     	model.addAttribute("mapErrors",new HashMap<String, String>());
     	model.addAttribute("isAdmin", authService.isAdmin());
 	    return "product/product-add";
     }
 
     @PostMapping("/admin/product/insert")
-    private String insertProduct(Model model, @ModelAttribute InsertProduct insertProductRequest){
-    	Map<String, String> mapErrors = validate.validateInsertProduct(insertProductRequest);
+    private String insertProduct(Model model, @ModelAttribute InsertProduct insertProduct){
+    	Map<String, String> mapErrors = validate.validateInsertProduct(insertProduct);
     	if(mapErrors.size() == 0) {
     		model.addAttribute("insertProductRequest", new InsertProduct());
-    		if(productService.insertProduct(insertProductRequest)) {
+    		if(productService.insertProduct(insertProduct)) {
     			model.addAttribute("message", "Thêm mới sản phẩm thành công!");
     		};
     	} else {
-    		model.addAttribute("insertProductRequest",insertProductRequest);
+    		model.addAttribute("insertProduct",insertProduct);
     	}
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("mapErrors",mapErrors);	
@@ -100,7 +100,7 @@ public class ProductController {
     private String showFormUpdate(Model model, @PathVariable("productId") int productId){
     	Product product = productService.getProductById(productId);
     	model.addAttribute("mapErrors",new HashMap<String, String>());
-    	model.addAttribute("updateProductRequest", product);
+    	model.addAttribute("updateProduct", product);
     	model.addAttribute("isAdmin", authService.isAdmin());
 	    return "product/product-update";
     }

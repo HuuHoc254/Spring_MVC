@@ -98,4 +98,14 @@ public class ProductService implements IProductService {
 	public boolean deleteProduct(int productId) {
 		return productMapper.deleteProduct(productId) > 0;
 	}
+
+	@Override
+	public String getProductCodeByName(String productName) {
+		return productMapper.getProductCodeByName(productName);
+	}
+
+	@Override
+	public String getProductNameByCode(String productCode) {
+		return productMapper.getProductNameByCode(productCode);
+	}
 }

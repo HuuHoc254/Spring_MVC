@@ -114,15 +114,15 @@
         
         var url = '/admin/account?page=' + currenPage;
         
-        if (accountName != "") {
+        if (accountName != null) {
             url += '&accountName=' + accountName ;
         }
         
-        if (fullName != "") {
+        if (fullName != null) {
             url += '&fullName=' + fullName ;
         }
         
-        if (phoneNumber != "") {
+        if (phoneNumber != null) {
             url += '&phoneNumber=' + phoneNumber ;
         }
         

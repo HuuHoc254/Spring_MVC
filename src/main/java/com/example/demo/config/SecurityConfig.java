@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                         auth.requestMatchers("/admin/**").hasAnyRole("ADMIN");
                         auth.requestMatchers("/login*").permitAll();
+                        auth.requestMatchers("/api/**").permitAll();
                         auth.anyRequest().authenticated(); }
                 )
                 .formLogin(formLogin -> formLogin
@@ -48,4 +49,4 @@ public class SecurityConfig {
             );
         return http.build();
     }
-}
+}	

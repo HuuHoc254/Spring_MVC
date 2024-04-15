@@ -33,4 +33,6 @@ public interface ProductMapper {
 					, Double salePrice
 					, Integer version);
 	int deleteProduct(int productId);
+	String getProductNameByCode(String productCode);
+	String getProductCodeByName(String productName);
 }

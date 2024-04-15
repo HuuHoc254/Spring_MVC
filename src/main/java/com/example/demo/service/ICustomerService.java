@@ -19,4 +19,6 @@ public interface ICustomerService {
 	boolean deleteCustomer(int customerId);
 	boolean insertCustomer(InsertCustomer insertCustomer);
 	boolean updateCustomer(UpdateCustomer updateCustomer);
+	String getPhoneNumberByName(String customerName);
+	String getCustomerNameByPhoneNumber(String phoneNumber);
 }

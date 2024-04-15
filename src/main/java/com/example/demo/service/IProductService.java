@@ -20,4 +20,6 @@ public interface IProductService {
 	boolean existsByProductNameNotId(String productName, Integer productId);
 	boolean updateProduct(UpdateProduct updateProductRequest);
 	boolean deleteProduct(int productId);
+	String getProductCodeByName(String productName);
+	String getProductNameByCode(String productCode);
 }

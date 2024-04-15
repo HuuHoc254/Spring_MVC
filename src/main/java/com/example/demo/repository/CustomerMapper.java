@@ -35,4 +35,6 @@ public interface CustomerMapper {
 					, 	Integer version);
 
 	int deleteCustomer(int customerId);
+	String getPhoneNumberByName(String customerName);
+	String getCustomerNameByPhoneNumber(String phoneNumber);
 }

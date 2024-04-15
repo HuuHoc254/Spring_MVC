@@ -109,4 +109,26 @@
 				customer_id 		= #{customerId}
 		</where>
 	</update>
+
+	<select id="getPhoneNumberByName" resultType="String">
+	    SELECT 
+	    	phone_number
+	    FROM
+	    	customer
+	    <where>
+	    	is_deleted = FALSE
+	    AND customer_name != #{customerName} 
+	    </where>
+	</select>
+
+	<select id="getCustomerNameByPhoneNumber" resultType="String">
+	    SELECT 
+	    	customer_name
+	    FROM
+	    	customer
+	    <where>
+	    	is_deleted = FALSE
+	    AND phone_number != #{phoneNumber} 
+	    </where>
+	</select>
   </mapper>

@@ -112,6 +112,7 @@
 			AND	version 		= #{version}
 		</where>
 	</update>
+
 	<update id="deleteProduct">
 		UPDATE
 			products
@@ -121,4 +122,26 @@
 				product_id 		= #{productId}
 		</where>
 	</update>
+
+	<select id="getProductCodeByName" resultType="String">
+	    SELECT 
+	    	product_code
+	    FROM
+	    	products
+	    <where>
+	    	is_deleted = FALSE
+    	AND product_name = #{productName}
+	    </where>
+	</select>
+
+	<select id="getProductNameByCode" resultType="String">
+	    SELECT 
+	    	product_name
+	    FROM
+	    	products
+	    <where>
+	    	is_deleted = FALSE
+    	AND product_code = #{productCode}
+	    </where>
+	</select>
   </mapper>
