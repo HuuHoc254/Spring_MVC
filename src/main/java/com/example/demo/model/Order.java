@@ -1,49 +1,158 @@
-//package com.example.demo.entity;
-//
-//import jakarta.persistence.*;
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.NoArgsConstructor;
-//import lombok.Setter;
-//
-//import java.time.LocalDateTime;
-//
-//@Setter
-//@Getter
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Entity
-//@Table(name = "orders")
-//public class OrderEntity {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Integer orderId;
-//    @ManyToOne
-//    @JoinColumn(name = "product_id")
-//    private ProductEntity product;
-//    @Column( name = "unit_price")
-//    private Double unitPrice;
-//    @Column( name = "quantity")
-//    private Integer quantity;
-//    @ManyToOne
-//    @JoinColumn(name = "customer_id")
-//    private CustomerEntity customer;
-//    @Column( name = "address_customer")
-//    private String addressCustomer;
-//    @Column( name = "phone_number_customer")
-//    private String phoneNumberCustomer;
-//    @ManyToOne
-//    @JoinColumn(name = "account_id")
-//    private AccountEntity account;
-//    @Column(name = "order_date", columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-//    private LocalDateTime orderDate;
-//    @Column(name = "allocation_date", columnDefinition = "DATETIME DEFAULT NULL")
-//    private LocalDateTime allocationDate;
-//    @ManyToOne
-//    @JoinColumn(name = "order_status_id")
-//    private OrderStatusEntity orderStatus;
-//    @Column( columnDefinition = "INT DEFAULT 0")
-//    private Integer version;
-//    @Column( columnDefinition = "BOOLEAN DEFAULT FALSE")
-//    private Boolean isDeleted;
-//}
+package com.example.demo.model;
+
+import java.time.LocalDateTime;
+
+public class Order {
+    private Integer orderId;
+    private String productCode;
+    private String productName;
+    private Double unitPrice;
+    private Integer quantity;
+    private String customerName;
+    private String addressCustomer;
+    private String phoneNumberCustomer;
+    private String accountName;
+    private String fullName;
+    private LocalDateTime orderDate;
+    private LocalDateTime allocationDate;
+    private String orderStatusName;
+    private Integer version;
+    
+	public Order() {
+		super();
+	}
+
+	public Order(Integer orderId, String productCode, String productName, Double unitPrice, Integer quantity,
+			String customerName, String addressCustomer, String phoneNumberCustomer, String accountName,
+			String fullName, LocalDateTime orderDate, LocalDateTime allocationDate, String orderStatusName,
+			Integer version) {
+		super();
+		this.orderId = orderId;
+		this.productCode = productCode;
+		this.productName = productName;
+		this.unitPrice = unitPrice;
+		this.quantity = quantity;
+		this.customerName = customerName;
+		this.addressCustomer = addressCustomer;
+		this.phoneNumberCustomer = phoneNumberCustomer;
+		this.accountName = accountName;
+		this.fullName = fullName;
+		this.orderDate = orderDate;
+		this.allocationDate = allocationDate;
+		this.orderStatusName = orderStatusName;
+		this.version = version;
+	}
+
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public Double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(Double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public String getAddressCustomer() {
+		return addressCustomer;
+	}
+
+	public void setAddressCustomer(String addressCustomer) {
+		this.addressCustomer = addressCustomer;
+	}
+
+	public String getPhoneNumberCustomer() {
+		return phoneNumberCustomer;
+	}
+
+	public void setPhoneNumberCustomer(String phoneNumberCustomer) {
+		this.phoneNumberCustomer = phoneNumberCustomer;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public LocalDateTime getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(LocalDateTime orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public LocalDateTime getAllocationDate() {
+		return allocationDate;
+	}
+
+	public void setAllocationDate(LocalDateTime allocationDate) {
+		this.allocationDate = allocationDate;
+	}
+
+	public String getOrderStatusName() {
+		return orderStatusName;
+	}
+
+	public void setOrderStatusName(String orderStatusName) {
+		this.orderStatusName = orderStatusName;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+	
+}

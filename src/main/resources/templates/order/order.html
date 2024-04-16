@@ -78,7 +78,7 @@
                 <label class="">Ngày đặt hàng bắt đầu</label>
             </div>
             <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="date" id="startOrderDate" name="startOrderDate">
+                <input class="form-control border-dark shadow-none" type="date" name="beginOrderDate">
             </div>
         </div>
 
@@ -87,7 +87,7 @@
                 <label class="">Ngày đặt hàng kết thúc</label>
             </div>
             <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="date" id="endOrderDate" name="endOrderDate">
+                <input class="form-control border-dark shadow-none" type="date" name="endOrderDate">
             </div>
         </div>
 
@@ -96,11 +96,11 @@
                 <label class="">Trạng thái</label>
             </div>
             <div class="form-check form-check-inline">
-			  	<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="orderStatus">
+			  	<input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="orderStatus">
 			  	<label class="form-check-label" for="inlineCheckbox1">Đã đặt hàng</label>
 			</div>
 			<div class="form-check form-check-inline">
-			  	<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="allocationStatus">
+			  	<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="allocationStatus">
 			  	<label class="form-check-label" for="inlineCheckbox2">Đã phân bổ</label>
 			</div>
         </div>
@@ -120,7 +120,7 @@
         </div>
     </form>
 
-    <form action="" method="post">
+    <form th:action="@{/order/save}" th:method="POST">
       <table width="100%">
         <thead>
           <tr class="bg-dark text-light">
@@ -135,46 +135,35 @@
             <th scope="col">Địa chỉ</th>
             <th scope="col">Trạng thái</th>
             <th scope="col">Ngày phân bổ</th>
-            <th scope="col">Tên đăng nhập</th>
-            <th scope="col">Tên nhân viên</th>
+            <th scope="col" th:if="${isAdmin}">Tên đăng nhập</th>
+            <th scope="col" th:if="${isAdmin}">Tên nhân viên</th>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>12/04/2024</td>
-            <td contenteditable="true" class="productCode1" onblur="fillData(this,document.querySelector('.productName1'),'name')">DT01</td>
-            <td contenteditable="true" class="productName1" onblur="fillData(this,document.querySelector('.productCode1'),'code')">Điện thoại Iphone 8</td>
-            <td>4,000,000 VND</td>
-            <td contenteditable="true">2</td>
-            <td contenteditable="true" class="customerName">Nguyễn Hữu Học</td>
-            <td contenteditable="true" class="phoneNumber">0788640856</td>
-            <td>Quảng Nam</td>
-            <td>Đã phân bổ</td>
-            <td>13/04/2024</td>
-            <td>staff</td>
-            <td>NV staff</td>
-          </tr>
+          <tr th:if = "${orders.size() != 0}" th:each="order, index : ${orders}">
+            <td class="text-center" th:text=" ${index.index + 1 + (currentPage - 1) *3}">1</td>
+            <td th:text="${order.orderDate}" ></td>
+            <td th:text="${order.productCode}" contenteditable="true" th:class="'productCode' + (${index.index + 1})" 
+    			th:onblur="'fillDataProduct(this, document.querySelector(\'.productName' + (${index.index + 1}) + '\'), \'name\')'"></td>
 
-          <tr data-index = "2">
-            <td>2</td>
-            <td>20/04/2024</td>
-            <td contenteditable="true" class="productCode2" onblur="fillData(this,document.querySelector('.productName2'),'name')">DT02</td>
-            <td contenteditable="true" class="productName2" onblur="fillData(this,document.querySelector('.productCode2'),'code')">Điện thoại Iphone X</td>
-            <td>6,000,000 VND</td>
-            <td contenteditable="true">3</td>
-            <td contenteditable="true" class="customerName">Võ Thị Phương Diễm</td>
-            <td contenteditable="true" class="phoneNumber">0937649897</td>
-            <td>Đà Nẵng</td>
-            <td>Đã đặt hàng</td>
-            <td>null</td>
-            <td>staff</td>
-            <td>NV staff</td>
+            <td th:text="${order.productName}" contenteditable="true" th:class="'productName' + (${index.index + 1})" 
+            	th:onblur="'fillDataProduct(this, document.querySelector(\'.productCode' + (${index.index + 1}) + '\'), \'code\')'"></td>
+            <td th:text="${order.unitPrice}"></td>
+            <td th:text="${order.quantity}" contenteditable="true"></td>
+            <td th:text="${order.customerName}" contenteditable="true" th:class="'customerName' + (${index.index + 1})"
+            	th:onblur="'fillDataCustomer(this, document.querySelector(\'.phoneNumber' + (${index.index + 1}) + '\'), \'phone\')'"></td>
+            <td th:text="${order.phoneNumberCustomer}" contenteditable="true" th:class="'phoneNumber' + ${index.index + 1}"
+            	th:onblur="'fillDataCustomer(this, document.querySelector(\'.customerName' + (${index.index + 1}) + '\'), \'name\')'"></td>
+            <td th:text="${order.addressCustomer}"></td>
+            <td th:text="${order.orderStatusName}"></td>
+            <td th:text="${order.allocationDate}"></td>
+            <td th:text="${order.accountName}" th:if="${isAdmin}"></td>
+            <td th:text="${order.fullName}" th:if="${isAdmin}"></td>
           </tr>
         </tbody>
       </table>
       <nav aria-label="Page navigation example " class="d-flex justify-content-center mt-4">
         <ul class="pagination">
-          <li class="page-item active">
+          <li class="page-item active">	
             <a class="page-link" aria-current="page">1</a>
           </li>
           <li class="page-item">
@@ -215,41 +204,44 @@
                 break;
             }
         }
-    
+
         // Nếu hàng cuối cùng không rỗng, tạo một hàng mới với số thứ tự tiếp theo
         if (isRowNotEmpty) {
             var newRow = table.insertRow(table.rows.length);
-            var nextIndex = parseInt(lastRow.cells[0].textContent) + 1; // Lấy số thứ tự tiếp theo
+            var nextIndex = (lastRow.cells[0].textContent != 'NaN' ?  parseInt(lastRow.cells[0].textContent) : 0) + 1; // Lấy số thứ tự tiếp theo
             var cells = [];
     
             // Thêm số thứ tự vào hàng mới
             var indexCell = newRow.insertCell(0);
             indexCell.textContent = nextIndex;
+            indexCell.setAttribute("class","text-center");
     
             // Thêm các ô có thể chỉnh sửa vào hàng mới
             for (var i = 0; i < 7; i++) {
                 cells[i] = newRow.insertCell(i+1);
                 switch (i) {
         			case 1:
-        				cells[i].setAttribute("contenteditable", "true");
-        				cells[i].setAttribute("onblur", "fillData(this,document.querySelector('.productName"+(table.rows.length - 1)+"'),'name')");
         				cells[i].setAttribute("class", "productCode" + (table.rows.length - 1));
+        				cells[i].setAttribute("contenteditable", "true");
+        				cells[i].setAttribute("onblur", "fillDataProduct(this,document.querySelector('.productName"+(table.rows.length - 1)+"'),'name')");
         				break;
         			case 2:
+        				cells[i].setAttribute("class", "productName" + (table.rows.length - 1));
         				cells[i].setAttribute("contenteditable", "true");
-        				cells[i].setAttribute("onblur", "fillData(this,document.querySelector('.productCode"+(table.rows.length - 1)+"'),'code')");
-        				cells[i].setAttribute("class", "productName"+ (table.rows.length - 1));
+        				cells[i].setAttribute("onblur", "fillDataProduct(this,document.querySelector('.productCode"+(table.rows.length - 1)+"'),'code')");
         				break;
         			case 4:
         				cells[i].setAttribute("contenteditable", "true");
         				break;
         			case 5:
-        				cells[i].setAttribute("class", "customerName");
+        				cells[i].setAttribute("class", "customerName" + (table.rows.length - 1));
         				cells[i].setAttribute("contenteditable", "true");
+        				cells[i].setAttribute("onblur", "fillDataCustomer(this,document.querySelector('.phoneNumber"+(table.rows.length - 1)+"'),'phone')");
         				break;
         			case 6:
-        				cells[i].setAttribute("class", "phoneNumber");
+        				cells[i].setAttribute("class", "phoneNumber" + (table.rows.length - 1));
         				cells[i].setAttribute("contenteditable", "true");
+        				cells[i].setAttribute("onblur", "fillDataCustomer(this,document.querySelector('.customerName"+(table.rows.length - 1)+"'),'name')");
         				break;
         		}
             }

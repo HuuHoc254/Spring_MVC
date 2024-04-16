@@ -117,7 +117,7 @@
 	    	customer
 	    <where>
 	    	is_deleted = FALSE
-	    AND customer_name != #{customerName} 
+	    AND customer_name = #{customerName} 
 	    </where>
 	</select>
 
@@ -128,7 +128,7 @@
 	    	customer
 	    <where>
 	    	is_deleted = FALSE
-	    AND phone_number != #{phoneNumber} 
+	    AND phone_number = #{phoneNumber} 
 	    </where>
 	</select>
   </mapper>

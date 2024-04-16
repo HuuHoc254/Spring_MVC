@@ -18,7 +18,7 @@ public class CustomerService implements ICustomerService {
 	@Autowired
 	private CustomerMapper customerMapper;
 
-	private Customer convertToEntity(Map<String, Object> map) {
+	private Customer convertToModel(Map<String, Object> map) {
 		Customer customer = new Customer();
 		Account account = new Account();
 		account.setAccountId((Integer) map.get("account_id"));
@@ -35,7 +35,7 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public List<Customer> searchCustomer(String customerName, String phoneNumber, int page) {
 		List<Map<String,Object>> customers = customerMapper.search(customerName, phoneNumber, (page - 1) * 3);
-		return customers.stream().map(m-> {return convertToEntity(m);}).toList();
+		return customers.stream().map(m-> {return convertToModel(m);}).toList();
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CustomerService implements ICustomerService {
 
 	@Override
 	public Customer getCustomerById(int customerId) {
-		return convertToEntity(customerMapper.findById(customerId));
+		return convertToModel(customerMapper.findById(customerId));
 	}
 
 	@Override

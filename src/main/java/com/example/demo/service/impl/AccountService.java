@@ -27,9 +27,9 @@ public class AccountService implements IAccountService {
 		if (map == null) {
 			return null;	
 		}
-		return convertTo(map);
+		return convertToModel(map);
 	}
-	private Account convertTo(Map<String, Object> map) {
+	private Account convertToModel(Map<String, Object> map) {
 		Account account = new Account();
 		Role role = new Role();
 		account.setAccountId((Integer) map.get("account_id"));
@@ -57,7 +57,7 @@ public class AccountService implements IAccountService {
 				 											, (page - 1) * 3
 				 											  );
 		 return map.stream().map(m ->{
-				return convertTo(m);
+				return convertToModel(m);
 			}).toList(); 
 	}
 	@Override
@@ -67,7 +67,7 @@ public class AccountService implements IAccountService {
 
 	@Override
 	public Account getAccountById(int accountId) {
-		return convertTo(accountMapper.findById(accountId));
+		return convertToModel(accountMapper.findById(accountId));
 	}
 	@Override
 	public boolean existsByAccountName(String accountName) {

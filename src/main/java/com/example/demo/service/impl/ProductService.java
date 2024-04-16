@@ -26,7 +26,7 @@ public class ProductService implements IProductService {
 													, productName
 													, (page - 1) * 3);
 		return map.stream().map(m ->{
-			return convertMapToProduct(m);
+			return convertToModel(m);
 		}).toList();
 	}
 
@@ -37,7 +37,7 @@ public class ProductService implements IProductService {
 		return productMapper.countSearch(productCode,productName);
 	}
 
-	private Product convertMapToProduct(Map<String,Object> map){
+	private Product convertToModel(Map<String,Object> map){
 		Product product = new Product();
 		product.setProductId( (Integer) map.get("product_id"));
 		product.setProductCode( (String) map.get("product_code"));
@@ -53,7 +53,7 @@ public class ProductService implements IProductService {
 
 	@Override
 	public Product getProductById(int productId) {
-		return convertMapToProduct(productMapper.getProductById(productId));
+		return convertToModel(productMapper.getProductById(productId));
 	}
 
 	@Override
