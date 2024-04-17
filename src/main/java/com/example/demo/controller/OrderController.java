@@ -102,4 +102,14 @@ public class OrderController {
         return "order/order";
     }
 
+	@GetMapping("/allocation")
+    private String showFormUpdate( HttpServletRequest request
+								,  Model model
+								){
+    	model.addAttribute("isAdmin", authService.isAdmin());
+    	model.addAttribute("allocation","order");
+	    return "allocation/allocation";
+    }
+
+
 }

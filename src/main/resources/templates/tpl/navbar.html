@@ -17,14 +17,14 @@
               <a class="nav-link" href="/order" >Order</a>
             </li>
             <li class="nav-item" th:if="${isAdmin}" th:classappend="${url== 'allocation' ? 'active' : ''}">
-              <a class="nav-link " href="#">
+              <a class="nav-link " href="/order/allocation">
                 Allocation Product
               </a>
             </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item" th:if="${isAdmin != null}">
-                    <a class="nav-link text-light" href="/logout">Đăng xuất</a>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/logout">LOG OUT</a>
                 </li>
             </ul>
         </div>
