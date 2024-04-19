@@ -17,14 +17,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/order")
+@RequestMapping
 public class OrderController {
 	@Autowired
 	private AuthService authService;
 	@Autowired
 	private IOrderService orderService;
 
-    @GetMapping
+    @GetMapping("/order")
     private String searchProduct(HttpServletRequest request
     							, Model model
     							, @RequestParam(defaultValue = "") String accountName
@@ -79,9 +79,6 @@ public class OrderController {
 														,  page
 										);
         model.addAttribute("isAdmin", authService.isAdmin());
-//        model.addAttribute("productCode", customerName);
-//    	model.addAttribute("accountId", authService.getIdLogin());
-//        model.addAttribute("productName", phoneNumber);
         model.addAttribute("accountName", accountName);
         model.addAttribute("fullName", fullName);
         model.addAttribute("productCode", productCode);
@@ -102,12 +99,12 @@ public class OrderController {
         return "order/order";
     }
 
-	@GetMapping("/allocation")
+	@GetMapping("/admin/allocation")
     private String showFormUpdate( HttpServletRequest request
 								,  Model model
 								){
     	model.addAttribute("isAdmin", authService.isAdmin());
-    	model.addAttribute("allocation","order");
+    	model.addAttribute("url","allocation");
 	    return "allocation/allocation";
     }
 

@@ -105,42 +105,15 @@
                         <button type="submit" class="btn btn-primary"> Thêm mới</button>
                     </div>
                     <div class="col-6">
-                        <button type="button" onclick="checkLocalStorage()" class="btn btn-primary">Hủy</button>
+                        <a href="/admin/account/cancel" class="text-decoration-none text-light">
+                        	<button type="button" class="btn btn-primary">Hủy</button>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
-<script>
-    // Function kiểm tra localStorage có chứa giá trị productCode và productName không
-    function checkLocalStorage() {
-        var accountName = localStorage.getItem('accountName'); // Lấy giá trị của productCode từ localStorage
-        var fullName = localStorage.getItem('fullName'); // Lấy giá trị của productName từ localStorage
-        var phoneNumber = localStorage.getItem('phoneNumber'); // Lấy giá trị của productName từ localStorage
-        var currenPage = localStorage.getItem('currentPage'); // Lấy giá trị của currentPage từ localStorage
-       
-        if (currenPage == null){
-        	currenPage = 1;
-        }
-        
-        var url = '/admin/account?page=' + currenPage;
-        
-        if (accountName != null) {
-            url += '&accountName=' + accountName ;
-        }
-        
-        if (fullName != null) {
-            url += '&fullName=' + fullName ;
-        }
-        
-        if (phoneNumber != null) {
-            url += '&phoneNumber=' + phoneNumber ;
-        }
-        
-        window.location.href = url;
-    }
-</script>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

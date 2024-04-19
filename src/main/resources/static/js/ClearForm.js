@@ -1,14 +1,10 @@
 function clearForm(){
-	if (document.getElementById('accountName')!=null){
-		document.getElementById('accountName').value = '';
-		document.getElementById('fullName').value = '';
-	}
-	document.getElementById('productCode').value = '';
-	document.getElementById('productName').value = '';
-	document.getElementById('customerName').value = '';
-	document.getElementById('phoneNumberCustomer').value = '';
-	document.getElementById('beginOrderDate').value = '';
-	document.getElementById('endOrderDate').value = '';
+	var inputs = document.querySelector('form').getElementsByTagName('input');
+	for (var i = 0; i < inputs.length; i++) {
+    inputs[i].value = '';
+}
+	if(document.getElementById('inlineCheckbox1')!=null){
 	document.getElementById('inlineCheckbox1').checked = false;
 	document.getElementById('inlineCheckbox2').checked = false;
+	}
 }

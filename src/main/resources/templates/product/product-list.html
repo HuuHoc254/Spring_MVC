@@ -8,6 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script type="text/javascript" src="/js/ClearForm.js"></script>
 </head>
 <body>
 <th:block th:insert="~{tpl/navbar.html :: navbar}">
@@ -40,16 +41,16 @@
             <div class="col-xl-4 col-md-6 col-sm-6 mt-1">
                 <div class="row">
                     <div class="col-6">
-                        <button type="submit" class="btn btn-primary" onclick="saveSearchValues()"> Tìm kiếm</button>
+                        <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
                     </div>
                     <div class="col-6">
-                        <button type="reset" class="btn btn-primary" onclick="clearLocalStorage()"> Clear</button>
+                        <button type="button" class="btn btn-primary" onclick="clearForm()"> Clear</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
-	<div class= "row m-3">
+	<div class= "row m-3" th:if="${isAdmin}">
 		<div class="col-xl-2 col-0"></div>
 		<a href="/admin/product/insert" class="text-decoration-none text-light">
 		<button class="btn btn-primary " type="button"> Thêm mới</button>
@@ -194,42 +195,6 @@
 	    alert(message);
 	}
 	/*]]>*/
-</script>
-
-<script>
-    // Hàm lấy giá trị của currentPage từ URL
-    function getCurrentPageFromURL() {
-        // Lấy query params từ URL
-        var urlParams = new URLSearchParams(window.location.search);
-        
-        // Lấy giá trị của tham số "page" từ query params
-        var currentPage = urlParams.get('page');
-        
-        // Trả về giá trị của currentPage hoặc mặc định là 1 nếu không có
-        return currentPage ? parseInt(currentPage) : 1;
-    }
-
-    // Function lưu giá trị vào localStorage
-    function saveSearchValues() {
-        var currentPage = getCurrentPageFromURL(); // Lấy giá trị của currentPage từ URL
-        var productCode = document.getElementById('productCode').value;
-        var productName = document.getElementById('productName').value;
-
-        // Lưu giá trị vào localStorage
-        localStorage.setItem('currentPage', currentPage);
-        localStorage.setItem('productCode', productCode);
-        localStorage.setItem('productName', productName);
-    }
- // Khi trang được load, lấy giá trị của currentPage từ URL và lưu vào localStorage
-    window.onload = function() {
-        var currentPage = getCurrentPageFromURL();
-        localStorage.setItem('currentPage', currentPage);
-    };	
- // Function xóa hết dữ liệu trong localStorage
-    function clearLocalStorage() {
-        localStorage.clear();
-        window.location.href = '/product';
-    }
 </script>
 
 

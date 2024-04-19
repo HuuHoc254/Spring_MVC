@@ -72,6 +72,39 @@ public class AccountController {
 		session.removeAttribute("message");
 		return "account/account-list";
 	}
+	
+	@PostMapping("/account/update/{accountId}")
+    private String updateAccount( HttpServletRequest request
+    							, Model model
+    							, @ModelAttribute UpdateAccount updateAccount
+    							, @PathVariable int accountId
+    							){
+    	HttpSession session = request.getSession();
+    	String accountName = (String) session.getAttribute("accountName");
+    	String fullName = (String) session.getAttribute("fullName");
+    	String phoneNumber = (String) session.getAttribute("phoneNumber");
+    	int page = (int) session.getAttribute("currentPage");
+    	String search = "redirect:/admin/account?page="+page;
+    	if(accountName!="") {
+    		search += "&accountName="+accountName;
+    	}
+    	if(fullName!="") {
+    		search += "&fullName="+fullName;
+    	}
+    	if(phoneNumber!="") {
+    		search += "&phoneNumber="+phoneNumber;
+    	}
+    	
+    	Map<String, String> mapErrors = validate.validateUpdateAccount(updateAccount);
+		if( mapErrors.size() == 0 && accountService.updateAccount(updateAccount)) {
+			session.setAttribute("message", "Cập nhật sản phẩm thành công!");
+			return search;
+		}
+    	model.addAttribute("updateAccount",updateAccount); 
+    	model.addAttribute("mapErrors",mapErrors);
+    	model.addAttribute("isAdmin", authService.isAdmin());
+    	return "account/account-update";	
+    }
 
 	@GetMapping("/account/insert")
     private String showFormInsert(Model model){
@@ -109,12 +142,8 @@ public class AccountController {
 	    return "account/account-update";
     }
 
-	@PostMapping("/account/update/{accountId}")
-    private String updateAccount( HttpServletRequest request
-    							, Model model
-    							, @ModelAttribute UpdateAccount updateAccount
-    							, @PathVariable int accountId
-    							){
+	@GetMapping("/account/cancel")
+    private String cancel( HttpServletRequest request, Model model){
     	HttpSession session = request.getSession();
     	String accountName = (String) session.getAttribute("accountName");
     	String fullName = (String) session.getAttribute("fullName");
@@ -130,16 +159,7 @@ public class AccountController {
     	if(phoneNumber!="") {
     		search += "&phoneNumber="+phoneNumber;
     	}
-    	
-    	Map<String, String> mapErrors = validate.validateUpdateAccount(updateAccount);
-		if( mapErrors.size() == 0 && accountService.updateAccount(updateAccount)) {
-			session.setAttribute("message", "Cập nhật sản phẩm thành công!");
-			return search;
-		}
-    	model.addAttribute("updateAccount",updateAccount); 
-    	model.addAttribute("mapErrors",mapErrors);
-    	model.addAttribute("isAdmin", authService.isAdmin());
-    	return "account/account-update";	
+		return search;
     }
 
 	 @GetMapping("/account/delete/{accountId}")

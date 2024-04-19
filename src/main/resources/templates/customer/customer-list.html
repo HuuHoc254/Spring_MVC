@@ -8,7 +8,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	
+  	<script type="text/javascript" src="/js/ClearForm.js"></script>
 </head>
 <body>
 <th:block th:insert="~{tpl/navbar.html :: navbar}">
@@ -41,10 +41,10 @@
             <div class="col-xl-4 col-md-6 col-sm-6 mt-1">
                 <div class="row">
                     <div class="col-6">
-                        <button type="submit" class="btn btn-primary" onclick="saveSearchValues()"> Tìm kiếm</button>
+                        <button type="submit" class="btn btn-primary"> Tìm kiếm</button>
                     </div>
                     <div class="col-6">
-                        <button type="reset" class="btn btn-primary" onclick="clearLocalStorage()"> Clear</button>
+                        <button type="button" class="btn btn-primary" onclick="clearForm()"> Clear</button>
                     </div>
                 </div>
             </div>
@@ -196,45 +196,6 @@
 	}
 	/*]]>*/
 </script>
-
-<script>
-    // Hàm lấy giá trị của currentPage từ URL
-    function getCurrentPageFromURL() {
-        // Lấy query params từ URL
-        var urlParams = new URLSearchParams(window.location.search);
-        
-        // Lấy giá trị của tham số "page" từ query params
-        var currentPage = urlParams.get('page');
-        
-        // Trả về giá trị của currentPage hoặc mặc định là 1 nếu không có
-        return currentPage ? parseInt(currentPage) : 1;
-    }
-
-    // Function lưu giá trị vào localStorage
-    function saveSearchValues() {
-        var currentPage = getCurrentPageFromURL(); // Lấy giá trị của currentPage từ URL
-        var customerName = document.getElementById('customerName').value;
-        var phoneNumber = document.getElementById('phoneNumberC').value;
-
-        // Lưu giá trị vào localStorage
-        localStorage.setItem('currentPage', currentPage);
-        localStorage.setItem('customerName', customerName);
-        localStorage.setItem('phoneNumberC', phoneNumber);
-    }
- // Khi trang được load, lấy giá trị của currentPage từ URL và lưu vào localStorage
-    window.onload = function() {
-        var currentPage = getCurrentPageFromURL();
-        localStorage.setItem('currentPage', currentPage);
-    };	
- // Function xóa hết dữ liệu trong localStorage
-    function clearLocalStorage() {
-        localStorage.clear();
-        window.location.href = '/customer';
-    }
-
-</script>
-
-
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

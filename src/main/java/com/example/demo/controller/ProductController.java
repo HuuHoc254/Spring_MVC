@@ -71,6 +71,22 @@ public class ProductController {
         return "product/product-list";
     }
 
+    @GetMapping("/product/cancel")
+    private String cancel( HttpServletRequest request, Model model){
+    	HttpSession session = request.getSession();
+    	String pCodeSearch = (String) session.getAttribute("productCode");
+    	String pNameSearch = (String) session.getAttribute("productName");
+    	int page = (int) session.getAttribute("currentPage");
+    	String search = "redirect:/product?page="+page;
+    	if(pCodeSearch!=null) {
+    		search += "&productCode="+pCodeSearch;
+    	}
+    	if(pNameSearch!=null) {
+    		search += "&productName="+pNameSearch;
+    	}
+		return search;
+    }
+
     @GetMapping("/admin/product/insert")
     private String showFormInsert(Model model){
     	model.addAttribute("insertProduct",new InsertProduct());

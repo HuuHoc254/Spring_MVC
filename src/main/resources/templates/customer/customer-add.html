@@ -73,36 +73,15 @@
                         <button type="submit" class="btn btn-primary"> Thêm mới</button>
                     </div>
                     <div class="col-6">
-                        <button type="button" onclick="checkLocalStorage()" class="btn btn-primary">Hủy</button>
+                        <a href="/customer/cancel" class="text-decoration-none text-light">
+                        	<button type="button" class="btn btn-primary">Hủy</button>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
-<script>
-    function checkLocalStorage() {
-        var customerName = localStorage.getItem('customerName');
-        var phoneNumber = localStorage.getItem('phoneNumberC');
-        var currenPage = localStorage.getItem('currentPage');
-
-        if (currenPage == null){
-        	currenPage = 1;
-        }
-
-        var url = '/customer?page=' + currenPage;
-
-        if (customerName != null) {
-            url += '&customerName=' + customerName ;
-        }
-
-        if (phoneNumber != null) {
-            url += '&phoneNumber=' + phoneNumber ;
-        }
-        
-        window.location.href = url;
-    }
-</script>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

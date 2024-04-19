@@ -21,6 +21,9 @@ public class CustomerService implements ICustomerService {
 	private Customer convertToModel(Map<String, Object> map) {
 		Customer customer = new Customer();
 		Account account = new Account();
+		if(map==null) {
+			return null;
+		}
 		account.setAccountId((Integer) map.get("account_id"));
 		account.setFullName((String) map.get("full_name"));
 		customer.setAccount(account);

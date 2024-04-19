@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,9 +35,10 @@ public class CustomerController {
 	private AuthService authService;
     @Autowired
     private ICustomerService customerService;
+    private static final Logger logger = Logger.getLogger(CustomerController.class);
 
     @GetMapping
-    private String searchProduct(HttpServletRequest request
+    private String searchCustomer(HttpServletRequest request
     							, Model model
     							, @RequestParam(defaultValue = "") String customerName
     							, @RequestParam(defaultValue = "") String phoneNumber
@@ -59,9 +61,9 @@ public class CustomerController {
         													, phoneNumber
         													, page);
         model.addAttribute("isAdmin", authService.isAdmin());
-        model.addAttribute("productCode", customerName);
+        model.addAttribute("customerName", customerName);
     	model.addAttribute("accountId", authService.getIdLogin());
-        model.addAttribute("productName", phoneNumber);
+        model.addAttribute("phoneNumber", phoneNumber);
         model.addAttribute("currentPage", page);
         model.addAttribute("customers", customers);
         model.addAttribute("totalPage",totalPage);
@@ -69,6 +71,25 @@ public class CustomerController {
         model.addAttribute("url","customer");
         session.removeAttribute("message");
         return "customer/customer-list";
+    }
+
+    @GetMapping("/cancel")
+    private String cancel( HttpServletRequest request,  Model model){
+    	HttpSession session = request.getSession();
+		String customerName = (String) session.getAttribute("customerName");
+    	String phoneNumber = (String) session.getAttribute("phoneNumberC");
+    	int page = 1;
+    	if(session.getAttribute("currentPage")!=null) {
+    		page = (int) session.getAttribute("currentPage");
+    	}
+    	String search = "redirect:/customer?page="+page;
+    	if(customerName!="") {
+    		search += "&customerName="+customerName;
+    	}
+    	if(phoneNumber!="") {
+    		search += "&phoneNumber="+phoneNumber;
+    	}
+		return search;
     }
 
     @GetMapping("/insert")
@@ -102,6 +123,28 @@ public class CustomerController {
 								,  @PathVariable("customerId") int customerId){
 		HttpSession session = request.getSession();
 		Customer customer = customerService.getCustomerById(customerId);
+		if(customer==null) {
+			String customerName = (String) session.getAttribute("customerName");
+	    	String phoneNumber = (String) session.getAttribute("phoneNumberC");
+	    	int page = 1;
+	    	if(session.getAttribute("currentPage")!=null) {
+	    		page = (int) session.getAttribute("currentPage");
+	    	}
+
+	    	String search = "redirect:/customer?page="+page;
+	    	if(customerName!="") {
+	    		search += "&customerName="+customerName;
+	    	}
+	    	if(phoneNumber!="") {
+	    		search += "&phoneNumber="+phoneNumber;
+	    	}
+    		session.setAttribute("message", "Khách hàng không tồn tại!");
+    		logger.info("---------------BEGIN-------------");
+    		logger.error("Account has ID= "+ authService.getIdLogin() + " request UPDATE customer HAS ID= "+customerId);
+    		logger.error("Customer not exits");
+    		logger.info("---------------END---------------");
+    		return search;
+		}
 		if(authService.getIdLogin()!= customer.getAccount().getAccountId() && !authService.isAdmin()) {
 			String customerName = (String) session.getAttribute("customerName");
 	    	String phoneNumber = (String) session.getAttribute("phoneNumberC");
@@ -118,6 +161,10 @@ public class CustomerController {
 	    		search += "&phoneNumber="+phoneNumber;
 	    	}
     		session.setAttribute("message", "Bạn không có quyền chỉnh sửa khách hàng này!");
+    		logger.info("---------------BEGIN-------------");
+    		logger.error("Account has ID= "+ authService.getIdLogin() + " request UPDATE customer HAS ID= "+customerId);
+    		logger.error("Account can't update this customer");
+    		logger.info("---------------END---------------");
     		return search;
     	}
     	UpdateCustomer uCustomer = new UpdateCustomer();
@@ -169,6 +216,10 @@ public class CustomerController {
    	Customer customer = customerService.getCustomerById(customerId);
 	if(authService.getIdLogin()!= customer.getAccount().getAccountId() && !authService.isAdmin()) {
 		session.setAttribute("message", "Xóa khách hàng thất bại vì bạn không có quyền!");
+		logger.info("---------------BEGIN-------------");
+		logger.error("Account has ID= "+ authService.getIdLogin() + " request DELETE customer HAS ID= "+customerId);
+		logger.error("Account can't delete this customer");
+		logger.info("---------------END---------------");
 	} else {
 	   	boolean check = customerService.deleteCustomer(customerId);
 	   	if (check) {
