@@ -1,4 +1,4 @@
-// Lấy tất cả các dòng trong allocationForm
+/*// Lấy tất cả các dòng trong allocationForm
 var rows = document.querySelectorAll('#allocationForm .row');
 
 // Lặp qua từng dòng để kiểm tra xem có ô nào đã nhập dữ liệu không
@@ -26,3 +26,4 @@ if (hasValue) {
         newRow.appendChild(col);
     document.getElementById('allocationForm').appendChild(newRow);
 }
+*/

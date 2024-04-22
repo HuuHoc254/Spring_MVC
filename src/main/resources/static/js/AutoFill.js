@@ -1,22 +1,61 @@
+$(document).ready(function() {
+    // Gọi hàm fillDataProduct hoặc fillDataCustomer khi có sự kiện blur trong các ô có thuộc tính contenteditable="true"
+    $("tbody").on("blur", "[contenteditable=true]", function() {
+        var cell = $(this);
+        var columnName = cell.attr("class");
+        var type = "";
+        
+        // Xác định loại dữ liệu và gọi hàm fillDataProduct hoặc fillDataCustomer tương ứng
+        if (columnName === "productCode" || columnName === "productName") {
+            type = (columnName === "productCode") ? "name" : "code";
+            fillDataProduct(cell, type);
+        } else if (columnName === "customerName" || columnName === "phoneNumber") {
+            type = (columnName === "customerName") ? "phone" : "name";
+            fillDataCustomer(cell, type);
+        }
+    });
+});
 
-  async function fillDataProduct(cellData,cellInsert, type) {
-    const data = cellData.textContent.trim();
-    const response = await fetch(`http://localhost:8080/api/product/${type}?${type === 'name' ? 'productCode' : 'productName'}=${encodeURIComponent(data)}`);
-    if (response.ok) {
-      const newData = await response.text();
-      cellInsert.textContent = newData;
-    } else {
-      console.error(`Lỗi khi gửi yêu cầu lấy ${type === 'name' ? 'tên' : 'mã'} sản phẩm:`, response.statusText);
+async function fillDataProduct(cellData, type) {
+    const data = $(cellData).text().trim();
+    if(type == 'code'){
+		cellInsert = $(cellData).closest("tr").find(".productCode");
+	} else {
+		cellInsert = $(cellData).closest("tr").find(".productName");
+	}
+	try {
+	    const response = await $.ajax({
+	        url: `http://localhost:8080/api/product/${type}`,
+	        method: 'GET',
+	        data: {
+	            [type === 'name' ? 'productCode' : 'productName']: data
+	        }
+	    });
+	    cellInsert.text(response);
+    } catch (error) {
+        console.error('Error:', error);
     }
-  }
-  
-  async function fillDataCustomer(cellData,cellInsert, type) {
-    const data = cellData.textContent.trim();
-    const response = await fetch(`http://localhost:8080/api/customer/${type}?${type === 'name' ? 'phoneNumber' : 'customerName'}=${encodeURIComponent(data)}`);
-    if (response.ok) {
-      const newData = await response.text();
-      cellInsert.textContent = newData;
-    } else {
-      console.error(`Lỗi khi gửi yêu cầu lấy ${type === 'name' ? 'tên ' : 'số điện thoại của '} khách hàng:`, response.statusText);
+}
+
+async function fillDataCustomer(cellData, type) {
+    const data = $(cellData).text().trim();
+
+	if(type == 'phone'){
+		cellInsert = $(cellData).closest("tr").find(".phoneNumber");
+	} else {
+		cellInsert = $(cellData).closest("tr").find(".customerName");
+	}
+	try {
+	    const response = await $.ajax({
+	        url: `http://localhost:8080/api/customer/${type}`,
+	        method: 'GET',
+	        data: {
+	            [type === 'name' ? 'phoneNumber' : 'customerName']: data
+	        }
+	    });
+	
+	    cellInsert.text(response);
+    } catch (error) {
+        console.error('Error:', error);
     }
-  }
+}

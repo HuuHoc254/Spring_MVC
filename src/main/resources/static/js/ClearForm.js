@@ -1,10 +1,12 @@
-function clearForm(){
-	var inputs = document.querySelector('form').getElementsByTagName('input');
-	for (var i = 0; i < inputs.length; i++) {
-    inputs[i].value = '';
-}
-	if(document.getElementById('inlineCheckbox1')!=null){
-	document.getElementById('inlineCheckbox1').checked = false;
-	document.getElementById('inlineCheckbox2').checked = false;
-	}
+function clearForm() {
+    // Chọn tất cả các input trong form và xóa giá trị của chúng
+    $('form input').val('');
+
+    // Kiểm tra nếu các checkbox tồn tại và đặt trạng thái của chúng thành false
+    if ($('#inlineCheckbox1').length) {
+        $('#inlineCheckbox1').prop('checked', false);
+    }
+    if ($('#inlineCheckbox2').length) {
+        $('#inlineCheckbox2').prop('checked', false);
+    }
 }

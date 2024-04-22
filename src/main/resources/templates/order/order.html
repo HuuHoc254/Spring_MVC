@@ -10,11 +10,11 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <script type="text/javascript" src="/js/AutoFill.js"></script>
-  <script type="text/javascript" src="/js/ClearForm.js"></script>
-   <script type="text/javascript" src="/js/SaveOrder.js"></script>
-</head>
-
+  </head>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
 <th:block th:insert="~{tpl/navbar.html :: navbar}">
 </th:block>
@@ -121,50 +121,51 @@
             </div>
         </div>
     </form>
+    <table width="100%">
+      <thead>
+        <tr class="bg-dark text-light">
+          <th scope="col" class="text-center">Số thứ tự</th>
+          <th scope="col">Ngày đặt hàng</th>
+          <th scope="col">Mã sản phẩm</th>
+          <th scope="col">Tên sản phẩm</th>
+          <th scope="col">Giá bán</th>
+          <th scope="col">Số lượng</th>
+          <th scope="col">Tên khách hàng</th>
+          <th scope="col">Số điện thoại</th>
+          <th scope="col">Địa chỉ</th>
+          <th scope="col">Trạng thái</th>
+          <th scope="col">Ngày phân bổ</th>
+          <th scope="col" th:if="${isAdmin}">Tên đăng nhập</th>
+          <th scope="col" th:if="${isAdmin}">Tên nhân viên</th>
+       	</tr>
+      </thead>
+      <tbody>
+        <tr th:if = "${orders.size() != 0}" th:each="order, index : ${orders}">
+          <td class="text-center index" th:text=" ${index.index + 1 + (currentPage - 1) *3}"></td>
+          <td th:text="${order.orderId}" class="orderId d-none" ></td>
+          <td th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm:ss')}" ></td>
+          <td th:text="${order.productCode}" contenteditable="true" class="productCode" ></td>
 
-    <form th:action="@{/order/save}" th:method="POST">
-      <table width="100%">
-        <thead>
-          <tr class="bg-dark text-light">
-            <th scope="col" class="text-center">Số thứ tự</th>
-            <th scope="col">Ngày đặt hàng</th>
-            <th scope="col">Mã sản phẩm</th>
-            <th scope="col">Tên sản phẩm</th>
-            <th scope="col">Giá bán</th>
-            <th scope="col">Số lượng</th>
-            <th scope="col">Tên khách hàng</th>
-            <th scope="col">Số điện thoại</th>
-            <th scope="col">Địa chỉ</th>
-            <th scope="col">Trạng thái</th>
-            <th scope="col">Ngày phân bổ</th>
-            <th scope="col" th:if="${isAdmin}">Tên đăng nhập</th>
-            <th scope="col" th:if="${isAdmin}">Tên nhân viên</th>
-        </thead>
-        <tbody>
-          <tr th:if = "${orders.size() != 0}" th:each="order, index : ${orders}">
-            <td class="text-center" th:text=" ${index.index + 1 + (currentPage - 1) *3}"></td>
-             <td th:text="${order.orderId}" class="orderId" style="display:none;"></td>
-            <td th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm:ss')}" ></td>
-            <td th:text="${order.productCode}" contenteditable="true" th:class="'productCode' + (${index.index + 1})" 
-    			th:onblur="'fillDataProduct(this, document.querySelector(\'.productName' + (${index.index + 1}) + '\'), \'name\')'"></td>
-
-            <td th:text="${order.productName}" contenteditable="true" th:class="'productName' + (${index.index + 1})" 
-            	th:onblur="'fillDataProduct(this, document.querySelector(\'.productCode' + (${index.index + 1}) + '\'), \'code\')'"></td>
-            <td th:text="${#numbers.formatDecimal(order.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-            <td th:text="${order.quantity}" contenteditable="true" class="text-center"></td>
-            <td th:text="${order.customerName}" contenteditable="true" th:class="'customerName' + (${index.index + 1})"
-            	th:onblur="'fillDataCustomer(this, document.querySelector(\'.phoneNumber' + (${index.index + 1}) + '\'), \'phone\')'"></td>
-            <td th:text="${order.phoneNumberCustomer}" contenteditable="true" th:class="'phoneNumber' + ${index.index + 1}"
-            	th:onblur="'fillDataCustomer(this, document.querySelector(\'.customerName' + (${index.index + 1}) + '\'), \'name\')'"></td>
-            <td th:text="${order.addressCustomer}"></td>
-            <td th:text="${order.orderStatusName}"></td>
-            <td th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm:ss')}"></td>
-            <td th:text="${order.accountName}" th:if="${isAdmin}"></td>
-            <td th:text="${order.fullName}" th:if="${isAdmin}"></td>
-          </tr>
-        </tbody>
-      </table>
-      <nav th:if = "${orders.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
+          <td th:text="${order.productName}" contenteditable="true" class="productName"></td>
+          <td th:text="${#numbers.formatDecimal(order.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+          <td th:text="${order.quantity}" contenteditable="true" class="text-center quantity"></td>
+          <td th:text="${order.customerName}" contenteditable="true" class="customerName"></td>
+          <td th:text="${order.phoneNumberCustomer}" contenteditable="true" class="phoneNumber"></td>
+          
+          <td th:text="${order.addressCustomer}"></td>
+          <td th:text="${order.orderStatusName}"></td>
+          <td th:text="${order.productCode}" class="oldProductCode d-none"></td>
+           <td th:text="${order.productName}" class="oldProductName d-none"></td>
+		  <td th:text="${order.quantity}" class="d-none text-center oldQuantity"></td>
+          <td th:text="${order.customerName}" class="oldCustomerName d-none"></td>
+          <td th:text="${order.phoneNumberCustomer}" class="oldPhoneNumber d-none"></td>
+          <td th:text="${#temporals.format(order.allocationDate, 'yyyy/MM/dd HH:mm:ss')}"></td>
+          <td th:text="${order.accountName}" th:if="${isAdmin}"></td>
+          <td th:text="${order.fullName}" th:if="${isAdmin}"></td>
+        </tr>
+      </tbody>
+    </table>
+    <nav th:if = "${orders.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
         <ul class="pagination">
         	<li class="page-item" th:if="${currentPage != 1}" >
 		      <a th:href="@{'/order?page=' +${currentPage - 1} 
@@ -379,101 +380,34 @@
         </ul>
     </nav>
 
-      <div class="row">
-        <div class="col-6 text-right">
-          <button class="btn btn-primary" type="button">
-             Lưu đơn hàng
-          </button>
-        </div>
-        <div class="col-6">
-          <button class="btn btn-primary" type="button">
-            Reset
-          </button>
-        </div>
+    <div class="row">
+      <div class="col-6 text-right">
+        <button class="btn btn-primary" type="button">
+           Lưu đơn hàng
+        </button>
       </div>
-    </form>
+      <div class="col-6">
+        <button class="btn btn-primary" type="button" onclick="resert()">
+          Reset
+        </button>
+      </div>
+    </div>
   </div>
-  <script>
-    // Lấy bảng và hàng cuối cùng
-    var table = document.querySelector("table");
-    createNewRow();
-    // Hàm để tạo hàng mới
-    function createNewRow() {
-        var lastRow = table.rows[table.rows.length - 1];
-        // Kiểm tra nếu người dùng đã nhập ít nhất một ô trong hàng cuối cùng
-        var isRowNotEmpty = false;
-        for (var i = 2; i <= 7; i++) { // Chỉ kiểm tra từ cột thứ 3 đến cột thứ 8 (index từ 2 đến 7)
-            if (lastRow.cells[i].textContent.trim()) {
-                isRowNotEmpty = true;
-                break;
-            }
-        }
-
-        // Nếu hàng cuối cùng không rỗng, tạo một hàng mới với số thứ tự tiếp theo
-        if (isRowNotEmpty) {
-            var newRow = table.insertRow(table.rows.length);
-            var nextIndex = ( (table.rows.length-2)!=0 ?  parseInt(lastRow.cells[0].textContent) : 0) + 1; // Lấy số thứ tự tiếp theo
-            var cells = [];
-    
-            // Thêm số thứ tự vào hàng mới
-            var indexCell = newRow.insertCell(0);
-            indexCell.textContent = nextIndex;
-            indexCell.setAttribute("class","text-center");
-    
-            // Thêm các ô có thể chỉnh sửa vào hàng mới
-            for (var i = 0; i < 7; i++) {
-                cells[i] = newRow.insertCell(i+1);
-                switch (i) {
-        			case 1:
-        				cells[i].setAttribute("class", "productCode" + (table.rows.length - 1));
-        				cells[i].setAttribute("contenteditable", "true");
-        				cells[i].setAttribute("onblur", "fillDataProduct(this,document.querySelector('.productName"+(table.rows.length - 1)+"'),'name')");
-        				break;
-        			case 2:
-        				cells[i].setAttribute("class", "productName" + (table.rows.length - 1));
-        				cells[i].setAttribute("contenteditable", "true");
-        				cells[i].setAttribute("onblur", "fillDataProduct(this,document.querySelector('.productCode"+(table.rows.length - 1)+"'),'code')");
-        				break;
-        			case 4:
-        				cells[i].setAttribute("class", "text-center");
-        				cells[i].setAttribute("contenteditable", "true");
-        				break;
-        			case 5:
-        				cells[i].setAttribute("class", "customerName" + (table.rows.length - 1));
-        				cells[i].setAttribute("contenteditable", "true");
-        				cells[i].setAttribute("onblur", "fillDataCustomer(this,document.querySelector('.phoneNumber"+(table.rows.length - 1)+"'),'phone')");
-        				break;
-        			case 6:
-        				cells[i].setAttribute("class", "phoneNumber" + (table.rows.length - 1));
-        				cells[i].setAttribute("contenteditable", "true");
-        				cells[i].setAttribute("onblur", "fillDataCustomer(this,document.querySelector('.customerName"+(table.rows.length - 1)+"'),'name')");
-        				break;
-        		}
-            }
-        }
-    }
-    
-    // Sự kiện khi người dùng thay đổi dữ liệu trong hàng mới
-    table.addEventListener("input", function(event) {
-        createNewRow();
-    });
-    
-   
-    
-    </script>
-
     
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
+ 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+   
+  <script type="text/javascript" src="/js/AutoFill.js"></script>
+  <script type="text/javascript" src="/js/InsertOrder.js"></script>
+  <script type="text/javascript" src="/js/SaveOrder.js"></script>
+  <script type="text/javascript" src="/js/ClearForm.js"></script>
 </body>
 
 </html>
