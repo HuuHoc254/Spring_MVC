@@ -141,7 +141,7 @@
       </thead>
       <tbody>
         <tr th:if = "${orders.size() != 0}" th:each="order, index : ${orders}">
-          <td class="text-center index" th:text=" ${index.index + 1 + (currentPage - 1) *3}"></td>
+          <td class="text-center index"></td>
           <td th:text="${order.orderId}" class="orderId d-none" ></td>
           <td th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm:ss')}" ></td>
           <td th:text="${order.productCode}" contenteditable="true" class="productCode" ></td>
@@ -151,6 +151,7 @@
           <td th:text="${order.quantity}" contenteditable="true" class="text-center quantity"></td>
           <td th:text="${order.customerName}" contenteditable="true" class="customerName"></td>
           <td th:text="${order.phoneNumberCustomer}" contenteditable="true" class="phoneNumber"></td>
+          <td th:text="${order.version}"  class="version d-none"></td>
           
           <td th:text="${order.addressCustomer}"></td>
           <td th:text="${order.orderStatusName}"></td>
@@ -382,7 +383,7 @@
 
     <div class="row">
       <div class="col-6 text-right">
-        <button class="btn btn-primary" type="button">
+        <button class="btn btn-primary" type="button" onclick="saveOrder()">
            Lưu đơn hàng
         </button>
       </div>

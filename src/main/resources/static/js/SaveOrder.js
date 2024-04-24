@@ -20,6 +20,7 @@ $("tbody").on("blur", "[contenteditable=true]", function() {
     let quantity = $currentRow.find(".quantity").text();
     let phoneNumber = $currentRow.find(".phoneNumber").text();
     let customerName = $currentRow.find(".customerName").text();
+    let version = $currentRow.find(".version").text();
 
     // Lấy ra các giá trị cũ (ẩn) tương ứng
     let oldProductCode = $currentRow.find(".oldProductCode").text();
@@ -34,7 +35,8 @@ $("tbody").on("blur", "[contenteditable=true]", function() {
             productName: productName,
             quantity: quantity,
             phoneNumber: phoneNumber,
-            customerName: customerName
+            customerName: customerName,
+            version: version
         };
     let oldOrder = {
 			index: index,
@@ -85,12 +87,32 @@ $("tbody").on("blur", "[contenteditable=true]", function() {
 					page: currentPage,
 					orderArr: arrIndex
 				}
+				//nếu tồn tại thì giảm index của các index phía sau đi 1
+				arrayPage = arrayPage.map(pageIndex => {
+				    if (pageIndex.page >= currentPage) {
+				        pageIndex.orderArr = pageIndex.orderArr.map(orderIndex => {
+				            if (parseInt(orderIndex) > parseInt(index)) {
+				                orderIndex = (parseInt(orderIndex) - 1).toString();
+				            }
+				            return orderIndex;
+				        });
+			    	}
+				    return pageIndex;
+				});
+
 			}
         }
         
         if (existingIndex !== -1) {
             // Nếu tồn tại, xóa khỏi mảng
             editedOrders.splice(existingIndex, 1);
+             // Giảm index của các index sau đi 1
+		    editedOrders.forEach(order => {
+		        if (parseInt(order.index) > parseInt(index)) {
+		            order.index--;
+		            order.index = order.index.toString();
+		        }
+		    });
         }
     }
 	localStorage.setItem("arrayPage", JSON.stringify(arrayPage));
@@ -131,9 +153,9 @@ function loadEditedOrders() {
         if (rowIndex !== -1) {
             let $row = $table.find("tr").eq(rowIndex);
             $row.find(".productCode").text(order.productCode);
-             $row.find(".productName").text(order.productName);
+            $row.find(".productName").text(order.productName);
             $row.find(".quantity").text(order.quantity);
-             $row.find(".customerName").text(order.customerName);
+            $row.find(".customerName").text(order.customerName);
             $row.find(".phoneNumber").text(order.phoneNumber);
         }
     });
@@ -180,17 +202,18 @@ function loadInsertOrders(){
 	let $table = $("tbody").closest("table"); // Lấy thẻ <table> chứa tbody
 	let orderArrays = JSON.parse(localStorage.getItem("arrayPage")) || [];
 	let editedOrders = JSON.parse(localStorage.getItem("editedOrders")) || [];
-	let orderInPage = orderArrays.find(order => order.page === currentPage);
+	let orderInPage = orderArrays.find(order => order.page === currentPage);//lấy ra page hiện tại
 	let length = 0;
 
 	if(orderInPage !== undefined){
 		length = orderInPage.orderArr.length;
 	}
-	console.log("length: "+length);
 	for (let i=0;i<length;i++){
-		let rowIndex = orderInPage.orderArr[i];
-        let order = editedOrders.find(order => order.index === rowIndex);
-		let $row = $table.find("tr").eq(rowIndex);
+		let rowIndex = orderInPage.orderArr[i];//lấy ra số thứ tự của order
+        let order = editedOrders.find(order => order.index === rowIndex);//tìm đơn hàng có số thự tự ở trên 
+		let $row = $table.find("tr").filter(function() {
+    		return $(this).find(".index").text() === rowIndex.toString();//Lấy ra dòng chứa đơn hàng
+		});
         $row.find(".productCode").text(order.productCode);
         $row.find(".productName").text(order.productName);
         $row.find(".quantity").text(order.quantity);
@@ -198,4 +221,33 @@ function loadInsertOrders(){
         $row.find(".phoneNumber").text(order.phoneNumber);
         createNewRow();
 	}
+}
+
+function saveOrder() {
+    // Lấy mảng editedOrders từ local storage
+    let editedOrders = localStorage.getItem("editedOrders") || [];
+
+    // Kiểm tra nếu mảng editedOrders không rỗng
+    if (editedOrders.length > 0) {
+        // Sử dụng jQuery để gửi dữ liệu
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/order/save",
+            data: editedOrders, // Chuyển đổi đối tượng thành chuỗi JSON
+            contentType: "application/json", // Đặt kiểu dữ liệu của yêu cầu là JSON
+            success: function(response) {
+                // Xử lý phản hồi từ máy chủ (nếu cần)
+                console.log("Đã gửi dữ liệu thành công:", response);
+                
+                // Sau khi gửi thành công, bạn có thể xóa mảng editedOrders từ local storage
+                //localStorage.removeItem("editedOrders");
+            },
+            error: function(xhr, status, error) {
+                // Xử lý lỗi nếu có
+                console.error("Lỗi khi gửi dữ liệu:", error);
+            }
+        });
+    } else {
+        console.log("Không có dữ liệu để gửi.");
+    }
 }

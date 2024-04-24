@@ -78,10 +78,10 @@ public class ProductController {
     	String pNameSearch = (String) session.getAttribute("productName");
     	int page = (int) session.getAttribute("currentPage");
     	String search = "redirect:/product?page="+page;
-    	if(pCodeSearch!=null) {
+    	if(pCodeSearch!="") {
     		search += "&productCode="+pCodeSearch;
     	}
-    	if(pNameSearch!=null) {
+    	if(pNameSearch!="") {
     		search += "&productName="+pNameSearch;
     	}
 		return search;
@@ -132,10 +132,10 @@ public class ProductController {
     	String pNameSearch = (String) session.getAttribute("productName");
     	int page = (int) session.getAttribute("currentPage");
     	String search = "redirect:/product?page="+page;
-    	if(pCodeSearch!=null) {
+    	if(pCodeSearch!="") {
     		search += "&productCode="+pCodeSearch;
     	}
-    	if(pNameSearch!=null) {
+    	if(pNameSearch!="") {
     		search += "&productName="+pNameSearch;
     	}
     	
@@ -165,10 +165,10 @@ public class ProductController {
     	String pNameSearch = (String) session.getAttribute("productName");
     	int page = (int) session.getAttribute("currentPage");
     	String search = "redirect:/product?page="+page;
-    	if(pCodeSearch!=null) {
+    	if(pCodeSearch!="") {
     		search += "&productCode="+pCodeSearch;
     	}
-    	if(pNameSearch!=null) {
+    	if(pNameSearch!="") {
     		search += "&productName="+pNameSearch;
     	}
 	    return search;
