@@ -112,4 +112,13 @@
     	LIMIT 3
 	    OFFSET #{offset}
 	</select>
+	<update id="updateOrder">
+		UPDATE
+			orders
+		JOIN   products    	p ON p.product_id   = o.product_id
+		JOIN   customer   	c ON c.customer_id  = o.customer_id
+		SET
+			o.product_id	= #{beginOrderDate}
+			customer_name
+	</update>
   </mapper>

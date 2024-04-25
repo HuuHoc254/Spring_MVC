@@ -121,7 +121,7 @@
             </div>
         </div>
     </form>
-    <table width="100%">
+    <table width="100%" class="table-bordered">
       <thead>
         <tr class="bg-dark text-light">
           <th scope="col" class="text-center">Số thứ tự</th>
@@ -148,7 +148,7 @@
 
           <td th:text="${order.productName}" contenteditable="true" class="productName"></td>
           <td th:text="${#numbers.formatDecimal(order.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-          <td th:text="${order.quantity}" contenteditable="true" class="text-center quantity"></td>
+          <td th:text="${order.quantity}" contenteditable="true" class="quantity text-center"></td>
           <td th:text="${order.customerName}" contenteditable="true" class="customerName"></td>
           <td th:text="${order.phoneNumberCustomer}" contenteditable="true" class="phoneNumber"></td>
           <td th:text="${order.version}"  class="version d-none"></td>
@@ -157,7 +157,7 @@
           <td th:text="${order.orderStatusName}"></td>
           <td th:text="${order.productCode}" class="oldProductCode d-none"></td>
            <td th:text="${order.productName}" class="oldProductName d-none"></td>
-		  <td th:text="${order.quantity}" class="d-none text-center oldQuantity"></td>
+		  <td th:text="${order.quantity}" class="oldQuantity d-none text-center "></td>
           <td th:text="${order.customerName}" class="oldCustomerName d-none"></td>
           <td th:text="${order.phoneNumberCustomer}" class="oldPhoneNumber d-none"></td>
           <td th:text="${#temporals.format(order.allocationDate, 'yyyy/MM/dd HH:mm:ss')}"></td>
@@ -404,7 +404,6 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
-   
   <script type="text/javascript" src="/js/AutoFill.js"></script>
   <script type="text/javascript" src="/js/InsertOrder.js"></script>
   <script type="text/javascript" src="/js/SaveOrder.js"></script>
