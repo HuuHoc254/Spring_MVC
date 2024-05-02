@@ -131,6 +131,7 @@ function notEquals(editedOrder, oldOrder) {
 function resert() {
 	localStorage.removeItem("editedOrders");
 	localStorage.removeItem("arrayPage");
+	localStorage.removeItem("errorData")
 	window.location.href = "http://localhost:8080/order";
 }
 
@@ -234,9 +235,12 @@ function saveOrder() {
 		success: function(response) {
 			saveErrorToLocalStorage(response);
 			displayErrorFromLocalStorage();
+			alert("Đơn hàng đã được lưu!");
+			// Tải lại trang sau khi thành công
+           	resert();
+            
 		},
 		error: function(xhr, status, error) {
-			console.error("Lỗi khi gửi yêu cầu:", error);
 			alert("Lỗi khi gửi yêu cầu:", error);
 		}
 	});

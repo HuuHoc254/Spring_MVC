@@ -21,4 +21,5 @@ public interface ICustomerService {
 	boolean updateCustomer(UpdateCustomer updateCustomer);
 	String getPhoneNumberByName(String customerName);
 	String getCustomerNameByPhoneNumber(String phoneNumber);
+	Customer getCustomerByPhoneNumber(String phoneNumber);
 }

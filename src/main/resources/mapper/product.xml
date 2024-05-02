@@ -49,6 +49,17 @@
 	    </where>
 	</select>
 
+	<select id="getProductByCode" resultType="java.util.Map">
+	    SELECT 
+	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity, version
+	    FROM
+	    	products
+	    <where>
+	    		is_deleted = FALSE
+	    	AND product_code = #{productCode} 
+	    </where>
+	</select>
+
 	<select id="existsByProductCode" resultType="int">
 	    SELECT 
 	    	COUNT(*)

@@ -115,10 +115,22 @@
 	<update id="updateOrder">
 		UPDATE
 			orders
-		JOIN   products    	p ON p.product_id   = o.product_id
-		JOIN   customer   	c ON c.customer_id  = o.customer_id
 		SET
-			o.product_id	= #{beginOrderDate}
-			customer_name
+			product_id				= #{productId}
+		,	unit_price				= #{unitPrice}
+		,	quantity				= #{quantity}
+		,	customer_id				= #{customerId}
+		,	address_customer		= #{address}
+		,	phone_number_customer	= #{phoneNumber}
+		,	version					= version + 1
+		<where>
+			order_id 		= #{orderId}
+		AND version  		= #{version}
+		AND order_status_id = 1 <!-- trang thai da dat hang -->
+		</where>
 	</update>
+	<insert id="insertOrder">
+		INSERT INTO orders(product_id, unit_price, quantity, customer_id, address_customer, phone_number_customer, account_id )
+		VALUES(#{productId}, #{unitPrice}, #{quantity}, #{customerId}, #{address}, #{phoneNumber}, #{accountId})
+	</insert>
   </mapper>

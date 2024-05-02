@@ -108,4 +108,9 @@ public class ProductService implements IProductService {
 	public String getProductNameByCode(String productCode) {
 		return productMapper.getProductNameByCode(productCode);
 	}
+
+	@Override
+	public Product getProductByCode(String productCode) {
+		return convertToModel(productMapper.getProductByCode(productCode));
+	}
 }

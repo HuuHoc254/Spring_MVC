@@ -37,4 +37,5 @@ public interface CustomerMapper {
 	int deleteCustomer(int customerId);
 	String getPhoneNumberByName(String customerName);
 	String getCustomerNameByPhoneNumber(String phoneNumber);
+	Map<String, Object> findByPhoneNumber(String phoneNumber);
 }

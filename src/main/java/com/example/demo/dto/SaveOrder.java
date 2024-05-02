@@ -2,7 +2,7 @@ package com.example.demo.dto;
 
 public class SaveOrder {
     private int  	index;
-    private int 	orderId;
+    private Integer 	orderId;
     private String  productCode;
     private int 	quantity;
     private String 	phoneNumber;
@@ -12,7 +12,7 @@ public class SaveOrder {
 		super();
 	}
 
-	public SaveOrder(int index, int orderId, String productCode, int quantity, String phoneNumber, int version) {
+	public SaveOrder(int index, Integer orderId, String productCode, int quantity, String phoneNumber, int version) {
 		super();
 		this.index = index;
 		this.orderId = orderId;
@@ -30,11 +30,11 @@ public class SaveOrder {
 		this.index = index;
 	}
 
-	public int getOrderId() {
+	public Integer getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(int orderId) {
+	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
 

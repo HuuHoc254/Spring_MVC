@@ -16,6 +16,17 @@
 	    </where>
 	</select>
 
+	<select id="findByPhoneNumber" resultType="java.util.Map">
+	    SELECT 
+	    	customer_id, customer_name, address, phone_number ,administrator_id as account_id , version
+	    FROM
+	    	customer
+	    <where>
+	    		is_deleted = FALSE
+	    	AND phone_number = #{phoneNumber} 
+	    </where>
+	</select>
+
 	<select id="countSearch" resultType="int">
 	   	SELECT 
 	   		COUNT(*)

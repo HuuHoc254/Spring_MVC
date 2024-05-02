@@ -95,4 +95,9 @@ public class CustomerService implements ICustomerService {
 		return customerMapper.getCustomerNameByPhoneNumber(phoneNumber);
 	}
 
+	@Override
+	public Customer getCustomerByPhoneNumber(String phoneNumber) {
+		return convertToModel(customerMapper.findByPhoneNumber(phoneNumber));
+	}
+
 }

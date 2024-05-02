@@ -22,4 +22,5 @@ public interface IProductService {
 	boolean deleteProduct(int productId);
 	String getProductCodeByName(String productName);
 	String getProductNameByCode(String productCode);
+	Product getProductByCode(String productCode);
 }

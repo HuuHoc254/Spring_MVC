@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.dto.Allocation;
 import com.example.demo.dto.SaveOrder;
 import com.example.demo.model.Order;
 import com.example.demo.service.IOrderService;
@@ -99,18 +101,6 @@ public class OrderController {
         model.addAttribute("allocationStatus", allocationStatus);
         model.addAttribute("mapErrors", mapErrors);
         session.removeAttribute("mapErrors");
-        
-//        session.setAttribute("accountNameO", accountName);
-//        session.setAttribute("fullNameO", fullName);
-//        session.setAttribute("productCodeO", productCode);
-//        session.setAttribute("productNameO", productName);
-//        session.setAttribute("customerNameO", customerName);
-//        session.setAttribute("phoneNumberCustomerO", phoneNumberCustomer);
-//        session.setAttribute("beginOrderDateO", beginOrderDate);
-//        session.setAttribute("endOrderDateO", endOrderDate);
-//        session.setAttribute("orderStatusO", orderStatus);
-//        session.setAttribute("allocationStatusO", allocationStatus);
-//        session.setAttribute("currentPage", page);
 
         model.addAttribute("currentPage", page);
         model.addAttribute("orders", orders);
@@ -122,9 +112,28 @@ public class OrderController {
     }
 
 	@GetMapping("/admin/allocation")
-    private String showFormUpdate( HttpServletRequest request
+    private String showForm( HttpServletRequest request
 								,  Model model
 								){
+    	model.addAttribute("isAdmin", authService.isAdmin());
+    	model.addAttribute("url","allocation");
+	    return "allocation/allocation";
+    }
+	@PostMapping("/admin/allocation")
+    private String allocation( HttpServletRequest request
+								,  Model model
+								,@RequestParam String[] productCodes
+								,@RequestParam String[] productNames
+								,@RequestParam Integer[] quantities){
+		List<Allocation> allocaties = new ArrayList<Allocation>(); 
+		for(int i=0;i< (productCodes.length -1) ;i++) {
+			Allocation allocate = new Allocation();
+			allocate.setProductCode(productCodes[i]);
+			allocate.setProductName(productNames[i]);
+			allocate.setQuantity(quantities[i]);
+			allocaties.add(allocate);
+		}
+		
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("url","allocation");
 	    return "allocation/allocation";

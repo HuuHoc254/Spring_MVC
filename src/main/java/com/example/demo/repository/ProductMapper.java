@@ -35,4 +35,5 @@ public interface ProductMapper {
 	int deleteProduct(int productId);
 	String getProductNameByCode(String productCode);
 	String getProductCodeByName(String productName);
+	Map<String, Object> getProductByCode(String productCode);
 }

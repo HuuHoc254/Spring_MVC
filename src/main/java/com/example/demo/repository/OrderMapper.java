@@ -34,4 +34,20 @@ public interface OrderMapper {
 									, boolean 	isAdmin
 									, int		offset
 									);
+    int updateOrder(int 	productId
+    			,	double 	unitPrice
+    			,	int 	quantity
+    			,	int 	customerId
+    			,	String 	address
+    			,	String 	phoneNumber
+    			,	int 	version
+    			,	int 	orderId);
+
+	int insertOrder(int 	productId
+				,	double 	unitPrice
+				,	int 	quantity
+				,	int 	customerId
+				,	String 	address
+				,	String 	phoneNumber
+				,	int 	accountId);
 }

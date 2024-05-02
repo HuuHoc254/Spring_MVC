@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import com.example.demo.dto.SaveOrder;
 import com.example.demo.model.Order;
 
 public interface IOrderService {
@@ -33,4 +34,6 @@ public interface IOrderService {
 							,  boolean 	isAdmin
 							,  int		page
 							);
+
+	void saveOrder(List<SaveOrder> orders);
 }
