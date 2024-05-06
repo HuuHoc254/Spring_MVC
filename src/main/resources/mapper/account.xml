@@ -110,8 +110,8 @@
 	    FROM
 	    	accounts
 	    <where>
-	    	name = #{name}
-    	AND id != #{id} 
+	    	name 	= #{name}
+    	AND id 		!= #{id} 
 	    </where>
 	</select>
 
@@ -121,8 +121,8 @@
 	    FROM
 	    	accounts
 	    <where>
-	    	phone = #{phone}
-	    AND id != #{id} 
+	    	phone 	= #{phone}
+	    AND id 		!= #{id} 
 	    </where>
 	</select>
 	
@@ -137,14 +137,14 @@
 		UPDATE
 			accounts
 		SET
-				account_name 	= #{name}
-			, 	password 		= #{password}
-			, 	full_name 		= #{fullName}
-			, 	phone			= #{phone}
-			, 	version 		= version + 1
+				name 		= #{name}
+			, 	password 	= #{password}
+			, 	full_name 	= #{fullName}
+			, 	phone		= #{phone}
+			, 	version 	= version + 1
 		<where>
-				id 				= #{id}
-			AND	version 		= #{version}
+				id 			= #{id}
+			AND	version 	= #{version}
 		</where>
 	</update>
 
@@ -155,7 +155,7 @@
 				is_deleted 	= TRUE
 			, 	version 	= version + 1
 		<where>
-				id 			= #{Id}
+				id 			= #{id}
 		</where>
 	</update>
   </mapper>
