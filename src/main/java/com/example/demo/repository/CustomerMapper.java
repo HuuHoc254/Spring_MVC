@@ -8,34 +8,34 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CustomerMapper {
 
-    int countSearch(  String 	customerName
-    				, String 	phoneNumber
+    int countSearch(  String 	name
+    				, String 	phone
     				);
-    List<Map<String, Object>> search( String 	customerName
-									, String 	phoneNumber
+    List<Map<String, Object>> search( String 	name
+									, String 	phone
 									, int 		offset
 									);
 
-	Map<String, Object> findById(int customerId);
+	Map<String, Object> findById(int id);
 
-	int existsByPhoneNumber(String phoneNumber);
+	int existsByPhone(String phone);
 
-	int insertCustomer(	String customerName
-					  , String phoneNumber
-					  ,	String address
-					  , int accountId
-						);
+	int create(	String 	name
+			  , String 	phone
+			  ,	String 	address
+			  , int 	accountId
+				);
 
-	int existsByPhoneNumberNotId(String phoneNumber, Integer customerId);
+	int existsByPhoneNotId(String phone, Integer id);
 
-	int updateCustomer(	Integer customerId
-					, 	String 	customerName
-					, 	String 	phoneNumber
-					, 	String 	address
-					, 	Integer version);
+	int update(	Integer id
+			, 	String 	name
+			, 	String 	phone
+			, 	String 	address
+			, 	Integer version);
 
-	int deleteCustomer(int customerId);
-	String getPhoneNumberByName(String customerName);
-	String getCustomerNameByPhoneNumber(String phoneNumber);
-	Map<String, Object> findByPhoneNumber(String phoneNumber);
+	int delete(int customerId);
+	String getPhoneByName(String name);
+	String getNameByPhone(String phone);
+	Map<String, Object> findByPhone(String phone);
 }

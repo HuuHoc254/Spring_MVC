@@ -20,7 +20,7 @@ public class OrderValidate {
 	@Autowired
     private ICustomerService customerService;
 
-	public Map<Integer,Map<String,String>> validateSaveOrder(List<SaveOrder> saveOrders) {
+	public Map<Integer,Map<String,String>> save(List<SaveOrder> saveOrders) {
 		Map<Integer,Map<String,String>> mapErrors = new HashMap<Integer, Map<String,String>>();
 		boolean check = false;
 		for (SaveOrder order: saveOrders) {
@@ -28,7 +28,7 @@ public class OrderValidate {
 			if (order.getProductCode().trim() == "") {
 				errors.put("productCode", "Không được để trống!");
 			}else {
-				check = productService.getProductNameByCode(order.getProductCode()) == null;
+				check = productService.getNameByCode(order.getProductCode()) == null;
 		        if ( check ) {
 		        	errors.put("productCode", "Mã sản phẩm không tồn tại!");
 		        }
@@ -38,7 +38,7 @@ public class OrderValidate {
 			if (order.getPhoneNumber().trim() == ""){
 				errors.put("phoneNumber", "Không được để trống!");
 			}else {
-				check = customerService.getCustomerNameByPhoneNumber(order.getPhoneNumber()) == null;
+				check = customerService.getNameByPhone(order.getPhoneNumber()) == null;
 		        if ( check ) {
 		        	errors.put("phoneNumber", "Số điện thoại không tồn tại!");
 		        }
@@ -54,7 +54,7 @@ public class OrderValidate {
  
     }
 
-	public Map<Integer,Map<String,String>> validateAllocation(List<Allocation> allocaties) {
+	public Map<Integer,Map<String,String>> allocation(List<Allocation> allocaties) {
 		Map<Integer,Map<String,String>> mapErrors = new HashMap<Integer, Map<String,String>>();
 		boolean check = false;
 		for (Allocation allocate: allocaties) {
@@ -62,7 +62,7 @@ public class OrderValidate {
 			if (allocate.getProductCode().trim() == "") {
 				errors.put("productCode", "Không được để trống!");
 			}else {
-				check = productService.getProductNameByCode(allocate.getProductCode()) == null;
+				check = productService.getNameByCode(allocate.getProductCode()) == null;
 		        if ( check ) {
 		        	errors.put("productCode", "Mã sản phẩm không tồn tại!");
 		        }

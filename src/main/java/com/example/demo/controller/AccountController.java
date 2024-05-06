@@ -59,7 +59,7 @@ public class AccountController {
 
 		int totalRecord = accountService.countSearch( accountName, fullName, phoneNumber);
 		int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
-		List<Account> accounts = accountService.searchAccount(accountName, fullName, phoneNumber, page);
+		List<Account> accounts = accountService.search(accountName, fullName, phoneNumber, page);
 		model.addAttribute("isAdmin", authService.isAdmin());
 		model.addAttribute("accountName", accountName);
 		model.addAttribute("fullName", fullName);
@@ -95,8 +95,8 @@ public class AccountController {
     		search += "&phoneNumber="+phoneNumber;
     	}
     	
-    	Map<String, String> mapErrors = validate.validateUpdateAccount(updateAccount);
-		if( mapErrors.size() == 0 && accountService.updateAccount(updateAccount)) {
+    	Map<String, String> mapErrors = validate.update(updateAccount);
+		if( mapErrors.size() == 0 && accountService.update(updateAccount)) {
 			session.setAttribute("message", "Cập nhật sản phẩm thành công!");
 			return search;
 		}
@@ -115,15 +115,15 @@ public class AccountController {
     }
 
 	@PostMapping("/account/insert")
-    private String insertAccount(Model model, @ModelAttribute InsertAccount insertAccount){
-    	Map<String, String> mapErrors = validate.validateInsertAccount(insertAccount);
+    private String insertAccount(Model model, @ModelAttribute InsertAccount create){
+    	Map<String, String> mapErrors = validate.create(create);
     	if(mapErrors.size() == 0) {
     		model.addAttribute("insertAccount", new InsertAccount());
-    		if(accountService.insertAccount(insertAccount)) {
+    		if(accountService.create(create)) {
     			model.addAttribute("message", "Thêm mới sản phẩm thành công!");
     		};
     	} else {
-    		model.addAttribute("insertAccount",insertAccount);
+    		model.addAttribute("insertAccount",create);
     	}
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("mapErrors",mapErrors);	
@@ -133,7 +133,7 @@ public class AccountController {
 
 	@GetMapping("/account/update/{accountId}")
     private String showFormUpdate(Model model, @PathVariable("accountId") int accountId){
-    	Account account = accountService.getAccountById(accountId);
+    	Account account = accountService.getById(accountId);
     	UpdateAccount uAccount = new UpdateAccount();
     	BeanUtils.copyProperties(account,uAccount);
     	model.addAttribute("mapErrors",new HashMap<String, String>());
@@ -167,7 +167,7 @@ public class AccountController {
     							, Model model
     							, @PathVariable("accountId") int accountId){
     	HttpSession session = request.getSession();
-    	boolean check = accountService.deleteAccount(accountId);
+    	boolean check = accountService.delete(accountId);
     	if (check) {
     		session.setAttribute("message", "Đã xóa nhân viên thành công!");
     	}else {

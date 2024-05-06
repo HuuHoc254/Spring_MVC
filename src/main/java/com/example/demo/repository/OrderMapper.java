@@ -12,9 +12,9 @@ public interface OrderMapper {
     				, String 	productCode
     				, String 	productName
     				, String 	customerName
-    				, String 	phoneNumber
-    				, String 	beginOrderDate
-    				, String 	endOrderDate
+    				, String 	phone
+    				, String 	beginDate
+    				, String 	endDate
     				, boolean 	orderStatus
     				, boolean 	allocationStatus
     				, Integer	accountId
@@ -25,29 +25,29 @@ public interface OrderMapper {
 									, String 	productCode
 									, String 	productName
 									, String 	customerName
-									, String 	phoneNumber
-									, String 	beginOrderDate
-									, String 	endOrderDate
+									, String 	phone
+									, String 	beginDate
+									, String 	endDate
 									, boolean 	orderStatus
 									, boolean 	allocationStatus
 									, Integer	accountId
 									, boolean 	isAdmin
 									, int		offset
 									);
-    int updateOrder(int 	productId
-    			,	double 	unitPrice
-    			,	int 	quantity
-    			,	int 	customerId
-    			,	String 	address
-    			,	String 	phoneNumber
-    			,	int 	version
-    			,	int 	orderId);
+    int update(	int 	productId
+			,	double 	unitPrice
+			,	int 	quantity
+			,	int 	customerId
+			,	String 	address
+			,	String 	phone
+			,	int 	version
+			,	int 	id);
 
-	int insertOrder(int 	productId
-				,	double 	unitPrice
-				,	int 	quantity
-				,	int 	customerId
-				,	String 	address
-				,	String 	phoneNumber
-				,	int 	accountId);
+	int create( int 	productId
+			,	double 	unitPrice
+			,	int 	quantity
+			,	int 	customerId
+			,	String 	address
+			,	String 	phoneNumber
+			,	int 	accountId);
 }

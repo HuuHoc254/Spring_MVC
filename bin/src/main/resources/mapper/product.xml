@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.example.demo.repository.ProductMapper" >
+	<select id="countSearch" resultType="int">
+	   	SELECT 
+	   		COUNT(*)
+	    FROM
+	    	products
+	    <where>
+	    	is_deleted = false
+	        <if test="productCode != null">
+	            AND product_code LIKE CONCAT(#{productCode}, '%')
+	        </if>
+	        <if test="productName != null">
+	            AND product_name LIKE CONCAT(#{productName}, '%')
+	        </if>
+	    </where>
+	</select>
+
+	<select id="search" resultType="java.util.Map">
+	    SELECT 
+	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity
+	    FROM
+	    	products
+	    <where>
+	    	is_deleted = false
+	        <if test="productCode != null">
+	            AND product_code LIKE CONCAT(#{productCode}, '%')
+	        </if>
+	        <if test="productName != null">
+	            AND product_name LIKE CONCAT(#{productName}, '%')
+	        </if>
+	    </where>
+	    LIMIT 3
+	    OFFSET #{offset}
+	</select>
+
+	<select id="getProductById" resultType="java.util.Map">
+	    SELECT 
+	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity, version
+	    FROM
+	    	products
+	    <where>
+	    		is_deleted = FALSE
+	    	AND product_id = #{productId} 
+	    </where>
+	</select>
+
+	<select id="getProductByCode" resultType="java.util.Map">
+	    SELECT 
+	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity, version
+	    FROM
+	    	products
+	    <where>
+	    		is_deleted = FALSE
+	    	AND product_code = #{productCode} 
+	    </where>
+	</select>
+
+	<select id="existsByProductCode" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	products
+	    <where>
+	    	product_code = #{productCode} 
+	    </where>
+	</select>
+
+	<select id="existsByProductName" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	products
+	    <where>
+	    	product_name = #{productName}
+	    </where>
+	</select>
+
+	<insert id="insertProduct">
+		INSERT INTO 
+				products( product_code, product_name, purchase_price, sale_price, inventory_quantity)
+		VALUES
+				(#{productCode},#{productName},#{purchasePrice},#{salePrice},#{inventoryQuantity})
+	</insert>
+
+	<select id="existsByProductCodeNotId" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	products
+	    <where>
+	    		product_code = #{productCode}
+	    	AND product_id != #{productId}
+	    </where>
+	</select>
+	
+	<select id="existsByProductNameNotId" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	products
+	    <where>
+	    		product_name = #{productName}
+	    	AND product_id != #{productId}
+	    </where>
+	</select>
+
+	<update id="updateProduct">
+		UPDATE
+			products
+		SET
+				product_code 	= #{productCode}
+			, 	product_name 	= #{productName}
+			, 	purchase_price 	= #{purchasePrice}
+			, 	sale_price 		= #{salePrice}
+			, 	version 		= #{version} + 1
+		<where>
+				product_id 		= #{productId}
+			AND	version 		= #{version}
+		</where>
+	</update>
+
+	<update id="deleteProduct">
+		UPDATE
+			products
+		SET
+				is_deleted 	= TRUE
+		<where>
+				product_id 		= #{productId}
+		</where>
+	</update>
+
+	<select id="getProductCodeByName" resultType="String">
+	    SELECT 
+	    	product_code
+	    FROM
+	    	products
+	    <where>
+	    	is_deleted = FALSE
+    	AND product_name = #{productName}
+	    </where>
+	</select>
+
+	<select id="getProductNameByCode" resultType="String">
+	    SELECT 
+	    	product_name
+	    FROM
+	    	products
+	    <where>
+	    	is_deleted = FALSE
+    	AND product_code = #{productCode}
+	    </where>
+	</select>
+  </mapper>

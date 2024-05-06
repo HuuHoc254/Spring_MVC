@@ -16,76 +16,76 @@ public class ProductValidate {
 	@Autowired
     private IProductService productService;
 
-	public Map<String,String> validateInsertProduct(InsertProduct insertProductRequest) {
+	public Map<String,String> create(InsertProduct create) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(insertProductRequest.getProductCode().trim() == "") {
+        if(create.getProductCode().trim() == "") {
         	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
         }else {
-	        check = productService.existsByProductCode(insertProductRequest.getProductCode());
+	        check = productService.existsByCode(create.getProductCode());
 	        if ( check ) {
 	            mapErrors.put("productCode", "Mã sản phẩm đã tồn tại!.");
 	        }
         }
 
-        if(insertProductRequest.getProductName().trim()== "") {
+        if(create.getProductName().trim()== "") {
         	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
         }else {
-	        check = productService.existsByProductName(insertProductRequest.getProductName());
+	        check = productService.existsByName(create.getProductName());
 	        if ( check ) {
 	        	mapErrors.put("productName", "Tên sản phẩm đã tồn tại!.");
 	        }
         }
 
-        if(insertProductRequest.getPurchasePrice() == null) {
+        if(create.getPurchasePrice() == null) {
         	mapErrors.put("purchasePrice", "Không được để trống giá mua vào!.");
         }
 
-        if(insertProductRequest.getSalePrice() == null) {
+        if(create.getSalePrice() == null) {
         	mapErrors.put("salePrice", "Không được để trống giá bán ra!.");
-        } else if (insertProductRequest.getSalePrice() != null && insertProductRequest.getSalePrice()<= insertProductRequest.getPurchasePrice()) {
+        } else if (create.getSalePrice() != null && create.getSalePrice()<= create.getPurchasePrice()) {
         	mapErrors.put("salePrice", "Giá bán phải lớn hơn giá mua!.");
         }
-        if(insertProductRequest.getInventoryQuantity()==null) {
-        	insertProductRequest.setInventoryQuantity(0);
-        }else if(insertProductRequest.getInventoryQuantity()<0){
+        if(create.getInventoryQuantity()==null) {
+        	create.setInventoryQuantity(0);
+        }else if(create.getInventoryQuantity()<0){
         	mapErrors.put("inventoryQuantity", "Số lượng tồn kho không hợp lệ.");
         }
         return mapErrors;
     }
 	
-	public Map<String,String> validateUpdateProduct(UpdateProduct updateProductRequest) {
+	public Map<String,String> update(UpdateProduct update) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(updateProductRequest.getProductCode().trim() == "") {
+        if(update.getProductCode().trim() == "") {
         	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
         }else {
-	        check = productService.existsByProductCodeNotId(updateProductRequest.getProductCode(),updateProductRequest.getProductId());
+	        check = productService.existsByCodeNotId(update.getProductCode(),update.getProductId());
 	        if ( check ) {
 	            mapErrors.put("productCode", "Mã sản phẩm đã tồn tại!.");
 	        }
         }
 
-        if(updateProductRequest.getProductName().trim() == "") {
+        if(update.getProductName().trim() == "") {
         	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
         }else {
-	        check = productService.existsByProductNameNotId(updateProductRequest.getProductName(),updateProductRequest.getProductId());
+	        check = productService.existsByNameNotId(update.getProductName(),update.getProductId());
 	        if ( check ) {
 	        	mapErrors.put("productName", "Tên sản phẩm đã tồn tại!.");
 	        }
         }
 
-        if(updateProductRequest.getPurchasePrice() == null) {
+        if(update.getPurchasePrice() == null) {
         	mapErrors.put("purchasePrice", "Không được để trống giá mua vào!.");
-        }else if(updateProductRequest.getPurchasePrice() <= 0){
+        }else if(update.getPurchasePrice() <= 0){
         	mapErrors.put("purchasePrice", "Giá mua vào phải lớn hơn 0!.");
         }
 
-        if(updateProductRequest.getSalePrice() == null) {
+        if(update.getSalePrice() == null) {
         	mapErrors.put("salePrice", "Không được để trống giá bán ra!.");
         }
-        if(updateProductRequest.getPurchasePrice() != null && updateProductRequest.getSalePrice() != null) {
-	        if ( updateProductRequest.getSalePrice()<= updateProductRequest.getPurchasePrice()) {
+        if(update.getPurchasePrice() != null && update.getSalePrice() != null) {
+	        if ( update.getSalePrice()<= update.getPurchasePrice()) {
 	        	mapErrors.put("salePrice", "Giá bán phải lớn hơn giá mua!.");
 	        }
         }

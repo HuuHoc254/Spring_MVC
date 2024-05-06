@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.example.demo.repository.OrderMapper" >
+	<select id="countSearch" resultType="int">
+	   	SELECT 
+	   		COUNT(*)
+	    FROM
+	    	orders o
+	    JOIN products 	p ON p.product_id 	= o.product_id
+	    JOIN account 	a ON a.account_id 	= o.account_id
+	    JOIN customer 	c ON c.customer_id 	= o.customer_id
+	    <where>
+	    	(
+			#{isAdmin} 
+			OR o.account_id = #{accountId} )
+	        <if test="accountName != null">
+	            AND a.account_name LIKE CONCAT(#{accountName}, '%')
+	        </if>
+	        <if test="fullName != null">
+	            AND a.full_name LIKE CONCAT(#{fullName}, '%')
+	        </if>
+	        <if test="productCode != null">
+	            AND p.product_code LIKE CONCAT(#{productCode}, '%')
+	        </if>
+	        <if test="productName != null">
+	            AND p.product_name LIKE CONCAT(#{productName}, '%')
+	        </if>
+	        <if test="customerName != null">
+	            AND c.customer_name LIKE CONCAT(#{customerName}, '%')
+	        </if>
+	        <if test="phoneNumber != null">
+	            AND o.phone_number_customer LIKE CONCAT(#{phoneNumber}, '%')
+	        </if>
+	        <if test="beginOrderDate != ''">
+	            AND o.order_date &gt; #{beginOrderDate}
+	        </if>
+	        <if test="endOrderDate != ''">
+	            AND o.order_date &lt; #{endOrderDate}
+	        </if>
+	        <if test="orderStatus and !allocationStatus">
+	            AND o.order_status_id = 1
+	        </if>
+	        <if test="!orderStatus and allocationStatus">
+	            AND o.order_status_id = 2
+	        </if>
+	    </where>
+	</select>
+
+	<select id="search" resultType="java.util.Map">
+	   	SELECT 
+	   		 o.order_id
+  		,	 o.order_date
+	    ,	 o.unit_price
+	    ,	 o.quantity
+	    ,	 o.phone_number_customer
+	    ,	 o.address_customer
+	    ,	 o.allocation_date
+	    ,	 o.version
+	    ,	 p.product_code
+	    ,	 p.product_name
+	    ,	 c.customer_name
+	    ,	 a.account_name
+	    ,	 a.full_name
+	    ,	 ost.order_status_name
+	    
+	    FROM
+	    	orders o
+	    JOIN products 	p ON p.product_id 	= o.product_id
+	    JOIN account 	a ON a.account_id 	= o.account_id
+	    JOIN customer 	c ON c.customer_id 	= o.customer_id
+	    JOIN order_status ost ON ost.order_status_id = o.order_status_id
+	    <where>
+	    	(
+			#{isAdmin} 
+			OR o.account_id = #{accountId} )
+	        <if test="accountName != null">
+	            AND a.account_name LIKE CONCAT(#{accountName}, '%')
+	        </if>
+	        <if test="fullName != null">
+	            AND a.full_name LIKE CONCAT(#{fullName}, '%')
+	        </if>
+	        <if test="productCode != null">
+	            AND p.product_code LIKE CONCAT(#{productCode}, '%')
+	        </if>
+	        <if test="productName != null">
+	            AND p.product_name LIKE CONCAT(#{productName}, '%')
+	        </if>
+	        <if test="customerName != null">
+	            AND c.customer_name LIKE CONCAT(#{customerName}, '%')
+	        </if>
+	        <if test="phoneNumber != null">
+	            AND o.phone_number_customer LIKE CONCAT(#{phoneNumber}, '%')
+	        </if>
+	        <if test="beginOrderDate != ''">
+	            AND o.order_date &gt; #{beginOrderDate}
+	        </if>
+	        <if test="endOrderDate != ''">
+	            AND o.order_date &lt; #{endOrderDate}
+	        </if>
+	        <if test="orderStatus and !allocationStatus">
+	            AND o.order_status_id = 1
+	        </if>
+	        <if test="!orderStatus and allocationStatus">
+	            AND o.order_status_id = 2
+	        </if>
+	    </where>
+	    ORDER BY
+	    	o.order_date DESC
+    	LIMIT 3
+	    OFFSET #{offset}
+	</select>
+	<update id="updateOrder">
+		UPDATE
+			orders
+		SET
+			product_id				= #{productId}
+		,	unit_price				= #{unitPrice}
+		,	quantity				= #{quantity}
+		,	customer_id				= #{customerId}
+		,	address_customer		= #{address}
+		,	phone_number_customer	= #{phoneNumber}
+		,	version					= version + 1
+		<where>
+			order_id 		= #{orderId}
+		AND version  		= #{version}
+		AND order_status_id = 1 <!-- trang thai da dat hang -->
+		</where>
+	</update>
+	<insert id="insertOrder">
+		INSERT INTO orders(product_id, unit_price, quantity, customer_id, address_customer, phone_number_customer, account_id )
+		VALUES(#{productId}, #{unitPrice}, #{quantity}, #{customerId}, #{address}, #{phoneNumber}, #{accountId})
+	</insert>
+	<select id="allocateInventory" statementType="CALLABLE">
+    	{ call allocateInventory(#{productId, mode=IN, jdbcType=INTEGER}, #{quantityToAdd, mode=IN, jdbcType=INTEGER}) }
+	</select>
+  </mapper>

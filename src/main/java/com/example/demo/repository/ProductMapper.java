@@ -7,33 +7,33 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ProductMapper {
-    int countSearch(String productCode, String productName);
-    List<Map<String, Object>> search(String productCode, String productName, int offset);
+    int countSearch(String code, String name);
+    List<Map<String, Object>> search(String code, String name, int offset);
 
-	Map<String, Object> getProductById(int productId);
+	Map<String, Object> getById(int id);
 
-	int existsByProductCode(String productCode);
+	int existsByCode(String code);
 
-	int existsByProductName(String productName);
+	int existsByName(String name);
 
-	int insertProduct(String productCode
-					, String productName
-					, Double purchasePrice
-					, Double salePrice
-					, Integer inventoryQuantity);
+	int create(	String 	code
+			, 	String 	name
+			, 	Double 	purchasePrice
+			, 	Double 	salePrice
+			, 	Integer inventoryQuantity);
 
-	int existsByProductCodeNotId(String productCode, Integer productId);
+	int existsByCodeNotId(String code, Integer id);
 
-	int existsByProductNameNotId(String productName, Integer productId);
+	int existsByNameNotId(String name, Integer id);
 
-	int updateProduct(Integer productId
-					, String productCode
-					, String productName
-					, Double purchasePrice
-					, Double salePrice
-					, Integer version);
-	int deleteProduct(int productId);
-	String getProductNameByCode(String productCode);
-	String getProductCodeByName(String productName);
-	Map<String, Object> getProductByCode(String productCode);
+	int update(	Integer id
+			, 	String 	code
+			, 	String 	name
+			, 	Double 	purchasePrice
+			, 	Double 	salePrice
+			, 	Integer version);
+	int delete(int id);
+	String getNameByCode(String code);
+	String getCodeByName(String name);
+	Map<String, Object> getByCode(String code);
 }

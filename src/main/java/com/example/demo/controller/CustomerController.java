@@ -57,9 +57,9 @@ public class CustomerController {
         int totalRecord = customerService.countSearch( customerName, phoneNumber);
         int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
         List<Customer> customers 
-        					= customerService.searchCustomer( customerName
-        													, phoneNumber
-        													, page);
+        					= customerService.search( customerName
+													, phoneNumber
+													, page);
         model.addAttribute("isAdmin", authService.isAdmin());
         model.addAttribute("customerName", customerName);
     	model.addAttribute("accountId", authService.getIdLogin());
@@ -101,16 +101,16 @@ public class CustomerController {
     }
 
 	@PostMapping("/insert")
-    private String insertCustomer(Model model, @ModelAttribute InsertCustomer insertCustomer){
-		insertCustomer.setAccountId(authService.getIdLogin());
-    	Map<String, String> mapErrors = validate.validateInsertCustomer(insertCustomer);
+    private String insertCustomer(Model model, @ModelAttribute InsertCustomer customer){
+		customer.setAccountId(authService.getIdLogin());
+    	Map<String, String> mapErrors = validate.create(customer);
     	if(mapErrors.size() == 0) {
     		model.addAttribute("insertCustomer", new InsertCustomer());
-    		if(customerService.insertCustomer(insertCustomer)) {
+    		if(customerService.create(customer)) {
     			model.addAttribute("message", "Thêm mới sản phẩm thành công!");
     		};
     	} else {
-    		model.addAttribute("insertCustomer",insertCustomer);
+    		model.addAttribute("insertCustomer",customer);
     	}
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("mapErrors",mapErrors);	
@@ -122,7 +122,7 @@ public class CustomerController {
 								,  Model model
 								,  @PathVariable("customerId") int customerId){
 		HttpSession session = request.getSession();
-		Customer customer = customerService.getCustomerById(customerId);
+		Customer customer = customerService.getById(customerId);
 		if(customer==null) {
 			String customerName = (String) session.getAttribute("customerName");
 	    	String phoneNumber = (String) session.getAttribute("phoneNumberC");
@@ -178,7 +178,7 @@ public class CustomerController {
 	@PostMapping("/update/{customerId}")
     private String updateCustomer( HttpServletRequest request
     							, Model model
-    							, @ModelAttribute UpdateCustomer updateCustomer
+    							, @ModelAttribute UpdateCustomer customer
     							, @PathVariable int customerId
     							){
     	HttpSession session = request.getSession();
@@ -197,12 +197,12 @@ public class CustomerController {
     		search += "&phoneNumber="+phoneNumber;
     	}
 
-    	Map<String, String> mapErrors = validate.validateUpdateCustomer(updateCustomer);
-		if( mapErrors.size() == 0 && customerService.updateCustomer(updateCustomer)) {
+    	Map<String, String> mapErrors = validate.update(customer);
+		if( mapErrors.size() == 0 && customerService.update(customer)) {
 			session.setAttribute("message", "Chỉnh sửa khách hàng thành công!");
 			return search;
 		}
-    	model.addAttribute("updateCustomer",updateCustomer); 
+    	model.addAttribute("updateCustomer",customer); 
     	model.addAttribute("mapErrors",mapErrors);
     	model.addAttribute("isAdmin", authService.isAdmin());
     	return "customer/customer-update";	
@@ -211,21 +211,21 @@ public class CustomerController {
 	@GetMapping("/delete/{customerId}")
     private String deleteAccount( HttpServletRequest request
    							, Model model
-   							, @PathVariable("customerId") int customerId){
+   							, @PathVariable("customerId") int id){
    	HttpSession session = request.getSession();
-   	Customer customer = customerService.getCustomerById(customerId);
+   	Customer customer = customerService.getById(id);
 	if(authService.getIdLogin()!= customer.getAccount().getAccountId() && !authService.isAdmin()) {
 		session.setAttribute("message", "Xóa khách hàng thất bại vì bạn không có quyền!");
 		logger.info("---------------BEGIN-------------");
-		logger.error("Account has ID= "+ authService.getIdLogin() + " request DELETE customer HAS ID= "+customerId);
+		logger.error("Account has ID= "+ authService.getIdLogin() + " request DELETE customer HAS ID= " + id);
 		logger.error("Account can't delete this customer");
 		logger.info("---------------END---------------");
 	} else {
-	   	boolean check = customerService.deleteCustomer(customerId);
+	   	boolean check = customerService.delete(id);
 	   	if (check) {
 	   		session.setAttribute("message", "Đã xóa khách hàng thành công!");
 	   	}else {
-	   		session.setAttribute("message", "Xóa khách hàng thất bại, đã có lỗi sảy ra!");
+	   		session.setAttribute("message", "Xóa khách hàng thấSt bại, đã có lỗi sảy ra!");
 	   	}
    	}
    	int page = 1;

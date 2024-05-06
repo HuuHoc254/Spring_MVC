@@ -24,80 +24,80 @@ public class CustomerService implements ICustomerService {
 		if(map==null) {
 			return null;
 		}
-		account.setAccountId((Integer) map.get("account_id"));
+		account.setAccountId((Integer) map.get("id"));
 		account.setFullName((String) map.get("full_name"));
 		customer.setAccount(account);
-		customer.setCustomerId((Integer) map.get("customer_id"));
-		customer.setCustomerName((String) map.get("customer_name"));
-		customer.setPhoneNumber((String) map.get("phone_number"));
+		customer.setCustomerId((Integer) map.get("id"));
+		customer.setCustomerName((String) map.get("name"));
+		customer.setPhoneNumber((String) map.get("phone"));
 		customer.setAddress((String) map.get("address"));
 		customer.setVersion((Integer) map.get("version"));
 		return customer;
 	}
 
 	@Override
-	public List<Customer> searchCustomer(String customerName, String phoneNumber, int page) {
-		List<Map<String,Object>> customers = customerMapper.search(customerName, phoneNumber, (page - 1) * 3);
+	public List<Customer> search(String name, String phone, int page) {
+		List<Map<String,Object>> customers = customerMapper.search(name, phone, (page - 1) * 3);
 		return customers.stream().map(m-> {return convertToModel(m);}).toList();
 	}
 
 	@Override
-	public int countSearch(String customerName, String phoneNumber) {
-		return customerMapper.countSearch(customerName, phoneNumber);
+	public int countSearch(String customerName, String phone) {
+		return customerMapper.countSearch(customerName, phone);
 	}
 
 	@Override
-	public Customer getCustomerById(int customerId) {
-		return convertToModel(customerMapper.findById(customerId));
+	public Customer getById(int id) {
+		return convertToModel(customerMapper.findById(id));
 	}
 
 	@Override
-	public boolean existsByPhoneNumber(String phoneNumber) {
-		return customerMapper.existsByPhoneNumber(phoneNumber) > 0;
+	public boolean existsByPhone(String phone) {
+		return customerMapper.existsByPhone(phone) > 0;
 	}
 
 	@Override
-	public boolean existsByPhoneNumberNotId(String phoneNumber, Integer customerId) {
-		return customerMapper.existsByPhoneNumberNotId(phoneNumber, customerId) > 0;
+	public boolean existsByPhoneNotId(String phone, Integer id) {
+		return customerMapper.existsByPhoneNotId(phone, id) > 0;
 	}
 
 	@Override
-	public boolean deleteCustomer(int customerId) {
-		return customerMapper.deleteCustomer(customerId) > 0;
+	public boolean delete(int id) {
+		return customerMapper.delete(id) > 0;
 	}
 
 	@Override
-	public boolean insertCustomer(InsertCustomer insertCustomer) {
-		return customerMapper.insertCustomer( insertCustomer.getCustomerName().trim()
-											, insertCustomer.getPhoneNumber().trim()
-											, insertCustomer.getAddress().trim()
-											, insertCustomer.getAccountId()
+	public boolean create(InsertCustomer create) {
+		return customerMapper.create( create.getCustomerName().trim()
+											, create.getPhoneNumber().trim()
+											, create.getAddress().trim()
+											, create.getAccountId()
 											) >0;
 	}
 
 	@Override
-	public boolean updateCustomer(UpdateCustomer updateCustomer) {
-		return customerMapper.updateCustomer( updateCustomer.getCustomerId()
-											, updateCustomer.getCustomerName().trim()
-											, updateCustomer.getPhoneNumber().trim()
-											, updateCustomer.getAddress().trim()
-											, updateCustomer.getVersion()
+	public boolean update(UpdateCustomer update) {
+		return customerMapper.update( update.getCustomerId()
+											, update.getCustomerName().trim()
+											, update.getPhoneNumber().trim()
+											, update.getAddress().trim()
+											, update.getVersion()
 											) >0;
 	}
 
 	@Override
-	public String getPhoneNumberByName(String customerName) {
-		return customerMapper.getPhoneNumberByName(customerName);
+	public String getPhoneByName(String name) {
+		return customerMapper.getPhoneByName(name);
 	}
 
 	@Override
-	public String getCustomerNameByPhoneNumber(String phoneNumber) {
-		return customerMapper.getCustomerNameByPhoneNumber(phoneNumber);
+	public String getNameByPhone(String phone) {
+		return customerMapper.getNameByPhone(phone);
 	}
 
 	@Override
-	public Customer getCustomerByPhoneNumber(String phoneNumber) {
-		return convertToModel(customerMapper.findByPhoneNumber(phoneNumber));
+	public Customer getByPhone(String phone) {
+		return convertToModel(customerMapper.findByPhone(phone));
 	}
 
 }

@@ -22,8 +22,8 @@ public class AccountService implements IAccountService {
 	PasswordEncoder encoder;
 
 	@Override
-	public Account findByAccountName(String accountName) {
-		Map<String, Object> map = accountMapper.findByAccountName(accountName);
+	public Account findByName(String name) {
+		Map<String, Object> map = accountMapper.findByName(name);
 		if (map == null) {
 			return null;	
 		}
@@ -32,10 +32,10 @@ public class AccountService implements IAccountService {
 	private Account convertToModel(Map<String, Object> map) {
 		Account account = new Account();
 		Role role = new Role();
-		account.setAccountId((Integer) map.get("account_id"));
-		account.setAccountName((String) map.get("account_name"));
+		account.setAccountId((Integer) map.get("id"));
+		account.setAccountName((String) map.get("name"));
 		account.setFullName((String) map.get("full_name"));
-		account.setPhoneNumber((String) map.get("phone_number"));
+		account.setPhoneNumber((String) map.get("phone"));
 		account.setIsOnline((Boolean) map.get("is_online"));
 		account.setPassword((String) map.get("password"));
 		account.setIsDeleted((Boolean) map.get("is_deleted"));
@@ -50,10 +50,10 @@ public class AccountService implements IAccountService {
 		return accountMapper.setOnline(accountId) > 0;
 	}
 	@Override
-	public List<Account> searchAccount(String accountName, String fullName, String phoneNumber, int page) {
-		 List<Map<String, Object>> map = accountMapper.search(accountName
+	public List<Account> search(String name, String fullName, String phone, int page) {
+		 List<Map<String, Object>> map = accountMapper.search(name
 				 											, fullName
-				 											, phoneNumber
+				 											, phone
 				 											, (page - 1) * 3
 				 											  );
 		 return map.stream().map(m ->{
@@ -61,51 +61,51 @@ public class AccountService implements IAccountService {
 			}).toList(); 
 	}
 	@Override
-	public int countSearch(String accountName, String fullName, String phoneNumber) {
-		return accountMapper.countSearch(accountName, fullName, phoneNumber);
+	public int countSearch(String name, String fullName, String phone) {
+		return accountMapper.countSearch(name, fullName, phone);
 	}
 
 	@Override
-	public Account getAccountById(int accountId) {
-		return convertToModel(accountMapper.findById(accountId));
+	public Account getById(int id) {
+		return convertToModel(accountMapper.findById(id));
 	}
 	@Override
-	public boolean existsByAccountName(String accountName) {
-		return accountMapper.existsByAccountName(accountName) > 0;
+	public boolean existsByName(String name) {
+		return accountMapper.existsByName(name) > 0;
 	}
 	@Override
-	public boolean existsByphoneNumber(String phoneNumber) {
-		return accountMapper.existsByPhoneNumber(phoneNumber) > 0;
+	public boolean existsByPhone(String phone) {
+		return accountMapper.existsByPhone(phone) > 0;
 	}
 	@Override
-	public boolean insertAccount(InsertAccount insertAccount) {
-		insertAccount.setPassword(encoder.encode(insertAccount.getPassword()));
-		return accountMapper.insertAccount(	insertAccount.getAccountName().trim()
-										  , insertAccount.getPassword()
-										  , insertAccount.getFullName().trim()
-										  , insertAccount.getPhoneNumber().trim()
+	public boolean create(InsertAccount create) {
+		create.setPassword(encoder.encode(create.getPassword()));
+		return accountMapper.create(	create.getAccountName().trim()
+										  , create.getPassword()
+										  , create.getFullName().trim()
+										  , create.getPhoneNumber().trim()
 										  ) > 0;
 	}
 	@Override
-	public boolean existsByAccountNameNotId(String accountName, Integer accountId) {
-		return accountMapper.existsByAccountNameNotId(accountName, accountId) > 0;
+	public boolean existsByNameNotId(String name, Integer id) {
+		return accountMapper.existsByNameNotId(name, id) > 0;
 	}
 	@Override
-	public boolean existsByPhoneNumberNotId(String phoneNumber, Integer accountId) {
-		return accountMapper.existsByPhoneNumberNotId(phoneNumber, accountId) > 0;
+	public boolean existsByPhoneNotId(String phone, Integer id) {
+		return accountMapper.existsByPhoneNotId(phone, id) > 0;
 	}
 	@Override
-	public boolean updateAccount(UpdateAccount updateAccount) {
-		return accountMapper.updateAccount( updateAccount.getAccountId()
-										  , updateAccount.getAccountName().trim()
-										  , updateAccount.getFullName().trim()
-										  , encoder.encode(updateAccount.getPassword())
-										  , updateAccount.getPhoneNumber().trim()
-										  , updateAccount.getVersion()
+	public boolean update(UpdateAccount update) {
+		return accountMapper.update( update.getAccountId()
+										  , update.getAccountName().trim()
+										  , update.getFullName().trim()
+										  , encoder.encode(update.getPassword())
+										  , update.getPhoneNumber().trim()
+										  , update.getVersion()
 											) > 0;
 	}
 	@Override
-	public boolean deleteAccount(int accountId) {
-		return accountMapper.deleteAccount(accountId) > 0;
+	public boolean delete(int id) {
+		return accountMapper.delete(id) > 0;
 	}
 }

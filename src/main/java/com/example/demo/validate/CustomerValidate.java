@@ -16,21 +16,21 @@ public class CustomerValidate {
 	@Autowired
     private ICustomerService customerService;
 
-	public Map<String,String> validateInsertCustomer(InsertCustomer insertCustomer) {
+	public Map<String,String> create(InsertCustomer create) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(insertCustomer.getCustomerName().trim() == "") {
+        if(create.getCustomerName().trim() == "") {
         	mapErrors.put("customerName", "Không được để trống tên khách hàng!");
         }
 
-        if(insertCustomer.getAddress().trim() == "") {
+        if(create.getAddress().trim() == "") {
         	mapErrors.put("address", "Không được để địa chỉ khách hàng!");
         }
 
-        if(insertCustomer.getPhoneNumber().trim() == "") {
+        if(create.getPhoneNumber().trim() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại của khách hàng!");
         } else {
-	        check = customerService.existsByPhoneNumber(insertCustomer.getPhoneNumber());
+	        check = customerService.existsByPhone(create.getPhoneNumber());
 	        if ( check ) {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }
@@ -39,21 +39,21 @@ public class CustomerValidate {
         return mapErrors;
     }
 
-	public Map<String,String> validateUpdateCustomer(UpdateCustomer updateCustomer) {
+	public Map<String,String> update(UpdateCustomer update) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(updateCustomer.getCustomerName().trim() == "") {
+        if(update.getCustomerName().trim() == "") {
         	mapErrors.put("customerName", "Không được để trống tên khách hàng!");
         }
 
-        if(updateCustomer.getAddress().trim() == "") {
+        if(update.getAddress().trim() == "") {
         	mapErrors.put("address", "Không được để địa chỉ khách hàng!");
         }
 
-        if(updateCustomer.getPhoneNumber().trim() == "") {
+        if(update.getPhoneNumber().trim() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại của khách hàng!");
         } else {
-	        check = customerService.existsByPhoneNumberNotId(updateCustomer.getPhoneNumber(), updateCustomer.getCustomerId());
+	        check = customerService.existsByPhoneNotId(update.getPhoneNumber(), update.getCustomerId());
 	        if ( check ) {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }

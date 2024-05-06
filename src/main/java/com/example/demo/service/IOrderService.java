@@ -12,28 +12,28 @@ public interface IOrderService {
 					, String 	productName
 					, String 	customerName
 					, String 	phoneNumber
-					, String 	beginOrderDate
-					, String 	endOrderDate
+					, String 	beginDate
+					, String 	endDate
 					, String 	orderStatus
 					, String 	allocationStatus
 					, Integer	accountId
 					, boolean 	isAdmin
 					);
 	
-	List<Order> searchCustomer(String 	accountName
-							,  String 	fullName
-							,  String 	productCode
-							,  String 	productName
-							,  String 	customerName
-							,  String 	phoneNumber
-							,  String 	beginOrderDate
-							,  String 	endOrderDate
-							,  String 	orderStatus
-							,  String 	allocationStatus
-							,  Integer	accountId
-							,  boolean 	isAdmin
-							,  int		page
-							);
+	List<Order> search(String 	accountName
+					,  String 	fullName
+					,  String 	productCode
+					,  String 	productName
+					,  String 	customerName
+					,  String 	phoneNumber
+					,  String 	beginDate
+					,  String 	endDate
+					,  String 	orderStatus
+					,  String 	allocationStatus
+					,  Integer	accountId
+					,  boolean 	isAdmin
+					,  int		page
+						);
 
 	void saveOrder(List<SaveOrder> orders);
 }

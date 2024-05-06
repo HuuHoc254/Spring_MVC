@@ -11,148 +11,148 @@
 	    	products
 	    <where>
 	    	is_deleted = false
-	        <if test="productCode != null">
-	            AND product_code LIKE CONCAT(#{productCode}, '%')
+	        <if test="code != null">
+	            AND code LIKE CONCAT(#{code}, '%')
 	        </if>
-	        <if test="productName != null">
-	            AND product_name LIKE CONCAT(#{productName}, '%')
+	        <if test="name != null">
+	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
 	    </where>
 	</select>
 
 	<select id="search" resultType="java.util.Map">
 	    SELECT 
-	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity
+	    	id, code, name, purchase_price, sale_price, inventory_quantity
 	    FROM
 	    	products
 	    <where>
 	    	is_deleted = false
-	        <if test="productCode != null">
-	            AND product_code LIKE CONCAT(#{productCode}, '%')
+	        <if test="code != null">
+	            AND code LIKE CONCAT(#{code}, '%')
 	        </if>
-	        <if test="productName != null">
-	            AND product_name LIKE CONCAT(#{productName}, '%')
+	        <if test="name != null">
+	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
 	    </where>
 	    LIMIT 3
 	    OFFSET #{offset}
 	</select>
 
-	<select id="getProductById" resultType="java.util.Map">
+	<select id="getById" resultType="java.util.Map">
 	    SELECT 
-	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity, version
+	    	id, code, name, purchase_price, sale_price, inventory_quantity, version
 	    FROM
 	    	products
 	    <where>
-	    		is_deleted = FALSE
-	    	AND product_id = #{productId} 
+	    		is_deleted 	= FALSE
+	    	AND id 			= #{id} 
 	    </where>
 	</select>
 
-	<select id="getProductByCode" resultType="java.util.Map">
+	<select id="getByCode" resultType="java.util.Map">
 	    SELECT 
-	    	product_id, product_code, product_name, purchase_price, sale_price, inventory_quantity, version
+	    	id, code, name, purchase_price, sale_price, inventory_quantity, version
 	    FROM
 	    	products
 	    <where>
-	    		is_deleted = FALSE
-	    	AND product_code = #{productCode} 
+	    		is_deleted 	= FALSE
+	    	AND code 		= #{code} 
 	    </where>
 	</select>
 
-	<select id="existsByProductCode" resultType="int">
-	    SELECT 
-	    	COUNT(*)
-	    FROM
-	    	products
-	    <where>
-	    	product_code = #{productCode} 
-	    </where>
-	</select>
-
-	<select id="existsByProductName" resultType="int">
+	<select id="existsByCode" resultType="int">
 	    SELECT 
 	    	COUNT(*)
 	    FROM
 	    	products
 	    <where>
-	    	product_name = #{productName}
+	    	code = #{code} 
 	    </where>
 	</select>
 
-	<insert id="insertProduct">
+	<select id="existsByName" resultType="int">
+	    SELECT 
+	    	COUNT(*)
+	    FROM
+	    	products
+	    <where>
+	    	name = #{name}
+	    </where>
+	</select>
+
+	<insert id="insert">
 		INSERT INTO 
-				products( product_code, product_name, purchase_price, sale_price, inventory_quantity)
+				products( code, name, purchase_price, sale_price, inventory_quantity)
 		VALUES
-				(#{productCode},#{productName},#{purchasePrice},#{salePrice},#{inventoryQuantity})
+				(#{code},#{name},#{purchasePrice},#{salePrice},#{inventoryQuantity})
 	</insert>
 
-	<select id="existsByProductCodeNotId" resultType="int">
+	<select id="existsByCodeNotId" resultType="int">
 	    SELECT 
 	    	COUNT(*)
 	    FROM
 	    	products
 	    <where>
-	    		product_code = #{productCode}
-	    	AND product_id != #{productId}
+	    		code 	= #{code}
+	    	AND id 		!= #{id}
 	    </where>
 	</select>
 	
-	<select id="existsByProductNameNotId" resultType="int">
+	<select id="existsByNameNotId" resultType="int">
 	    SELECT 
 	    	COUNT(*)
 	    FROM
 	    	products
 	    <where>
-	    		product_name = #{productName}
-	    	AND product_id != #{productId}
+	    		name 	= #{name}
+	    	AND id 		!= #{id}
 	    </where>
 	</select>
 
-	<update id="updateProduct">
+	<update id="update">
 		UPDATE
 			products
 		SET
-				product_code 	= #{productCode}
-			, 	product_name 	= #{productName}
+				code 			= #{code}
+			, 	name 			= #{name}
 			, 	purchase_price 	= #{purchasePrice}
 			, 	sale_price 		= #{salePrice}
 			, 	version 		= #{version} + 1
 		<where>
-				product_id 		= #{productId}
+				id 				= #{id}
 			AND	version 		= #{version}
 		</where>
 	</update>
 
-	<update id="deleteProduct">
+	<update id="delete">
 		UPDATE
 			products
 		SET
-				is_deleted 	= TRUE
+			is_deleted 	= TRUE
 		<where>
-				product_id 		= #{productId}
+			id 			= #{id}
 		</where>
 	</update>
 
-	<select id="getProductCodeByName" resultType="String">
+	<select id="getCodeByName" resultType="String">
 	    SELECT 
-	    	product_code
+	    	code
 	    FROM
 	    	products
 	    <where>
 	    	is_deleted = FALSE
-    	AND product_name = #{productName}
+    	AND name = #{name}
 	    </where>
 	</select>
 
-	<select id="getProductNameByCode" resultType="String">
+	<select id="getNameByCode" resultType="String">
 	    SELECT 
-	    	product_name
+	    	name
 	    FROM
 	    	products
 	    <where>
 	    	is_deleted = FALSE
-    	AND product_code = #{productCode}
+    	AND code = #{code}
 	    </where>
 	</select>
   </mapper>

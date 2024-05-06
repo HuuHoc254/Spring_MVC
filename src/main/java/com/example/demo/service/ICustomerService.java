@@ -7,19 +7,22 @@ import com.example.demo.dto.UpdateCustomer;
 import com.example.demo.model.Customer;
 
 public interface ICustomerService {
-	List<Customer> searchCustomer(String 	customerName
-								, String 	phoneNumber
-								, int 		page );
-	int countSearch(  String 	customerName
-					, String 	phoneNumber
+	List<Customer> search(String 	name
+						, String 	phone
+						, int 		page
+						);
+	int countSearch(String 	name
+				, 	String 	phone
 					);
-	Customer getCustomerById(int customerId);
-	boolean existsByPhoneNumber(String phoneNumber);
-	boolean existsByPhoneNumberNotId(String phoneNumber, Integer customerId);
-	boolean deleteCustomer(int customerId);
-	boolean insertCustomer(InsertCustomer insertCustomer);
-	boolean updateCustomer(UpdateCustomer updateCustomer);
-	String getPhoneNumberByName(String customerName);
-	String getCustomerNameByPhoneNumber(String phoneNumber);
-	Customer getCustomerByPhoneNumber(String phoneNumber);
+	Customer getById(int id);
+	boolean existsByPhone(String phone);
+	boolean existsByPhoneNotId(	String phone
+							, 	Integer id
+								);
+	boolean delete(int id);
+	boolean create(InsertCustomer create);
+	boolean update(UpdateCustomer update);
+	String getPhoneByName(String name);
+	String getNameByPhone(String phone);
+	Customer getByPhone(String phone);
 }

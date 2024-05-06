@@ -1,0 +1,413 @@
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Order</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body>
+<th:block th:insert="~{tpl/navbar.html :: navbar}">
+</th:block>
+  <div class="container-fluid">
+<h2 class=" mt-3 mb-3 text-center"> Danh sách đơn hàng</h2>
+  <form id="searchForm" th:action="@{/order}" th:method="GET">
+        <div class="row input-group mb-3" th:if="${isAdmin}">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Tên đăng nhập</label>
+            </div>
+            <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="text" id="accountName" name="accountName" placeholder="Nhập tên đăng nhập" th:value="${accountName}">
+            </div>
+        </div>
+        
+         <div class="row input-group mb-3"  th:if="${isAdmin}">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Tên nhân viên</label>
+            </div>
+            <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="text" id="fullName" name="fullName" placeholder="Nhập tên nhân viên" th:value="${fullName}">
+            </div>
+        </div>
+
+	 	<div class="row input-group mb-3">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Mã sản phẩm</label>
+            </div>
+            <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="text" id="productCode" name="productCode" placeholder="Nhập mã sản phẩm" th:value="${productCode}">
+            </div>
+        </div>
+
+        <div class="row input-group mb-3">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Tên sản phẩm</label>
+            </div>
+            <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="text" id="productName" name="productName" placeholder="Nhập tên sản phẩm" th:value="${productName}">
+            </div>
+        </div>
+
+		<div class="row input-group mb-3">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Tên khách hàng</label>
+            </div>
+            <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="text" id="customerName" name="customerName" placeholder="Nhập tên khách hàng" th:value="${customerName}">
+            </div>
+        </div>
+
+        <div class="row input-group mb-3">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Số điện thoại</label>
+            </div>
+             <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="text" id="phoneNumberCustomer" name="phoneNumberCustomer" placeholder="Nhập số điện thoại" th:value="${phoneNumberCustomer}">
+            </div>
+        </div>
+
+		<div class="row input-group mb-3">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Ngày đặt hàng bắt đầu</label>
+            </div>
+            <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="date" id="beginOrderDate"  name="beginOrderDate" th:value="${beginOrderDate}">
+            </div>
+        </div>
+
+		<div class="row input-group mb-3">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right">
+                <label class="">Ngày đặt hàng kết thúc</label>
+            </div>
+            <div class="col-xl-5 col-md-6 col-sm-7">
+                <input class="form-control border-dark shadow-none" type="date" id="endOrderDate" name="endOrderDate" th:value="${endOrderDate}">
+            </div>
+        </div>
+
+		<div class="row input-group mb-3">
+            <div class="col-xl-2 col-md-2 col-sm-3 mt-1 text-right mr-3">
+                <label class="">Trạng thái</label>
+            </div>
+            <div class="form-check form-check-inline">
+			  	<input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="orderStatus" th:checked="${orderStatus == 'on' ? 'checked' : null}">
+			  	<label class="form-check-label" for="inlineCheckbox1">Đã đặt hàng</label>
+			</div>
+			<div class="form-check form-check-inline">
+			  	<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="allocationStatus" th:checked="${allocationStatus == 'on' ? 'checked' : null}">
+			  	<label class="form-check-label" for="inlineCheckbox2">Đã phân bổ</label>
+			</div>
+        </div>
+		
+        <div class="row mt-3 mb-3">
+            <div class="col-2"></div>
+            <div class="col-xl-4 col-md-6 col-sm-6 mt-1">
+                <div class="row">
+                    <div class="col-xl-3 col-md-5">
+                        <button type="submit" class="btn btn-primary" onclick="saveSearchValues()"> Tìm kiếm</button>
+                    </div>
+                    <div class="col-xl-3 col-md-5">
+                        <button type="button" class="btn btn-primary" onclick="clearForm()"> Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <table width="100%" class="table-bordered">
+      <thead>
+        <tr class="bg-dark text-light">
+          <th scope="col" class="text-center">Số thứ tự</th>
+          <th scope="col">Ngày đặt hàng</th>
+          <th scope="col">Mã sản phẩm</th>
+          <th scope="col">Tên sản phẩm</th>
+          <th scope="col">Giá bán</th>
+          <th scope="col">Số lượng</th>
+          <th scope="col">Tên khách hàng</th>
+          <th scope="col">Số điện thoại</th>
+          <th scope="col">Địa chỉ</th>
+          <th scope="col">Trạng thái</th>
+          <th scope="col">Ngày phân bổ</th>
+          <th scope="col" th:if="${isAdmin}">Tên đăng nhập</th>
+          <th scope="col" th:if="${isAdmin}">Tên nhân viên</th>
+       	</tr>
+      </thead>
+      <tbody>
+        <tr th:if = "${orders.size() != 0}" th:each="order, index : ${orders}">
+          <td class="text-center index"></td>
+          <td th:text="${order.orderId}" class="orderId d-none" ></td>
+          <td th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm:ss')}" ></td>
+          <td th:text="${order.productCode}" contenteditable="true" class="productCode" ></td>
+
+          <td th:text="${order.productName}" contenteditable="true" class="productName"></td>
+          <td th:text="${#numbers.formatDecimal(order.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+          <td th:text="${order.quantity}" contenteditable="true" class="quantity text-center"></td>
+          <td th:text="${order.customerName}" contenteditable="true" class="customerName"></td>
+          <td th:text="${order.phoneNumberCustomer}" contenteditable="true" class="phoneNumber"></td>
+          <td th:text="${order.version}"  class="version d-none"></td>
+          
+          <td th:text="${order.addressCustomer}"></td>
+          <td th:text="${order.orderStatusName}"></td>
+          <td th:text="${order.productCode}" class="oldProductCode d-none"></td>
+           <td th:text="${order.productName}" class="oldProductName d-none"></td>
+		  <td th:text="${order.quantity}" class="oldQuantity d-none text-center "></td>
+          <td th:text="${order.customerName}" class="oldCustomerName d-none"></td>
+          <td th:text="${order.phoneNumberCustomer}" class="oldPhoneNumber d-none"></td>
+          <td th:text="${#temporals.format(order.allocationDate, 'yyyy/MM/dd HH:mm:ss')}"></td>
+          <td th:text="${order.accountName}" th:if="${isAdmin}"></td>
+          <td th:text="${order.fullName}" th:if="${isAdmin}"></td>
+        </tr>
+      </tbody>
+    </table>
+    <nav th:if = "${orders.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
+        <ul class="pagination">
+        	<li class="page-item" th:if="${currentPage != 1}" >
+		      <a th:href="@{'/order?page=' +${currentPage - 1} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+		      	class="page-link" aria-label="Previous">
+		        <span aria-hidden="true">&laquo;</span>
+		      </a>
+   			 </li>
+   			 <th:block th:if="${totalPage <= 8}" th:each="i : ${#numbers.sequence(1, totalPage)}" >
+   			 	<li class="page-item" th:if="${i != currentPage}">
+	                <a class="page-link" aria-current="page" 
+	                	th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+            	</li>
+            	<li class="page-item active" th:if="${i == currentPage}">
+	                <a class="page-link" aria-current="page" href="#" th:text="${i}">
+	               	</a>
+            	</li>
+   			 </th:block>
+
+   			 <th:block th:if="${totalPage > 8 and currentPage < 5}" th:each="i : ${#numbers.sequence(1, totalPage)}">
+   			 	<li class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
+	               	<a  th:if="${i < 6}"
+	                	class="page-link" 
+	                	th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+	               	<div class="page-link"  th:if="${i == totalPage-1 }">...</div>
+	               	<a  th:if="${i == totalPage}"
+	                	class="page-link" 
+	                	th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+            	</li>
+   			 </th:block>
+
+			<th:block th:if="${totalPage > 8 and currentPage > totalPage - 4 }" th:each="i : ${#numbers.sequence(1, totalPage)}">
+				<li class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
+	               	<a  th:if="${i == 1}"
+	                	class="page-link" 
+						th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+	               	<div class="page-link"  th:if="${i == 2 }">...</div>
+	               	<a  th:if="${i > totalPage-5}"
+	                	class="page-link" 
+						th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+            	</li>
+			</th:block>
+            
+            <th:block th:if="${totalPage > 8 and currentPage < totalPage - 3 and currentPage > 4 }" th:each="i : ${#numbers.sequence(1, totalPage)}">
+            	<li  class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
+	               	<a  th:if="${i == 1}"
+	                	class="page-link" 
+	                	th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+	               	<div class="page-link"  th:if="${i == 2 }">...</div>
+	               	<a  th:if="${ i == currentPage -1 }"
+	                	class="page-link" 
+	                	th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+	               	<a  th:if="${ i == currentPage }"
+	                	class="page-link" 
+	                	href="#"
+	                 	th:text="${i}">
+	               	</a>
+	               	<a  th:if="${i == currentPage + 1 }"
+	                	class="page-link" 
+	                	th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+	               	<div class="page-link"  th:if="${i == totalPage -1 }">...</div>
+	               	<a  th:if="${i == totalPage}"
+	                	class="page-link" 
+	                	th:href="@{'/order?page=' +${i} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+	                 	th:text="${i}">
+	               	</a>
+            	</li>
+            </th:block>
+            
+            <li th:if="${currentPage != totalPage}">
+        		<a  th:href="@{'/order?page=' +${currentPage + 1} 
+		      			+ ${ accountName 			!= '' ? '&accountName=' 		+ accountName : '' } 
+		      			+ ${ fullName 				!= '' ? '&fullName=' 			+ fullName : '' }
+		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
+		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
+		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
+		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
+		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
+		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
+		      			+ ${ allocationStatus 		!= '' ? '&allocationStatus=' 	+ allocationStatus : '' }
+		      			}" 
+        			class="page-link" aria-label="Next">
+        			<span aria-hidden="true">&raquo;</span>
+        		</a>
+        	</li>
+        </ul>
+    </nav>
+
+    <div class="row">
+      <div class="col-6 text-right">
+        <button class="btn btn-primary" type="button" onclick="saveOrder()">
+           Lưu đơn hàng
+        </button>
+      </div>
+      <div class="col-6">
+        <button class="btn btn-primary" type="button" onclick="resert()">
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/js/AutoFill.js"></script>
+  <script type="text/javascript" src="/js/InsertOrder.js"></script>
+  <script type="text/javascript" src="/js/SaveOrder.js"></script>
+  <script type="text/javascript" src="/js/ClearForm.js"></script>
+</body>
+
+</html>

@@ -62,27 +62,27 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
-	public List<Order> searchCustomer( String accountName
-									,  String fullName
-									,  String productCode
-									,  String productName
-									,  String customerName
-									,  String phoneNumber
-									,  String beginOrderDate
-									,  String endOrderDate
-									,  String orderStatus
-									,  String allocationStatus
-									,  Integer accountId
-									,  boolean isAdmin
-									,  int page) {
+	public List<Order> search( String accountName
+							,  String fullName
+							,  String productCode
+							,  String productName
+							,  String customerName
+							,  String customerPhone
+							,  String beginDate
+							,  String endDate
+							,  String orderStatus
+							,  String allocationStatus
+							,  Integer accountId
+							,  boolean isAdmin
+							,  int page) {
 		List<Map<String,Object>> map = orderMapper.search(accountName
 														, fullName
 														, productCode
 														, productName
 														, customerName
-														, phoneNumber
-														, beginOrderDate
-														, endOrderDate
+														, customerPhone
+														, beginDate
+														, endDate
 														, orderStatus.equals("on")
 														, allocationStatus.equals("on")
 														, accountId
@@ -93,20 +93,20 @@ public class OrderService implements IOrderService {
 	}
 	private Order convertToModel(Map<String, Object> map) {
 		Order order = new Order();
-		order.setOrderId((int) map.get("order_id"));
+		order.setOrderId((int) map.get("id"));
 		order.setAccountName((String) map.get("account_name"));
 		order.setFullName((String) map.get("full_name"));
 		order.setCustomerName((String) map.get("customer_name"));
-		order.setPhoneNumberCustomer((String) map.get("phone_number_customer"));
-		order.setAddressCustomer((String) map.get("address_customer"));
+		order.setPhoneNumberCustomer((String) map.get("customer_phone"));
+		order.setAddressCustomer((String) map.get("customer_address"));
 		order.setProductCode((String) map.get("product_code"));
 		order.setProductName((String) map.get("product_name"));
 		order.setUnitPrice((Double) map.get("unit_price"));
 		order.setQuantity((Integer) map.get("quantity"));
 		order.setOrderStatusName((String) map.get("order_status_name"));
-		order.setOrderDate((LocalDateTime) map.get("order_date"));
+		order.setOrderDate((LocalDateTime) map.get("date"));
 		order.setVersion((int) map.get("version"));
-		if(map.get("order_date")!=null) {
+		if(map.get("date")!=null) {
 			order.setAllocationDate((LocalDateTime) map.get("allocation_date"));
 		}
 		return order;
@@ -116,18 +116,17 @@ public class OrderService implements IOrderService {
 	public void saveOrder(List<SaveOrder> orders) {
 		boolean check = false;
 		for(SaveOrder order : orders) {
-			Product product = productService.getProductByCode(order.getProductCode());
-			Customer customer = customerService.getCustomerByPhoneNumber(order.getPhoneNumber());
+			Product product = productService.getByCode(order.getProductCode());
+			Customer customer = customerService.getByPhone(order.getPhoneNumber());
 			if(order.getOrderId() != null) {
-				check = orderMapper.updateOrder(
-												product.getProductId()
-											, 	product.getSalePrice()
-											,	order.getQuantity()
-											,	customer.getCustomerId()
-											,	customer.getAddress()
-											,	customer.getPhoneNumber()
-											,	order.getVersion()
-											,	order.getOrderId()) > 0;
+				check = orderMapper.update(	product.getProductId()
+										, 	product.getSalePrice()
+										,	order.getQuantity()
+										,	customer.getCustomerId()
+										,	customer.getAddress()
+										,	customer.getPhoneNumber()
+										,	order.getVersion()
+										,	order.getOrderId()) > 0;
 				if(!check) {
 					logger.info("---------------BEGIN-------------");
 		    		logger.error("OrderID not exits or Version do not match!");
@@ -137,21 +136,20 @@ public class OrderService implements IOrderService {
 					throw new RuntimeException("Đã có lỗi xảy ra, vui lòng ktra lại!");
 				}
 			}else {
-				check = orderMapper.insertOrder(
-												product.getProductId()
-											,	product.getSalePrice()
-											,	order.getQuantity()
-											,	customer.getCustomerId()
-											,	customer.getAddress()
-											,	customer.getPhoneNumber()
-											,	authService.getIdLogin()
-												) > 0;
+				check = orderMapper.create(	product.getProductId()
+										,	product.getSalePrice()
+										,	order.getQuantity()
+										,	customer.getCustomerId()
+										,	customer.getAddress()
+										,	customer.getPhoneNumber()
+										,	authService.getIdLogin()
+											) > 0;
 				if(!check) {
 					logger.info("---------------BEGIN-------------");
 		    		logger.error("Sever Errors!");
-		    		logger.error("Insert not success!");
+		    		logger.error("Create not success!");
 		    		logger.info("---------------END---------------");
-					throw new RuntimeException("Đã có lỗi xảy ra, vui lòng ktra lại!");
+					throw new RuntimeException("Đã có lỗi xảy ra, vui lòng kiem tra lại!");
 				}
 			}
 		}

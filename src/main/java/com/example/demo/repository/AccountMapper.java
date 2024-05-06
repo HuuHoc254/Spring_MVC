@@ -8,40 +8,40 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AccountMapper {
 
-	Map<String, Object> findByAccountName(String accountName);
+	Map<String, Object> findByName(String name);
 
-	int setOnline(Integer accountId);
-    int countSearch(  String accountName
+	int setOnline(Integer id);
+    int countSearch(  String name
     				, String fullName
-    				, String phoneNumber
+    				, String phone
     				);
-    List<Map<String, Object>> search( String accountName
-									, String fullName
-									, String phoneNumber
-									, int offset
+    List<Map<String, Object>> search( String 	name
+									, String 	fullName
+									, String 	phone
+									, int 		offset
 									);
 
-	Map<String, Object> findById(int accountId);
+	Map<String, Object> findById(int id);
 
-	int existsByAccountName(String accountName);
+	int existsByName(String name);
 
-	int existsByPhoneNumber(String phoneNumber);
+	int existsByPhone(String phone);
 
-	int insertAccount(String accountName
+	int create(String name
 					, String password
 					, String fullName
-					, String phoneNumber);
+					, String phone);
 
-	int existsByAccountNameNotId(String accountName, Integer accountId);
+	int existsByNameNotId(String name, Integer id);
 
-	int existsByPhoneNumberNotId(String phoneNumber, Integer accountId);
+	int existsByPhoneNotId(String phone, Integer id);
 
-	int updateAccount(Integer accountId
-					, String accountName
-					, String fullName
-					, String password
-					, String phoneNumber
-					, Integer version);
+	int update(	Integer id
+			, 	String 	name
+			, 	String 	fullName
+			, 	String 	password
+			, 	String 	phone
+			, 	Integer version);
 
-	int deleteAccount(int accountId);
+	int delete(int id);
 }

@@ -18,30 +18,31 @@ public class ProductService implements IProductService {
 	private ProductMapper productMapper;
 
 	@Override
-	public List<Product> searchProduct( String 	productCode
-											, String 	productName
-											, int		page) {
+	public List<Product> search(String 	code
+							, 	String 	productName
+							, 	int		page
+								) {
 		List<Map<String, Object>> map = productMapper.search(
-													 productCode
-													, productName
-													, (page - 1) * 3);
+													 	code
+													, 	productName
+													, 	(page - 1) * 3);
 		return map.stream().map(m ->{
 			return convertToModel(m);
 		}).toList();
 	}
 
 	@Override
-	public int countSearch(String 	productCode
-						 , String 	productName) {
+	public int countSearch( String 	code
+						 , 	String 	name) {
 		// TODO Auto-generated method stub
-		return productMapper.countSearch(productCode,productName);
+		return productMapper.countSearch(code, name);
 	}
 
 	private Product convertToModel(Map<String,Object> map){
 		Product product = new Product();
-		product.setProductId( (Integer) map.get("product_id"));
-		product.setProductCode( (String) map.get("product_code"));
-		product.setProductName( (String) map.get("product_name"));
+		product.setProductId( (Integer) map.get("id"));
+		product.setProductCode( (String) map.get("code"));
+		product.setProductName( (String) map.get("name"));
 		product.setPurchasePrice( (Double) map.get("purchase_price"));
 		product.setSalePrice( (Double) map.get("sale_price"));
 		product.setInventoryQuantity( (Integer) map.get("inventory_quantity"));
@@ -52,65 +53,65 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public Product getProductById(int productId) {
-		return convertToModel(productMapper.getProductById(productId));
+	public Product getById(int id) {
+		return convertToModel(productMapper.getById(id));
 	}
 
 	@Override
-	public boolean existsByProductCode(String productCode) {
-		return productMapper.existsByProductCode(productCode) > 0;
+	public boolean existsByCode(String code) {
+		return productMapper.existsByCode(code) > 0;
 	}
 
 	@Override
-	public boolean existsByProductName(String productName) {
-		return productMapper.existsByProductName(productName) > 0;
+	public boolean existsByName(String name) {
+		return productMapper.existsByName(name) > 0;
 	}
 
 	@Override
-	public boolean insertProduct(InsertProduct insertProductRequest) {
-		return productMapper.insertProduct(insertProductRequest.getProductCode().trim()
-										 , insertProductRequest.getProductName().trim()
-										 , insertProductRequest.getPurchasePrice()
-										 , insertProductRequest.getSalePrice()
-										 , insertProductRequest.getInventoryQuantity()) > 0;
+	public boolean create(InsertProduct create) {
+		return productMapper.create(create.getProductCode().trim()
+								 ,  create.getProductName().trim()
+								 , 	create.getPurchasePrice()
+								 , 	create.getSalePrice()
+								 , 	create.getInventoryQuantity()) > 0;
 	}
 
 	@Override
-	public boolean existsByProductCodeNotId(String productCode, Integer productId) {
-		return productMapper.existsByProductCodeNotId(productCode,productId) > 0;
+	public boolean existsByCodeNotId(String code, Integer id) {
+		return productMapper.existsByCodeNotId(code, id) > 0;
 	}
 	@Override
-	public boolean existsByProductNameNotId(String productName, Integer productId) {
-		return productMapper.existsByProductNameNotId(productName,productId) > 0;
-	}
-
-	@Override
-	public boolean updateProduct(UpdateProduct updateProductRequest) {
-		return productMapper.updateProduct(updateProductRequest.getProductId()   
-										 , updateProductRequest.getProductCode().trim()
-										 , updateProductRequest.getProductName().trim()
-										 , updateProductRequest.getPurchasePrice()
-										 , updateProductRequest.getSalePrice()
-										 , updateProductRequest.getVersion()) > 0;
+	public boolean existsByNameNotId(String name, Integer id) {
+		return productMapper.existsByNameNotId(name, id) > 0;
 	}
 
 	@Override
-	public boolean deleteProduct(int productId) {
-		return productMapper.deleteProduct(productId) > 0;
+	public boolean update(UpdateProduct update) {
+		return productMapper.update(update.getProductId()   
+								 , 	update.getProductCode().trim()
+								 , 	update.getProductName().trim()
+								 , 	update.getPurchasePrice()
+								 , 	update.getSalePrice()
+								 , 	update.getVersion()) > 0;
 	}
 
 	@Override
-	public String getProductCodeByName(String productName) {
-		return productMapper.getProductCodeByName(productName);
+	public boolean delete(int id) {
+		return productMapper.delete(id) > 0;
 	}
 
 	@Override
-	public String getProductNameByCode(String productCode) {
-		return productMapper.getProductNameByCode(productCode);
+	public String getCodeByName(String name) {
+		return productMapper.getCodeByName(name);
 	}
 
 	@Override
-	public Product getProductByCode(String productCode) {
-		return convertToModel(productMapper.getProductByCode(productCode));
+	public String getNameByCode(String code) {
+		return productMapper.getNameByCode(code);
+	}
+
+	@Override
+	public Product getByCode(String code) {
+		return convertToModel(productMapper.getByCode(code));
 	}
 }

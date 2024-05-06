@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Allocation</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+	<th:block th:insert="~{tpl/navbar.html :: navbar}">
+	</th:block>
+	<h2 class=" mt-3 mb-3 text-center">Phân bổ sản phẩm</h2>
+	<div class="container mt-3">
+		<form id="searchForm" th:action="@{allocation}" th:method="POST" th:object="${allocaties}">
+			<table width="100%">
+				<thead>
+					<tr class="bg-dark text-light text-center">
+						<th scope="col">Số thứ tự</th>
+						<th scope="col">Mã sản phẩm</th>
+						<th scope="col">Tên sản phẩm</th>
+						<th scope="col">Số lượng</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr  th:each="allocate, allocateStat : ${allocaties}">
+						<td><input class="index text-center w-100" type="text" readonly="readonly" th:field="*{__${allocateStat.index}__}.index" /></td>
+						<td><input class="productCode w-100" type="text" th:field="*{__${allocateStat.index}__}.productCode" /></td>
+						<td><input class="productName w-100" type="text" th:field="*{__${allocateStat.index}__}.productName" /></td>
+						<td><input class="quantity w-100" type="number" th:field="*{__${allocateStat.index}__}.quantity" /></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row justify-content-end mt-3 mr-3">
+			    <button id="allocateBtn" class="btn btn-primary" type="submit">
+			        Phân bổ
+			    </button>
+			</div>
+		</form>
+	</div>
+
+
+<script th:inline="javascript">
+		/*<![CDATA[*/
+		var message = /*[[${message}]]*/'';
+
+		if (message) {
+			alert(message);
+		}
+		/*]]>*/
+</script>
+<script type="text/javascript">
+
+
+ async function fillDataProduct(cellData, type) {
+    const data = $(cellData).val().trim();
+    var cellInsert;
+    if(type == 'code'){
+		cellInsert = $(cellData).closest("tr").find(".productCode");
+	} else {
+		cellInsert = $(cellData).closest("tr").find(".productName");
+	}
+	try {
+	    const response = await $.ajax({
+	        url: `http://localhost:8080/api/product/${type}`,
+	        method: 'GET',
+	        data: {
+	            [type === 'name' ? 'productCode' : 'productName']: data
+	        }
+	    });
+	    cellInsert.val(response);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+var table = $("tbody");
+$(document).ready(function() {
+	 displayErrors();
+	 createNewRow();
+	 $("tbody").on("focusout", "input[name='productCodes'], input[name='productNames'], input[name='quantities']", function() {
+		$(this).removeClass("bg-danger");
+		$(this).removeAttr("title");
+		$(this).removeAttr("data-original-title");
+		var cell = $(this);
+        var classList = cell.attr("class"); // Lấy tất cả các class của cell
+        var classArray = classList.split(" "); // Tách chuỗi thành một mảng các class
+        var columnName = classArray[0]; // Lấy phần tử đầu tiên của mảng, đó chính là class đầu tiên
+        var type = "";
+        // Xác định loại dữ liệu và gọi hàm fillDataProduct hoặc fillDataCustomer tương ứng
+        if (columnName === "productCode" || columnName === "productName") {
+            type = (columnName === "productCode") ? "name" : "code";
+            fillDataProduct(cell, type);
+        }
+        createNewRow();
+        checkRows();
+
+    });
+});
+function createNewRow() {
+   var lastRow = table.find("tr:last");
+   var rowCount = table.find("tr").length - 1; // Số lượng hàng trong bảng
+   // Kiểm tra các cột của hàng cuối cùng
+   var isRowNotEmpty = false;
+   lastRow.find("input[name='productCodes'], input[name='productNames'], input[name='quantities']").each(function() {
+	    if ($(this).val().trim()) {
+	        isRowNotEmpty = true;
+	        return false; // Thoát vòng lặp khi gặp ô không rỗng
+	    }
+	});
+   
+   // Nếu hàng cuối cùng không rỗng, tạo một hàng mới với số thứ tự tiếp theo
+   if (isRowNotEmpty || table.find("tr").length === 0) {
+       var nextIndex = table.find("tr").length + 1;
+
+    // Tạo một hàng mới và thêm vào bảng
+       var newRow = $("<tr>").appendTo(table);
+
+       // Thêm các input vào hàng mới
+       $("<td>").append(
+           $('<input>', {
+               "class": "index text-center w-100",
+               "type": "text",
+               "readonly": "readonly",
+               "value": nextIndex,
+               "name": "allocaties[" + rowCount + "].index"
+           })
+       ).appendTo(newRow);
+
+       $("<td>").append(
+           $('<input>', {
+               "class": "productCode w-100",
+               "type": "text",
+               "name": "allocaties[" + rowCount + "].productCode"
+           })
+       ).appendTo(newRow);
+
+       $("<td>").append(
+           $('<input>', {
+               "class": "productName w-100",
+               "type": "text",
+               "name": "allocaties[" + rowCount + "].productName"
+           })
+       ).appendTo(newRow);
+
+       $("<td>").append(
+           $('<input>', {
+               "class": "quantity w-100",
+               "type": "number",
+               "name": "allocaties[" + rowCount + "].quantity"
+           })
+       ).appendTo(newRow);
+   }
+}
+function checkRows() {
+    var rowCount = $("tbody tr").length; // Đếm số lượng hàng trong tbody
+    if (rowCount > 1) {
+        $("#allocateBtn").prop("disabled", false); // Kích hoạt nút "Phân bổ" nếu có ít nhất một hàng
+    } else {
+        $("#allocateBtn").prop("disabled", true); // Vô hiệu hóa nút "Phân bổ" nếu không có hàng nào
+    }
+}
+</script>
+<script th:inline="javascript">
+	function displayErrors(){
+		var mapErrors = /*[[ ${mapErrors} ]]*/ null;
+	    if (mapErrors) {
+	        for (const key in mapErrors) {
+	            if (mapErrors.hasOwnProperty(key)) {
+	                const mapErrorField = mapErrors[key];
+	                const $row = table.find("tr").filter(function() {
+	                    return $(this).find(".index").text() === key.toString();
+	                });
+	                for (const k in mapErrorField) {
+	                    if (mapErrorField.hasOwnProperty(k)) {
+	                        var $element = $row.find("." + k);
+	                        $element.addClass("bg-danger");
+	                        if ($element.attr("data-original-title") != null) {
+								$element.removeAttr("data-original-title");
+							}
+							$element.attr("data-toggle", "tooltip");
+							$element.attr("data-original-title", mapErrorField[k]);
+	                        $element.tooltip();
+	                    }
+	                }
+	            }
+	        }
+	    }
+	}
+</script>
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

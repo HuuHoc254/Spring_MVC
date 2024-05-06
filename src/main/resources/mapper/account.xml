@@ -126,14 +126,14 @@
 	    </where>
 	</select>
 	
-	<insert id="insertAccount">
+	<insert id="create">
 		INSERT INTO
-				accounts( name, password, full_name, phone, role_id)
+			accounts( name, password, full_name, phone, role_id)
 		VALUES
-				(#{name},#{password},#{fullName},#{phone},2)
+			(#{name},#{password},#{fullName},#{phone},2)
 	</insert>
 
-	<update id="updateAccount">
+	<update id="update">
 		UPDATE
 			accounts
 		SET
@@ -148,14 +148,14 @@
 		</where>
 	</update>
 
-	<update id="deleteAccount">
+	<update id="delete">
 		UPDATE
 			account
 		SET
-				is_deleted 	= TRUE
-			, 	version 	= version + 1
+			is_deleted 	= TRUE
+		, 	version 	= version + 1
 		<where>
-				id 			= #{id}
+			id 			= #{id}
 		</where>
 	</update>
   </mapper>

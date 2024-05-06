@@ -7,20 +7,22 @@ import com.example.demo.dto.UpdateProduct;
 import com.example.demo.model.Product;
 
 public interface IProductService {
-	List<Product> searchProduct(String productCode
-									, String productName
-									, int page );
-    int countSearch( String productCode
-				   , String productName );
-	Product getProductById(int productId);
-	boolean existsByProductCode(String productCode);
-	boolean existsByProductName(String productName);
-	boolean insertProduct(InsertProduct insertProductRequest);
-	boolean existsByProductCodeNotId(String productCode, Integer productId);
-	boolean existsByProductNameNotId(String productName, Integer productId);
-	boolean updateProduct(UpdateProduct updateProductRequest);
-	boolean deleteProduct(int productId);
-	String getProductCodeByName(String productName);
-	String getProductNameByCode(String productCode);
-	Product getProductByCode(String productCode);
+	List<Product> search(	String code
+					 	,	String name
+						, 	int 	page
+						);
+    int countSearch( String code
+				   , String name
+				   );
+	Product getById(int id);
+	boolean existsByCode(String code);
+	boolean existsByName(String name);
+	boolean create(InsertProduct create);
+	boolean existsByCodeNotId(String code, Integer id);
+	boolean existsByNameNotId(String name, Integer id);
+	boolean update(UpdateProduct update);
+	boolean delete(int id);
+	String  getCodeByName(String name);
+	String  getNameByCode(String code);
+	Product getByCode(String code);
 }
