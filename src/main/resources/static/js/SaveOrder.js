@@ -75,42 +75,36 @@ function checkValue(cell) {
 	} else {
 		// Nếu giống nhau, kiểm tra xem đơn hàng đã tồn tại trong mảng editedOrders chưa
 		let existingIndex = editedOrders.findIndex(order => order.index === index);
-		if (existingPage !== -1) {
-			let arrIndex = arrayPage[existingPage].orderArr;
-			let existingOrderInPage = arrIndex.findIndex(orderInPage => orderInPage === index);
-			if (existingOrderInPage !== -1) {
-				// Nếu tồn tại, xóa khỏi mảng
-				arrIndex.splice(existingOrderInPage, 1);
-				arrayPage[existingPage] = {
-					page: currentPage,
-					orderArr: arrIndex
-				}
-				//nếu tồn tại thì giảm index của các index phía sau đi 1
-				arrayPage = arrayPage.map(pageIndex => {
-					if (pageIndex.page >= currentPage) {
-						pageIndex.orderArr = pageIndex.orderArr.map(orderIndex => {
-							if (parseInt(orderIndex) > parseInt(index)) {
-								orderIndex = (parseInt(orderIndex) - 1).toString();
-							}
-							return orderIndex;
-						});
+		if(orderId == "") {
+			if (existingPage !== -1) {
+				let arrIndex = arrayPage[existingPage].orderArr;
+				let existingOrderInPage = arrIndex.findIndex(orderInPage => orderInPage === index);
+				if (existingOrderInPage !== -1) {
+					// Nếu tồn tại, xóa khỏi mảng
+					arrIndex.splice(existingOrderInPage, 1);
+					arrayPage[existingPage] = {
+						page: currentPage,
+						orderArr: arrIndex
 					}
-					return pageIndex;
-				});
-
+					//nếu tồn tại thì giảm index của các index phía sau đi 1
+					arrayPage = arrayPage.map(pageIndex => {
+						if (pageIndex.page >= currentPage) {
+							pageIndex.orderArr = pageIndex.orderArr.map(orderIndex => {
+								if (parseInt(orderIndex) > parseInt(index)) {
+									orderIndex = (parseInt(orderIndex) - 1).toString();
+								}
+								return orderIndex;
+							});
+						}
+						return pageIndex;
+					});
+	
+				}
 			}
 		}
-
 		if (existingIndex !== -1) {
 			// Nếu tồn tại, xóa khỏi mảng
-			editedOrders.splice(existingIndex, 1);
-			// Giảm index của các index sau đi 1
-			editedOrders.forEach(order => {
-				if (parseInt(order.index) > parseInt(index)) {
-					order.index--;
-					order.index = order.index.toString();
-				}
-			});
+			editedOrders.splice(existingIndex, 1);			
 		}
 	}
 	localStorage.setItem("arrayPage", JSON.stringify(arrayPage));
@@ -223,9 +217,13 @@ function loadInsertOrders() {
 }
 
 function saveOrder() {
-	let $table = $("tbody").closest("table");
 	// Lấy mảng editedOrders từ local storage
 	let editedOrders = localStorage.getItem("editedOrders") || [];
+
+	if(editedOrders == ""){
+		alert("Không có sự thay đổi nào!");
+		return false;
+	}
 	// Sử dụng jQuery để gửi dữ liệu
 	$.ajax({
 		type: "POST",
@@ -233,12 +231,13 @@ function saveOrder() {
 		data: editedOrders, // Chuyển đổi đối tượng thành chuỗi JSON
 		contentType: "application/json", // Đặt kiểu dữ liệu của yêu cầu là JSON
 		success: function(response) {
-			saveErrorToLocalStorage(response);
-			displayErrorFromLocalStorage();
-			alert("Đơn hàng đã được lưu!");
-			// Tải lại trang sau khi thành công
-           	resert();
-            
+			if(response){
+				saveErrorToLocalStorage(response);
+				displayErrorFromLocalStorage();
+			}else{
+				alert("Đơn hàng đã được lưu!");
+           		resert();// Tải lại trang sau khi thành công
+			}
 		},
 		error: function(xhr, status, error) {
 			alert("Lỗi khi gửi yêu cầu:", error);

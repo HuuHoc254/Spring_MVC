@@ -7,23 +7,23 @@
 
 	<select id="findById" resultType="java.util.Map">
 	    SELECT 
-	    	customer_id, customer_name, address, phone_number ,administrator_id as account_id , version
+	    	id, name, address, number ,administrator_id as account_id , version
 	    FROM
-	    	customer
+	    	customers
 	    <where>
-	    		is_deleted = FALSE
-	    	AND customer_id = #{customerId} 
+	    		is_deleted 	= FALSE
+	    	AND id 			= #{id} 
 	    </where>
 	</select>
 
-	<select id="findByPhoneNumber" resultType="java.util.Map">
+	<select id="findByPhone" resultType="java.util.Map">
 	    SELECT 
-	    	customer_id, customer_name, address, phone_number ,administrator_id as account_id , version
+	    	id, name, address, phone ,administrator_id as account_id , version
 	    FROM
-	    	customer
+	    	customers
 	    <where>
-	    		is_deleted = FALSE
-	    	AND phone_number = #{phoneNumber} 
+	    		is_deleted 	= FALSE
+    	AND 	phone 		= #{phone} 
 	    </where>
 	</select>
 
@@ -31,25 +31,25 @@
 	   	SELECT 
 	   		COUNT(*)
 	    FROM
-	    	customer
+	    	customers
 	    <where>
 	    	is_deleted = false
-	        <if test="customerName != null">
-	            AND customer_name LIKE CONCAT(#{customerName}, '%')
+	        <if test="name != null">
+	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
-	        <if test="phoneNumber != null">
-	            AND phone_number LIKE CONCAT(#{phoneNumber}, '%')
+	        <if test="number != null">
+	            AND phone LIKE CONCAT(#{phone}, '%')
 	        </if>
 	    </where>
 	</select>
 
 	<select id="search" resultType="java.util.Map">
 	    SELECT 
-	    	  c.customer_id
-	    	, c.customer_name
+	    	  c.id
+	    	, c.name
 	    	, c.address
-	    	, c.phone_number
-	    	, a.account_id
+	    	, c.phone
+	    	, a.id
 	    	, a.full_name
 	    FROM
 	    	customer c 

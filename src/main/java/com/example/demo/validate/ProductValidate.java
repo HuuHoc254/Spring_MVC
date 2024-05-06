@@ -19,7 +19,7 @@ public class ProductValidate {
 	public Map<String,String> validateInsertProduct(InsertProduct insertProductRequest) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(insertProductRequest.getProductCode() == "") {
+        if(insertProductRequest.getProductCode().trim() == "") {
         	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
         }else {
 	        check = productService.existsByProductCode(insertProductRequest.getProductCode());
@@ -28,7 +28,7 @@ public class ProductValidate {
 	        }
         }
 
-        if(insertProductRequest.getProductName()== "") {
+        if(insertProductRequest.getProductName().trim()== "") {
         	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
         }else {
 	        check = productService.existsByProductName(insertProductRequest.getProductName());
@@ -37,17 +37,19 @@ public class ProductValidate {
 	        }
         }
 
-        if(insertProductRequest.getPurchasePrice()== null) {
+        if(insertProductRequest.getPurchasePrice() == null) {
         	mapErrors.put("purchasePrice", "Không được để trống giá mua vào!.");
         }
 
-        if(insertProductRequest.getSalePrice()== null) {
+        if(insertProductRequest.getSalePrice() == null) {
         	mapErrors.put("salePrice", "Không được để trống giá bán ra!.");
-        } else if (insertProductRequest.getSalePrice()<= insertProductRequest.getPurchasePrice()) {
+        } else if (insertProductRequest.getSalePrice() != null && insertProductRequest.getSalePrice()<= insertProductRequest.getPurchasePrice()) {
         	mapErrors.put("salePrice", "Giá bán phải lớn hơn giá mua!.");
         }
         if(insertProductRequest.getInventoryQuantity()==null) {
         	insertProductRequest.setInventoryQuantity(0);
+        }else if(insertProductRequest.getInventoryQuantity()<0){
+        	mapErrors.put("inventoryQuantity", "Số lượng tồn kho không hợp lệ.");
         }
         return mapErrors;
     }
@@ -55,7 +57,7 @@ public class ProductValidate {
 	public Map<String,String> validateUpdateProduct(UpdateProduct updateProductRequest) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(updateProductRequest.getProductCode() == "") {
+        if(updateProductRequest.getProductCode().trim() == "") {
         	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
         }else {
 	        check = productService.existsByProductCodeNotId(updateProductRequest.getProductCode(),updateProductRequest.getProductId());
@@ -64,7 +66,7 @@ public class ProductValidate {
 	        }
         }
 
-        if(updateProductRequest.getProductName()== "") {
+        if(updateProductRequest.getProductName().trim() == "") {
         	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
         }else {
 	        check = productService.existsByProductNameNotId(updateProductRequest.getProductName(),updateProductRequest.getProductId());
@@ -73,14 +75,19 @@ public class ProductValidate {
 	        }
         }
 
-        if(updateProductRequest.getPurchasePrice()== null) {
+        if(updateProductRequest.getPurchasePrice() == null) {
         	mapErrors.put("purchasePrice", "Không được để trống giá mua vào!.");
+        }else if(updateProductRequest.getPurchasePrice() <= 0){
+        	mapErrors.put("purchasePrice", "Giá mua vào phải lớn hơn 0!.");
         }
 
-        if(updateProductRequest.getSalePrice()== null) {
+        if(updateProductRequest.getSalePrice() == null) {
         	mapErrors.put("salePrice", "Không được để trống giá bán ra!.");
-        } else if (updateProductRequest.getSalePrice()<= updateProductRequest.getPurchasePrice()) {
-        	mapErrors.put("salePrice", "Giá bán phải lớn hơn giá mua!.");
+        }
+        if(updateProductRequest.getPurchasePrice() != null && updateProductRequest.getSalePrice() != null) {
+	        if ( updateProductRequest.getSalePrice()<= updateProductRequest.getPurchasePrice()) {
+	        	mapErrors.put("salePrice", "Giá bán phải lớn hơn giá mua!.");
+	        }
         }
         return mapErrors;
     }

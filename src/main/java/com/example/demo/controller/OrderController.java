@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.dto.Allocation;
-import com.example.demo.dto.SaveOrder;
 import com.example.demo.model.Order;
 import com.example.demo.service.IOrderService;
 import com.example.demo.service.impl.AuthService;
@@ -31,9 +30,10 @@ public class OrderController {
 	private AuthService authService;
 	@Autowired
 	private IOrderService orderService;
-
+	@Autowired
+	private OrderValidate validate;
     @GetMapping("/order")
-    private String searchProduct(HttpServletRequest request
+    private String searchOrder(HttpServletRequest request
     							, Model model
     							, @RequestParam(defaultValue = "") String accountName
     							, @RequestParam(defaultValue = "") String fullName
@@ -48,23 +48,31 @@ public class OrderController {
     							, @RequestParam(defaultValue = "1") int page
     							){
     	HttpSession session = request.getSession();
-//    	if( accountName != "") {
-//    		session.setAttribute("customerNameO", customerName);
-//    	}
-//    	if( phoneNumber != "") {
-//    		session.setAttribute("phoneNumberC", phoneNumber);
-//    	}
-//    	
     	session.setAttribute("currentPage", page);
-    	
+    	boolean checkFormatStart = false;
+    	boolean checkFormatEnd = false;
+    	try {
+    		if(!beginOrderDate.isEmpty()) {
+    			LocalDate.parse(beginOrderDate);
+    		}
+    		checkFormatStart = true;
+    		if(!endOrderDate.isEmpty()) {
+    			LocalDate.parse(endOrderDate);
+    		}
+    		checkFormatEnd = true;
+		} catch (Exception e) {
+			if(checkFormatStart) {
+				checkFormatEnd = false;
+			}
+		} 
         int totalRecord = orderService.countSearch(accountName
 												,  fullName
 												,  productCode
 												,  productName
 												,  customerName
 												,  phoneNumberCustomer
-												,  beginOrderDate
-												,  endOrderDate
+												,  checkFormatStart ? beginOrderDate : "9999-12-31"
+												,  checkFormatEnd ? endOrderDate : "9999-12-31"
 												,  orderStatus
 												,  allocationStatus
 												,  authService.getIdLogin()
@@ -80,8 +88,8 @@ public class OrderController {
 														,  productName
 														,  customerName
 														,  phoneNumberCustomer
-														,  beginOrderDate
-														,  endOrderDate
+														,  checkFormatStart ? beginOrderDate : "9999-12-31"
+														,  checkFormatEnd ? endOrderDate : "9999-12-31"
 														,  orderStatus
 														,  allocationStatus
 														,  authService.getIdLogin()
@@ -100,40 +108,35 @@ public class OrderController {
         model.addAttribute("orderStatus", orderStatus);
         model.addAttribute("allocationStatus", allocationStatus);
         model.addAttribute("mapErrors", mapErrors);
-        session.removeAttribute("mapErrors");
-
         model.addAttribute("currentPage", page);
         model.addAttribute("orders", orders);
         model.addAttribute("totalPage",totalPage);
         model.addAttribute("message", session.getAttribute("message"));
         model.addAttribute("url","order");
         session.removeAttribute("message");
+        session.removeAttribute("mapErrors");
         return "order/order";
     }
 
 	@GetMapping("/admin/allocation")
     private String showForm( HttpServletRequest request
-								,  Model model
-								){
+						   , Model model
+							){
+		model.addAttribute("allocaties", new ArrayList<Allocation>());
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("url","allocation");
 	    return "allocation/allocation";
     }
 	@PostMapping("/admin/allocation")
     private String allocation( HttpServletRequest request
-								,  Model model
-								,@RequestParam String[] productCodes
-								,@RequestParam String[] productNames
-								,@RequestParam Integer[] quantities){
-		List<Allocation> allocaties = new ArrayList<Allocation>(); 
-		for(int i=0;i< (productCodes.length -1) ;i++) {
-			Allocation allocate = new Allocation();
-			allocate.setProductCode(productCodes[i]);
-			allocate.setProductName(productNames[i]);
-			allocate.setQuantity(quantities[i]);
-			allocaties.add(allocate);
+							,  Model model
+							,  @ModelAttribute("allocaties") List<Allocation> allocaties){
+
+		Map<Integer, Map<String, String>> mapErrors = validate.validateAllocation(allocaties);
+		if(mapErrors.size() >0) {
+			model.addAttribute("mapErrors", mapErrors);
 		}
-		
+		model.addAttribute("allocaties", allocaties);
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("url","allocation");
 	    return "allocation/allocation";

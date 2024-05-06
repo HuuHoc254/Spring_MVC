@@ -12,17 +12,16 @@ $(document).ready(function() {
         if (columnName === "productCode" || columnName === "productName") {
             type = (columnName === "productCode") ? "name" : "code";
             fillDataProduct(cell, type).then(() => {
-                checkValue(cell);
             });
         } else if (columnName === "customerName" || columnName === "phoneNumber") {
             type = (columnName === "customerName") ? "phone" : "name";
             fillDataCustomer(cell, type).then(() => {
-                checkValue(cell);
             });
-        }else {
-			checkValue(cell);
-		}
+        }
+
+		checkValue(cell);
     });
+
     
 });
 

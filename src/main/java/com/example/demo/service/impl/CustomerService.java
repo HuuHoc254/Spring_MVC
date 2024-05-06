@@ -68,9 +68,9 @@ public class CustomerService implements ICustomerService {
 
 	@Override
 	public boolean insertCustomer(InsertCustomer insertCustomer) {
-		return customerMapper.insertCustomer( insertCustomer.getCustomerName()
-											, insertCustomer.getPhoneNumber()
-											, insertCustomer.getAddress()
+		return customerMapper.insertCustomer( insertCustomer.getCustomerName().trim()
+											, insertCustomer.getPhoneNumber().trim()
+											, insertCustomer.getAddress().trim()
 											, insertCustomer.getAccountId()
 											) >0;
 	}
@@ -78,9 +78,9 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public boolean updateCustomer(UpdateCustomer updateCustomer) {
 		return customerMapper.updateCustomer( updateCustomer.getCustomerId()
-											, updateCustomer.getCustomerName()
-											, updateCustomer.getPhoneNumber()
-											, updateCustomer.getAddress()
+											, updateCustomer.getCustomerName().trim()
+											, updateCustomer.getPhoneNumber().trim()
+											, updateCustomer.getAddress().trim()
 											, updateCustomer.getVersion()
 											) >0;
 	}

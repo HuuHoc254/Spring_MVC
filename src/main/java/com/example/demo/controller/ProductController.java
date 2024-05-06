@@ -76,7 +76,10 @@ public class ProductController {
     	HttpSession session = request.getSession();
     	String pCodeSearch = (String) session.getAttribute("productCode");
     	String pNameSearch = (String) session.getAttribute("productName");
-    	int page = (int) session.getAttribute("currentPage");
+    	int page = 1;
+    	if(session.getAttribute("currentPage") !=null ) {
+    		page = (int) session.getAttribute("currentPage");
+    	}
     	String search = "redirect:/product?page="+page;
     	if(pCodeSearch!="") {
     		search += "&productCode="+pCodeSearch;
@@ -107,7 +110,7 @@ public class ProductController {
     		model.addAttribute("insertProduct",insertProduct);
     	}
     	model.addAttribute("isAdmin", authService.isAdmin());
-    	model.addAttribute("mapErrors",mapErrors);	
+    	model.addAttribute("mapErrors",mapErrors);
     	return "product/product-add";
     	
     }
@@ -130,7 +133,7 @@ public class ProductController {
     	HttpSession session = request.getSession();
     	String pCodeSearch = (String) session.getAttribute("productCode");
     	String pNameSearch = (String) session.getAttribute("productName");
-    	int page = (int) session.getAttribute("currentPage");
+    	int page = (int) session.getAttribute("currentPage") ;
     	String search = "redirect:/product?page="+page;
     	if(pCodeSearch!="") {
     		search += "&productCode="+pCodeSearch;

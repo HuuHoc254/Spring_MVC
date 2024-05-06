@@ -19,7 +19,7 @@ public class AccountValidate {
 	public Map<String,String> validateInsertAccount(InsertAccount insertAccountRequest) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(insertAccountRequest.getAccountName() == "") {
+        if(insertAccountRequest.getAccountName().trim() == "") {
         	mapErrors.put("accountName", "Không được để trống tên đăng nhập!");
         }else {
 	        check = accountService.existsByAccountName(insertAccountRequest.getAccountName());
@@ -28,17 +28,17 @@ public class AccountValidate {
 	        }
         }
 
-        if(insertAccountRequest.getPassword()== "") {
+        if(insertAccountRequest.getPassword().trim() == "") {
         	mapErrors.put("password", "Không được để trống mật khẩu!");
         }else if(!insertAccountRequest.getPassword().matches( "^(?=.*[A-Z])(?=.*\\d).+{8,}$" )){
         	mapErrors.put("password", "Sai định dạng mật khẩu!");
         }
-        
+
         if(!insertAccountRequest.getConfirmPassword().equals(insertAccountRequest.getPassword())  ) {
         	mapErrors.put("confirmPassword", "Xác nhận mật khẩu không trùng khớp!");
         }
 
-        if(insertAccountRequest.getFullName()== "") {
+        if(insertAccountRequest.getFullName().trim() == "") {
         	mapErrors.put("fullName", "Không được để tên nhân viên!");
         }
 
@@ -50,37 +50,37 @@ public class AccountValidate {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }
         }
-        
+
         return mapErrors;
     }
-	
+
 	public Map<String,String> validateUpdateAccount(UpdateAccount updateAccount) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(updateAccount.getAccountName() == "") {
+        if(updateAccount.getAccountName().trim() == "") {
         	mapErrors.put("accountName", "Không được để trống tên đăng nhập!");
         }else {
-	        check = accountService.existsByAccountNameNotId(updateAccount.getAccountName(), updateAccount.getAccountId());
-	        if ( check ) {
+        	check = accountService.existsByAccountNameNotId(updateAccount.getAccountName(), updateAccount.getAccountId());
+        	if ( check ) {
 	            mapErrors.put("accountName", "Tên đăng nhập đã tồn tại!.");
 	        }
         }
 
-        if(updateAccount.getPassword()== "") {
+        if(updateAccount.getPassword().trim() == "") {
         	mapErrors.put("password", "Không được để trống mật khẩu!");
         }else if(!updateAccount.getPassword().matches( "^(?=.*[A-Z])(?=.*\\d).+{8,}$" )){
         	mapErrors.put("password", "Sai định dạng mật khẩu!");
         }
-        
+
         if(!updateAccount.getConfirmPassword().equals(updateAccount.getPassword())  ) {
         	mapErrors.put("confirmPassword", "Xác nhận mật khẩu không trùng khớp!");
         }
 
-        if(updateAccount.getFullName()== "") {
+        if(updateAccount.getFullName().trim() == "") {
         	mapErrors.put("fullName", "Không được để tên nhân viên!");
         }
 
-        if(updateAccount.getPhoneNumber()== "") {
+        if(updateAccount.getPhoneNumber().trim() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại!");
         } else {
 	        check = accountService.existsByPhoneNumberNotId(updateAccount.getPhoneNumber(), updateAccount.getAccountId());
@@ -88,7 +88,7 @@ public class AccountValidate {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }
         }
-        
+
         return mapErrors;
     }
 

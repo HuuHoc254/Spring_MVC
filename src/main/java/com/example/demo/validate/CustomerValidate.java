@@ -19,15 +19,15 @@ public class CustomerValidate {
 	public Map<String,String> validateInsertCustomer(InsertCustomer insertCustomer) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(insertCustomer.getCustomerName() == "") {
+        if(insertCustomer.getCustomerName().trim() == "") {
         	mapErrors.put("customerName", "Không được để trống tên khách hàng!");
         }
 
-        if(insertCustomer.getAddress()== "") {
+        if(insertCustomer.getAddress().trim() == "") {
         	mapErrors.put("address", "Không được để địa chỉ khách hàng!");
         }
 
-        if(insertCustomer.getPhoneNumber()== "") {
+        if(insertCustomer.getPhoneNumber().trim() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại của khách hàng!");
         } else {
 	        check = customerService.existsByPhoneNumber(insertCustomer.getPhoneNumber());
@@ -35,22 +35,22 @@ public class CustomerValidate {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }
         }
-        
+
         return mapErrors;
     }
 
 	public Map<String,String> validateUpdateCustomer(UpdateCustomer updateCustomer) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(updateCustomer.getCustomerName() == "") {
+        if(updateCustomer.getCustomerName().trim() == "") {
         	mapErrors.put("customerName", "Không được để trống tên khách hàng!");
         }
 
-        if(updateCustomer.getAddress()== "") {
+        if(updateCustomer.getAddress().trim() == "") {
         	mapErrors.put("address", "Không được để địa chỉ khách hàng!");
         }
 
-        if(updateCustomer.getPhoneNumber()== "") {
+        if(updateCustomer.getPhoneNumber().trim() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại của khách hàng!");
         } else {
 	        check = customerService.existsByPhoneNumberNotId(updateCustomer.getPhoneNumber(), updateCustomer.getCustomerId());
@@ -58,7 +58,7 @@ public class CustomerValidate {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }
         }
-        
+
         return mapErrors;
     }
 }

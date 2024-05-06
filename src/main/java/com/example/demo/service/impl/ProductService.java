@@ -68,8 +68,8 @@ public class ProductService implements IProductService {
 
 	@Override
 	public boolean insertProduct(InsertProduct insertProductRequest) {
-		return productMapper.insertProduct(insertProductRequest.getProductCode()
-										 , insertProductRequest.getProductName()
+		return productMapper.insertProduct(insertProductRequest.getProductCode().trim()
+										 , insertProductRequest.getProductName().trim()
 										 , insertProductRequest.getPurchasePrice()
 										 , insertProductRequest.getSalePrice()
 										 , insertProductRequest.getInventoryQuantity()) > 0;
@@ -87,8 +87,8 @@ public class ProductService implements IProductService {
 	@Override
 	public boolean updateProduct(UpdateProduct updateProductRequest) {
 		return productMapper.updateProduct(updateProductRequest.getProductId()   
-										 , updateProductRequest.getProductCode()
-										 , updateProductRequest.getProductName()
+										 , updateProductRequest.getProductCode().trim()
+										 , updateProductRequest.getProductName().trim()
 										 , updateProductRequest.getPurchasePrice()
 										 , updateProductRequest.getSalePrice()
 										 , updateProductRequest.getVersion()) > 0;

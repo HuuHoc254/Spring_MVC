@@ -6,39 +6,39 @@
   <mapper namespace="com.example.demo.repository.AccountMapper" >
 	<select id="findByAccountName" resultType="java.util.Map">
 	    SELECT
-	    	  a.account_id 
-	    	, a.account_name
+	    	  a.id 
+	    	, a.name
 	    	, a.password
 	    	, a.is_deleted
-	    	, r.role_id
-	    	, r.role_name
+	    	, r.id
+	    	, r.name
 	    FROM
-	    	account a
+	    	accounts a
 	    JOIN
-	    	role r ON r.role_id = a.role_id 
+	    	roles r ON r.id = a.role_id 
 	    <where>
-    		account_name = #{accountName}
+    		name = #{name}
 	    </where>
 	</select>
 	
 	<select id="findById" resultType="java.util.Map">
 	    SELECT 
-	    	account_id, account_name, full_name, phone_number , version
+	    	id, name, full_name, phone, version
 	    FROM
-	    	account
+	    	accounts
 	    <where>
 	    		is_deleted = FALSE
-	    	AND account_id = #{accountId} 
+	    	AND id = #{id} 
 	    </where>
 	</select>
 
 	<update id="setOnline">
 		UPDATE
-			account
+			accounts
 		SET
 			is_online = NOT is_online
 		<where>
-			account_id = #{accountId}
+			id = #{id}
 		</where>
 	</update>
 
@@ -46,36 +46,36 @@
 	   	SELECT 
 	   		COUNT(*)
 	    FROM
-	    	account
+	    	accounts
 	    <where>
 	    	is_deleted = false
-	        <if test="accountName != null">
-	            AND account_name LIKE CONCAT(#{accountName}, '%')
+	        <if test="name != null">
+	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
-	        <if test="fullName != null">
+	        <if test="name != null">
 	            AND full_name LIKE CONCAT(#{fullName}, '%')
 	        </if>
-	        <if test="phoneNumber != null">
-	            AND phone_number LIKE CONCAT(#{phoneNumber}, '%')
+	        <if test="number != null">
+	            AND phone LIKE CONCAT(#{phone}, '%')
 	        </if>
 	    </where>
 	</select>
 
 	<select id="search" resultType="java.util.Map">
 	    SELECT 
-	    	account_id, account_name, full_name, phone_number, is_online
+	    	id, name, full_name, phone, is_online
 	    FROM
-	    	account
+	    	accounts
 	    <where>
 	    	is_deleted = false
-	        <if test="accountName != null">
-	            AND account_name LIKE CONCAT(#{accountName}, '%')
+	        <if test="name != null">
+	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
 	        <if test="fullName != null">
 	            AND full_name LIKE CONCAT(#{fullName}, '%')
 	        </if>
-	        <if test="phoneNumber != null">
-	            AND phone_number LIKE CONCAT(#{phoneNumber}, '%')
+	        <if test="phone != null">
+	            AND phone LIKE CONCAT(#{phone}, '%')
 	        </if>
 	    </where>
 	    ORDER BY
@@ -84,66 +84,66 @@
 	    OFFSET #{offset}
 	</select>
 
-	<select id="existsByAccountName" resultType="int">
+	<select id="existsByName" resultType="int">
 	    SELECT 
 	    	COUNT(*)
 	    FROM
-	    	account
+	    	accounts
 	    <where>
-	    	account_name = #{accountName} 
+	    	name = #{name} 
 	    </where>
 	</select>
 
-	<select id="existsByPhoneNumber" resultType="int">
+	<select id="existsByPhone" resultType="int">
 	    SELECT 
 	    	COUNT(*)
 	    FROM
-	    	account
+	    	accounts
 	    <where>
-	    	phone_number = #{phoneNumber}
+	    	phone = #{phone}
 	    </where>
 	</select>
 
-	<select id="existsByAccountNameNotId" resultType="int">
+	<select id="existsByNameNotId" resultType="int">
 	    SELECT 
 	    	COUNT(*)
 	    FROM
-	    	account
+	    	accounts
 	    <where>
-	    	account_name = #{accountName}
-    	AND account_id != #{accountId} 
+	    	name = #{name}
+    	AND id != #{id} 
 	    </where>
 	</select>
 
-	<select id="existsByPhoneNumberNotId" resultType="int">
+	<select id="existsByPhoneNotId" resultType="int">
 	    SELECT 
 	    	COUNT(*)
 	    FROM
-	    	account
+	    	accounts
 	    <where>
-	    	phone_number = #{phoneNumber}
-	    AND account_id != #{accountId} 
+	    	phone = #{phone}
+	    AND id != #{id} 
 	    </where>
 	</select>
 	
 	<insert id="insertAccount">
-		INSERT INTO 
-				account( account_name, password, full_name, phone_number, role_id)
+		INSERT INTO
+				accounts( name, password, full_name, phone, role_id)
 		VALUES
-				(#{accountName},#{password},#{fullName},#{phoneNumber},2)
+				(#{name},#{password},#{fullName},#{phone},2)
 	</insert>
 
 	<update id="updateAccount">
 		UPDATE
-			account
+			accounts
 		SET
-				account_name 	= #{accountName}
+				account_name 	= #{name}
 			, 	password 		= #{password}
 			, 	full_name 		= #{fullName}
-			, 	phone_number 	= #{phoneNumber}
-			, 	version 		= #{version} + 1
+			, 	phone			= #{phone}
+			, 	version 		= version + 1
 		<where>
-				account_id 		= #{accountId}
+				id 				= #{id}
 			AND	version 		= #{version}
 		</where>
 	</update>
@@ -153,8 +153,9 @@
 			account
 		SET
 				is_deleted 	= TRUE
+			, 	version 	= version + 1
 		<where>
-				account_id 		= #{accountId}
+				id 			= #{Id}
 		</where>
 	</update>
   </mapper>
