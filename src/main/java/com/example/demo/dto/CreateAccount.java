@@ -1,16 +1,16 @@
 package com.example.demo.dto;
 
-public class InsertAccount {
+public class CreateAccount {
     private String  accountName;
     private String  password;
     private String  confirmPassword;
     private String  fullName;
     private String  phoneNumber;
 
-	public InsertAccount() {
+	public CreateAccount() {
 	}
 
-	public InsertAccount(String accountName, String password, String confirmPassword, String fullName,
+	public CreateAccount(String accountName, String password, String confirmPassword, String fullName,
 			String phoneNumber) {
 		this.accountName = accountName;
 		this.password = password;

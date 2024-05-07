@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.dto.InsertProduct;
+import com.example.demo.dto.CreateProduct;
 import com.example.demo.dto.UpdateProduct;
 import com.example.demo.model.Product;
 import com.example.demo.service.IProductService;
@@ -37,144 +37,169 @@ public class ProductController {
     private ProductValidate validate;
 
     @GetMapping("/product")
-    private String searchProduct(HttpServletRequest request
+    private String search(HttpServletRequest request
     							, Model model
-    							, @RequestParam(defaultValue = "") String productCode
-    							, @RequestParam(defaultValue = "") String productName
+    							, @RequestParam(defaultValue = "") String code
+    							, @RequestParam(defaultValue = "") String name
     							, @RequestParam(defaultValue = "1") int page
     							){
-    	HttpSession session = request.getSession();
-    	if(page < 1) {
-    		page = 1;
-    	}
-    	if( productCode != "") {
-    		session.setAttribute("productCode", productCode);
-    	}
-    	if( productName != "") {
-    		session.setAttribute("productName", productName);
-    	}
-    	
-    	session.setAttribute("currentPage", page);
-    	
-        int totalRecord = productService.countSearch( productCode, productName );
-        int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
-        List<Product> products = productService.searchProduct(productCode, productName, page);
-        model.addAttribute("isAdmin", authService.isAdmin());
-        model.addAttribute("productCode", productCode);
-        model.addAttribute("productName", productName);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("products", products);
-        model.addAttribute("totalPage",totalPage);
-        model.addAttribute("message", session.getAttribute("message"));
-        model.addAttribute("url","product");
-        session.removeAttribute("message");
-        return "product/product-list";
+    	try {
+    		HttpSession session = request.getSession();
+        	if(page < 1) {
+        		page = 1;
+        	}
+        	session.setAttribute("productCode", code);
+        	session.setAttribute("productName", name);
+        	session.setAttribute("currentPage", page);
+
+            int totalRecord = productService.countSearch( code, name );
+            int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+            List<Product> products = productService.search(code, name, page);
+            model.addAttribute("isAdmin", authService.isAdmin());
+            model.addAttribute("code", code);
+            model.addAttribute("name", name);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("products", products);
+            model.addAttribute("totalPage",totalPage);
+            model.addAttribute("successMessage", session.getAttribute("successMessage"));
+            model.addAttribute("url","product");
+            session.removeAttribute("successMessage");
+            return "product/list";
+    	}catch (Exception e) {
+    		model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
+		}
     }
 
     @GetMapping("/product/cancel")
     private String cancel( HttpServletRequest request, Model model){
     	HttpSession session = request.getSession();
-    	String pCodeSearch = (String) session.getAttribute("productCode");
-    	String pNameSearch = (String) session.getAttribute("productName");
+    	String code = (String) session.getAttribute("productCode");
+    	String name = (String) session.getAttribute("productName");
     	int page = 1;
     	if(session.getAttribute("currentPage") !=null ) {
     		page = (int) session.getAttribute("currentPage");
     	}
-    	String search = "redirect:/product?page="+page;
-    	if(pCodeSearch!="") {
-    		search += "&productCode="+pCodeSearch;
+    	String url = "redirect:/product?page="+page;
+    	if( !code.trim().equals("") ) {
+    		url += "&code="+code;
     	}
-    	if(pNameSearch!="") {
-    		search += "&productName="+pNameSearch;
+    	if( !name.trim().equals("") ) {
+    		url += "&name="+name;
     	}
-		return search;
+		return url;
     }
 
-    @GetMapping("/admin/product/insert")
-    private String showFormInsert(Model model){
-    	model.addAttribute("insertProduct",new InsertProduct());
+    @GetMapping("/admin/product/create")
+    private String showFormCreate(Model model){
+    	model.addAttribute("product", new CreateProduct());
     	model.addAttribute("mapErrors",new HashMap<String, String>());
     	model.addAttribute("isAdmin", authService.isAdmin());
-	    return "product/product-add";
+	    return "product/create";
     }
 
-    @PostMapping("/admin/product/insert")
-    private String insertProduct(Model model, @ModelAttribute InsertProduct insertProduct){
-    	Map<String, String> mapErrors = validate.validateInsertProduct(insertProduct);
-    	if(mapErrors.size() == 0) {
-    		model.addAttribute("insertProductRequest", new InsertProduct());
-    		if(productService.insertProduct(insertProduct)) {
-    			model.addAttribute("message", "Thêm mới sản phẩm thành công!");
-    		};
-    	} else {
-    		model.addAttribute("insertProduct",insertProduct);
-    	}
-    	model.addAttribute("isAdmin", authService.isAdmin());
-    	model.addAttribute("mapErrors",mapErrors);
-    	return "product/product-add";
-    	
-    }
-
-    @GetMapping("/admin/product/update/{productId}")
-    private String showFormUpdate(Model model, @PathVariable("productId") int productId){
-    	Product product = productService.getProductById(productId);
-    	model.addAttribute("mapErrors",new HashMap<String, String>());
-    	model.addAttribute("updateProduct", product);
-    	model.addAttribute("isAdmin", authService.isAdmin());
-	    return "product/product-update";
-    }
-    
-    @PostMapping("admin/product/update/{productId}")
-    private String updateProduct( HttpServletRequest request
-    							, Model model
-    							, @ModelAttribute UpdateProduct updateProductRequest
-    							, @PathVariable int productId
-    							){
-    	HttpSession session = request.getSession();
-    	String pCodeSearch = (String) session.getAttribute("productCode");
-    	String pNameSearch = (String) session.getAttribute("productName");
-    	int page = (int) session.getAttribute("currentPage") ;
-    	String search = "redirect:/product?page="+page;
-    	if(pCodeSearch!="") {
-    		search += "&productCode="+pCodeSearch;
-    	}
-    	if(pNameSearch!="") {
-    		search += "&productName="+pNameSearch;
-    	}
-    	
-    	Map<String, String> mapErrors = validate.validateUpdateProduct(updateProductRequest);
-		if( mapErrors.size() == 0 && productService.updateProduct(updateProductRequest)) {
-			session.setAttribute("message", "Cập nhật sản phẩm thành công!");
-			return search;
+    @PostMapping("/admin/product/store")
+    private String store(Model model, @ModelAttribute CreateProduct product){
+    	try {
+    		Map<String, String> mapErrors = validate.create(product);
+        	if(mapErrors.size() == 0) {
+        		if(productService.create(product)) {
+        			model.addAttribute("product",new CreateProduct());
+        			model.addAttribute("successMessage", "Thêm mới sản phẩm thành công!");
+        		};
+        	} else {
+        		model.addAttribute("product",product);
+        	}
+        	model.addAttribute("isAdmin", authService.isAdmin());
+        	model.addAttribute("url", "product");
+        	model.addAttribute("mapErrors",mapErrors);
+        	return "product/create";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
 		}
-    	model.addAttribute("updateProductRequest",updateProductRequest); 
-    	model.addAttribute("mapErrors",mapErrors);
-    	model.addAttribute("isAdmin", authService.isAdmin());
-    	return "product/product-update";	
+
+    }
+
+    @GetMapping("/admin/product/edit/{id}")
+    private String showFormEdit(Model model, @PathVariable("id") int id){
+    	try {
+    		Product product = productService.getById(id);
+        	model.addAttribute("mapErrors",new HashMap<String, String>());
+        	model.addAttribute("updateProduct", product);
+        	model.addAttribute("isAdmin", authService.isAdmin());
+    	    return "product/edit";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
+		}
+    	
     }
     
-    @GetMapping("/admin/product/delete/{productId}")
-    private String deleteProduct( HttpServletRequest request
-    							, Model model
-    							, @PathVariable("productId") int productId){
-    	HttpSession session = request.getSession();
-    	boolean check = productService.deleteProduct(productId);
-    	if (check) {
-    		session.setAttribute("message", "Đã xóa sản phẩm thành công!");
-    	}else {
-    		session.setAttribute("message", "Xóa sản phẩm thất bại, đã có lỗi s!");
-    	}
-    	String pCodeSearch = (String) session.getAttribute("productCode");
-    	String pNameSearch = (String) session.getAttribute("productName");
-    	int page = (int) session.getAttribute("currentPage");
-    	String search = "redirect:/product?page="+page;
-    	if(pCodeSearch!="") {
-    		search += "&productCode="+pCodeSearch;
-    	}
-    	if(pNameSearch!="") {
-    		search += "&productName="+pNameSearch;
-    	}
-	    return search;
+    @PostMapping("admin/product/update/{id}")
+    private String update( 	HttpServletRequest request
+						, 	Model model
+						, 	@ModelAttribute UpdateProduct product
+						, 	@PathVariable int id
+							){
+    	try {
+    		HttpSession session = request.getSession();
+        	String code = (String) session.getAttribute("productCode");
+        	String name = (String) session.getAttribute("productName");
+        	int page = (int) session.getAttribute("currentPage") ;
+        	String url = "redirect:/product?page="+page;
+        	if( !code.trim().equals("") ) {
+        		url += "&code="+code;
+        	}
+        	if( !name.trim().equals("") ) {
+        		url += "&name="+name;
+        	}
+
+        	Map<String, String> mapErrors = validate.update(product);
+    		if( mapErrors.size() == 0 && productService.update(product)) {
+    			session.setAttribute("successMessage", "Cập nhật sản phẩm thành công!");
+    			return url;
+    		}
+        	model.addAttribute("updateProduct",product); 
+        	model.addAttribute("mapErrors",mapErrors);
+        	model.addAttribute("isAdmin", authService.isAdmin());
+        	return "product/edit";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
+		}
+
+    }
+    
+    @GetMapping("/admin/product/destroy/{id}")
+    private String delete( 	HttpServletRequest request
+						, 	Model model
+						, 	@PathVariable("id") int id
+							){
+    	try {
+    		HttpSession session = request.getSession();
+        	boolean check = productService.delete(id);
+        	if (check) {
+        		session.setAttribute("successMessage", "Đã xóa sản phẩm thành công!");
+        	}else {
+        		throw new RuntimeException("Sản phẩm không tồn tại!");
+        	}
+        	String code = (String) session.getAttribute("productCode");
+        	String name = (String) session.getAttribute("productName");
+        	int page = (int) session.getAttribute("currentPage");
+        	String url = "redirect:/product?page="+page;
+        	if( !code.trim().equals("") ) {
+        		url += "&code="+code;
+        	}
+        	if( !name.trim().equals("") ) {
+        		url += "&name="+name;
+        	}
+    	    return url;
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
+		}
+    	
     }
 
 }

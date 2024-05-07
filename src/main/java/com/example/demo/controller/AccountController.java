@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.dto.InsertAccount;
+import com.example.demo.dto.CreateAccount;
 import com.example.demo.dto.UpdateAccount;
 import com.example.demo.model.Account;
 import com.example.demo.service.IAccountService;
@@ -37,156 +37,171 @@ public class AccountController {
 	private AccountValidate validate;
 
 	@GetMapping("/account")
-	private String searchAccount( HttpServletRequest request
-								, Model model
-								, @RequestParam(defaultValue = "") String accountName
-								, @RequestParam(defaultValue = "") String fullName
-								, @RequestParam(defaultValue = "") String phoneNumber
-								, @RequestParam(defaultValue = "1") int page
-			){
-		HttpSession session = request.getSession();
-		if( accountName != "") {
-			session.setAttribute("accountName", accountName);
-		}
-		if( fullName != "") {
+	private String search(HttpServletRequest request
+						, Model model
+						, @RequestParam(defaultValue = "") String name
+						, @RequestParam(defaultValue = "") String fullName
+						, @RequestParam(defaultValue = "") String phone
+						, @RequestParam(defaultValue = "1") int page
+							){
+		try {
+			HttpSession session = request.getSession();
+			session.setAttribute("name", name);
 			session.setAttribute("fullName", fullName);
-		}
-		if( phoneNumber != "") {
-			session.setAttribute("phoneNumber", phoneNumber);
-		}
+			session.setAttribute("phone", phone);
+			session.setAttribute("currentPage", page);
 
-		session.setAttribute("currentPage", page);
-
-		int totalRecord = accountService.countSearch( accountName, fullName, phoneNumber);
-		int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
-		List<Account> accounts = accountService.search(accountName, fullName, phoneNumber, page);
-		model.addAttribute("isAdmin", authService.isAdmin());
-		model.addAttribute("accountName", accountName);
-		model.addAttribute("fullName", fullName);
-		model.addAttribute("phoneNumber", phoneNumber);
-		model.addAttribute("currentPage", page);
-		model.addAttribute("accounts", accounts);
-		model.addAttribute("totalPage",totalPage);
-		model.addAttribute("url","account");
-		model.addAttribute("message", session.getAttribute("message"));
-		session.removeAttribute("message");
-		return "account/account-list";
+			int totalRecord = accountService.countSearch( name, fullName, phone);
+			int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+			List<Account> accounts = accountService.search(name, fullName, phone, page);
+			model.addAttribute("isAdmin", authService.isAdmin());
+			model.addAttribute("name", name);
+			model.addAttribute("fullName", fullName);
+			model.addAttribute("phone", phone);
+			model.addAttribute("currentPage", page);
+			model.addAttribute("accounts", accounts);
+			model.addAttribute("totalPage",totalPage);
+			model.addAttribute("url","account");
+			model.addAttribute("successMessage", session.getAttribute("successMessage"));
+			session.removeAttribute("successMessage");
+			return "account/list";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
+		}
 	}
-	
-	@PostMapping("/account/update/{accountId}")
-    private String updateAccount( HttpServletRequest request
-    							, Model model
-    							, @ModelAttribute UpdateAccount updateAccount
-    							, @PathVariable int accountId
-    							){
-    	HttpSession session = request.getSession();
-    	String accountName = (String) session.getAttribute("accountName");
-    	String fullName = (String) session.getAttribute("fullName");
-    	String phoneNumber = (String) session.getAttribute("phoneNumber");
-    	int page = (int) session.getAttribute("currentPage");
-    	String search = "redirect:/admin/account?page="+page;
-    	if(accountName!="") {
-    		search += "&accountName="+accountName;
-    	}
-    	if(fullName!="") {
-    		search += "&fullName="+fullName;
-    	}
-    	if(phoneNumber!="") {
-    		search += "&phoneNumber="+phoneNumber;
-    	}
-    	
-    	Map<String, String> mapErrors = validate.update(updateAccount);
-		if( mapErrors.size() == 0 && accountService.update(updateAccount)) {
-			session.setAttribute("message", "Cập nhật sản phẩm thành công!");
-			return search;
+
+	@PostMapping("/account/update/{id}")
+    private String update(HttpServletRequest request
+						, Model model
+						, @ModelAttribute UpdateAccount account
+						, @PathVariable int id
+						){
+		try {
+			HttpSession session = request.getSession();
+	    	String name = (String) session.getAttribute("accountName");
+	    	String fullName = (String) session.getAttribute("fullName");
+	    	String phone = (String) session.getAttribute("phone");
+	    	int page = (int) session.getAttribute("currentPage");
+	    	String url = "redirect:/admin/account?page="+page;
+	    	if( !name.trim().equals("") ) {
+	    		url += "&name="+name;
+	    	}
+	    	if( !fullName.trim().equals("") ) {
+	    		url += "&fullName="+fullName;
+	    	}
+	    	if( !phone.trim().equals("") ) {
+	    		url += "&phone="+phone;
+	    	}
+	    	
+	    	Map<String, String> mapErrors = validate.update(account);
+			if( mapErrors.size() == 0 && accountService.update(account)) {
+				session.setAttribute("successMessage", "Cập nhật sản phẩm thành công!");
+				return url;
+			}
+	    	model.addAttribute("account",account); 
+	    	model.addAttribute("mapErrors",mapErrors);
+	    	model.addAttribute("isAdmin", authService.isAdmin());
+	    	return "account/edit";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
 		}
-    	model.addAttribute("updateAccount",updateAccount); 
-    	model.addAttribute("mapErrors",mapErrors);
-    	model.addAttribute("isAdmin", authService.isAdmin());
-    	return "account/account-update";	
     }
 
-	@GetMapping("/account/insert")
-    private String showFormInsert(Model model){
-    	model.addAttribute("insertAccount",new InsertAccount());
+	@GetMapping("/account/create")
+    private String showFormCreate(Model model){
+    	model.addAttribute("account",new CreateAccount());
     	model.addAttribute("mapErrors",new HashMap<String, String>());
     	model.addAttribute("isAdmin", authService.isAdmin());
-	    return "account/account-add";
+	    return "account/create";
     }
 
-	@PostMapping("/account/insert")
-    private String insertAccount(Model model, @ModelAttribute InsertAccount create){
-    	Map<String, String> mapErrors = validate.create(create);
-    	if(mapErrors.size() == 0) {
-    		model.addAttribute("insertAccount", new InsertAccount());
-    		if(accountService.create(create)) {
-    			model.addAttribute("message", "Thêm mới sản phẩm thành công!");
-    		};
-    	} else {
-    		model.addAttribute("insertAccount",create);
-    	}
-    	model.addAttribute("isAdmin", authService.isAdmin());
-    	model.addAttribute("mapErrors",mapErrors);	
-    	return "account/account-add";
+	@PostMapping("/account/store")
+    private String create(Model model, @ModelAttribute CreateAccount account){
+		try {
+			Map<String, String> mapErrors = validate.create(account);
+	    	if(mapErrors.size() == 0) {
+	    		model.addAttribute("account", new CreateAccount());
+	    		if(accountService.create(account)) {
+	    			model.addAttribute("successMessage", "Thêm mới sản phẩm thành công!");
+	    		};
+	    	} else {
+	    		model.addAttribute("account",account);
+	    	}
+	    	model.addAttribute("isAdmin", authService.isAdmin());
+	    	model.addAttribute("mapErrors",mapErrors);	
+	    	return "account/create";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
+		}
+    	
 
     }
 
-	@GetMapping("/account/update/{accountId}")
-    private String showFormUpdate(Model model, @PathVariable("accountId") int accountId){
-    	Account account = accountService.getById(accountId);
-    	UpdateAccount uAccount = new UpdateAccount();
-    	BeanUtils.copyProperties(account,uAccount);
+	@GetMapping("/account/edit/{id}")
+    private String showFormUpdate(Model model, @PathVariable("id") int id){
+    	Account account = accountService.getById(id);
     	model.addAttribute("mapErrors",new HashMap<String, String>());
-    	model.addAttribute("updateAccount", uAccount);
+    	model.addAttribute("account", account);
     	model.addAttribute("isAdmin", authService.isAdmin());
-	    return "account/account-update";
+	    return "account/edit";
     }
 
 	@GetMapping("/account/cancel")
     private String cancel( HttpServletRequest request, Model model){
     	HttpSession session = request.getSession();
-    	String accountName = (String) session.getAttribute("accountName");
+    	String name = (String) session.getAttribute("accountName");
     	String fullName = (String) session.getAttribute("fullName");
-    	String phoneNumber = (String) session.getAttribute("phoneNumber");
-    	int page = (int) session.getAttribute("currentPage");
-    	String search = "redirect:/admin/account?page="+page;
-    	if(accountName!="") {
-    		search += "&accountName="+accountName;
+    	String phone = (String) session.getAttribute("phone");
+    	int page = 1;
+    	if( session.getAttribute("currentPage")!=null ) {
+    		page = (int) session.getAttribute("currentPage");
     	}
-    	if(fullName!="") {
-    		search += "&fullName="+fullName;
+    	String url = "redirect:/admin/account?page="+page;
+    	if( !name.trim().equals("") ) {
+    		url += "&name="+name;
     	}
-    	if(phoneNumber!="") {
-    		search += "&phoneNumber="+phoneNumber;
+    	if( !fullName.trim().equals("") ) {
+    		url += "&fullName="+fullName;
     	}
-		return search;
+    	if( !phone.trim().equals("") ) {
+    		url += "&phone="+phone;
+    	}
+		return url;
     }
 
-	 @GetMapping("/account/delete/{accountId}")
+	 @GetMapping("/account/destroy/{id}")
      private String deleteAccount( HttpServletRequest request
     							, Model model
-    							, @PathVariable("accountId") int accountId){
-    	HttpSession session = request.getSession();
-    	boolean check = accountService.delete(accountId);
-    	if (check) {
-    		session.setAttribute("message", "Đã xóa nhân viên thành công!");
-    	}else {
-    		session.setAttribute("message", "Xóa nhân viên thất bại, đã có lỗi s!");
-    	}
-    	String accountName = (String) session.getAttribute("accountName");
-    	String fullName = (String) session.getAttribute("fullName");
-    	String phoneNumber = (String) session.getAttribute("phoneNumber");
-    	int page = (int) session.getAttribute("currentPage");
-    	String search = "redirect:/admin/account?page="+page;
-    	if(accountName!="") {
-    		search += "&accountName="+accountName;
-    	}
-    	if(fullName!="") {
-    		search += "&fullName="+fullName;
-    	}
-    	if(phoneNumber!="") {
-    		search += "&phoneNumber="+phoneNumber;
-    	}
-	    return search;
+    							, @PathVariable("id") int id){
+    	try {
+    		HttpSession session = request.getSession();
+        	boolean check = accountService.delete(id);
+        	if (check) {
+        		session.setAttribute("successMessage", "Đã xóa nhân viên thành công!");
+        	}else {
+        		throw new RuntimeException("Nhân viên không tồn tại!");
+        	}
+        	String name = (String) session.getAttribute("accountName");
+        	String fullName = (String) session.getAttribute("fullName");
+        	String phone = (String) session.getAttribute("phone");
+        	int page = (int) session.getAttribute("currentPage");
+        	String url = "redirect:/admin/account?page="+page;
+        	if( !name.trim().equals("") ) {
+        		url += "&name="+name;
+        	}
+        	if( !fullName.trim().equals("") ) {
+        		url += "&fullName="+fullName;
+        	}
+        	if( !phone.trim().equals("") ) {
+        		url += "&phone="+phone;
+        	}
+    	    return url;
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
+		}
     }
 }

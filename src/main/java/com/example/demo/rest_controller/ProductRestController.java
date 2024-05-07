@@ -15,13 +15,13 @@ public class ProductRestController {
     private IProductService productService;
 
     @GetMapping("/code")
-    private String getProductCodeByName(@RequestParam String productName) {
-    	return productService.getProductCodeByName(productName);
+    private String getCodeByName(@RequestParam String name) {
+    	return productService.getCodeByName(name);
     }
 
     @GetMapping("/name")
-    private String getProductNameByCode(@RequestParam String productCode) {
-    	String name =  productService.getProductNameByCode(productCode);
+    private String getNameByCode(@RequestParam String code) {
+    	String name =  productService.getNameByCode(code);
     	return name;
     }
 }

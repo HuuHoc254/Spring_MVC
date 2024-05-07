@@ -4,20 +4,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace="com.example.demo.repository.AccountMapper" >
-	<select id="findByAccountName" resultType="java.util.Map">
+	<select id="findByName" resultType="java.util.Map">
 	    SELECT
 	    	  a.id 
 	    	, a.name
 	    	, a.password
 	    	, a.is_deleted
 	    	, r.id
-	    	, r.name
+	    	, r.name as role_name
 	    FROM
 	    	accounts a
 	    JOIN
 	    	roles r ON r.id = a.role_id 
 	    <where>
-    		name = #{name}
+    		a.name = #{name}
 	    </where>
 	</select>
 	
@@ -27,8 +27,8 @@
 	    FROM
 	    	accounts
 	    <where>
-	    		is_deleted = FALSE
-	    	AND id = #{id} 
+	    		is_deleted 	= FALSE
+	    	AND id 			= #{id} 
 	    </where>
 	</select>
 

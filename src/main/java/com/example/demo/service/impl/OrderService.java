@@ -40,8 +40,8 @@ public class OrderService implements IOrderService {
 						,  String productName
 						,  String customerName
 						,  String phoneNumber
-						,  String beginOrderDate
-						,  String endOrderDate
+						,  String beginDate
+						,  String endDate
 						,  String orderStatus
 						,  String allocationStatus
 						,  Integer accountId
@@ -53,8 +53,8 @@ public class OrderService implements IOrderService {
 									,  productName
 									,  customerName
 									,  phoneNumber
-									,  beginOrderDate
-									,  endOrderDate
+									,  beginDate
+									,  endDate
 									,  orderStatus.equals("on")
 									,  allocationStatus.equals("on")
 									,  accountId
@@ -104,9 +104,9 @@ public class OrderService implements IOrderService {
 		order.setUnitPrice((Double) map.get("unit_price"));
 		order.setQuantity((Integer) map.get("quantity"));
 		order.setOrderStatusName((String) map.get("order_status_name"));
-		order.setOrderDate((LocalDateTime) map.get("date"));
+		order.setOrderDate((LocalDateTime) map.get("order_date"));
 		order.setVersion((int) map.get("version"));
-		if(map.get("date")!=null) {
+		if(map.get("allocation_date")!=null) {
 			order.setAllocationDate((LocalDateTime) map.get("allocation_date"));
 		}
 		return order;

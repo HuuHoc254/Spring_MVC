@@ -1,87 +1,69 @@
 package com.example.demo.dto;
 
 public class UpdateAccount {
-	private Integer accountId;
-    private String  accountName;
+	private Integer id;
+    private String  name;
     private String  password;
     private String confirmPassword;
     private String fullName;
-    private String phoneNumber;
+    private String phone;
     private Integer version;
-
 	public UpdateAccount() {
-	}
-
-	public UpdateAccount(Integer accountId, String accountName, String password, String confirmPassword,
-			String fullName, String phoneNumber, Integer version) {
 		super();
-		this.accountId = accountId;
-		this.accountName = accountName;
+	}
+	public UpdateAccount(Integer id, String name, String password, String confirmPassword, String fullName,
+			String phone, Integer version) {
+		super();
+		this.id = id;
+		this.name = name;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
 		this.fullName = fullName;
-		this.phoneNumber = phoneNumber;
+		this.phone = phone;
 		this.version = version;
 	}
-
-	public Integer getAccountId() {
-		return accountId;
+	public Integer getId() {
+		return id;
 	}
-
-
-	public void setAccountId(Integer accountId) {
-		this.accountId = accountId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
-
-
-	public String getAccountName() {
-		return accountName;
+	public String getName() {
+		return name;
 	}
-
-
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
+	public void setName(String name) {
+		this.name = name;
 	}
-
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
-
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
-
 	public String getFullName() {
 		return fullName;
 	}
-
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone() {
+		return phone;
 	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
-
 	public Integer getVersion() {
 		return version;
 	}
-
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
+    
 
 }

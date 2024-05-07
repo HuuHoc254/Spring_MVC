@@ -1,34 +1,34 @@
 package com.example.demo.dto;
 
-public class InsertProduct {
-    private String  productCode;
-    private String  productName;
+public class CreateProduct {
+    private String  code;
+    private String  name;
     private Double purchasePrice;
     private Double salePrice;
     private Integer inventoryQuantity;
 
-	public InsertProduct() {
+	public CreateProduct() {
 	}
 	
-	public InsertProduct(String productCode, String productName, Double purchasePrice, Double salePrice, Integer inventoryQuantity) {
-		this.productCode = productCode;
-		this.productName = productName;
+	public CreateProduct(String code, String name, Double purchasePrice, Double salePrice, Integer inventoryQuantity) {
+		this.code = code;
+		this.name = name;
 		this.purchasePrice = purchasePrice;
 		this.salePrice = salePrice;
 		this.inventoryQuantity = inventoryQuantity;
 	}
 
-	public String getProductCode() {
-		return productCode;
+	public String getCode() {
+		return code;
 	}
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
-	public String getProductName() {
-		return productName;
+	public String getName() {
+		return name;
 	}
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Double getPurchasePrice() {

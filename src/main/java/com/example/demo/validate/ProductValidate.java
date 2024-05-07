@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.dto.InsertProduct;
+import com.example.demo.dto.CreateProduct;
 import com.example.demo.dto.UpdateProduct;
 import com.example.demo.service.IProductService;
 
@@ -16,22 +16,22 @@ public class ProductValidate {
 	@Autowired
     private IProductService productService;
 
-	public Map<String,String> create(InsertProduct create) {
+	public Map<String,String> create(CreateProduct create) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(create.getProductCode().trim() == "") {
+        if(create.getCode().trim() == "") {
         	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
         }else {
-	        check = productService.existsByCode(create.getProductCode());
+	        check = productService.existsByCode(create.getCode());
 	        if ( check ) {
 	            mapErrors.put("productCode", "Mã sản phẩm đã tồn tại!.");
 	        }
         }
 
-        if(create.getProductName().trim()== "") {
+        if(create.getName().trim()== "") {
         	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
         }else {
-	        check = productService.existsByName(create.getProductName());
+	        check = productService.existsByName(create.getName());
 	        if ( check ) {
 	        	mapErrors.put("productName", "Tên sản phẩm đã tồn tại!.");
 	        }
@@ -57,19 +57,19 @@ public class ProductValidate {
 	public Map<String,String> update(UpdateProduct update) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(update.getProductCode().trim() == "") {
+        if(update.getCode().trim() == "") {
         	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
         }else {
-	        check = productService.existsByCodeNotId(update.getProductCode(),update.getProductId());
+	        check = productService.existsByCodeNotId(update.getCode(),update.getId());
 	        if ( check ) {
 	            mapErrors.put("productCode", "Mã sản phẩm đã tồn tại!.");
 	        }
         }
 
-        if(update.getProductName().trim() == "") {
+        if(update.getName().trim() == "") {
         	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
         }else {
-	        check = productService.existsByNameNotId(update.getProductName(),update.getProductId());
+	        check = productService.existsByNameNotId(update.getName(),update.getId());
 	        if ( check ) {
 	        	mapErrors.put("productName", "Tên sản phẩm đã tồn tại!.");
 	        }

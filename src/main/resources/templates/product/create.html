@@ -23,7 +23,7 @@
 		<div class="col-3"></div>
 		<div class="col-5 mb-3 text-danger" th:text= "${message}"></div>
 	</div>
-    <form th:action="@{/admin/product/insert}" th:method="post" th:object="${insertProduct}">
+    <form th:action="@{/admin/product/store}" th:method="post" th:object="${product}">
     	
         <div class="row input-group mb-3">
             <div class="col-1"></div>
@@ -32,7 +32,7 @@
             </div>
 
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="productCode" placeholder="Nhập mã sản phẩm" th:value="${insertProduct.productCode}" 
+                <input class="form-control border-dark shadow-none" type="text" name="code" placeholder="Nhập mã sản phẩm" th:value="${product.code}" 
                 	th:classappend="${mapErrors.get('productCode') != null ? 'is-invalid' : ''}">
             </div>
 
@@ -47,7 +47,7 @@
             </div>
             
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="productName" placeholder="Nhập tên sản phẩm"  th:value="${insertProduct.productName}"
+                <input class="form-control border-dark shadow-none" type="text" name="name" placeholder="Nhập tên sản phẩm"  th:value="${product.name}"
                 	th:classappend="${mapErrors.get('productName') != null ? 'is-invalid' : ''}">
             </div>
             
@@ -60,7 +60,7 @@
                 <label class="">Giá mua vào</label>
             </div>
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="number" name="purchasePrice" placeholder="Nhập giá mua vào"  th:value="${insertProduct.purchasePrice}"
+                <input class="form-control border-dark shadow-none" type="number" name="purchasePrice" placeholder="Nhập giá mua vào"  th:value="${product.purchasePrice}"
                 	th:classappend="${mapErrors.get('purchasePrice') != null ? 'is-invalid' : ''}">
             </div>
              <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('purchasePrice') != null}" th:text= "${mapErrors.get('purchasePrice')}">
@@ -72,7 +72,7 @@
                 <label class="">Giá bán ra</label>
             </div>
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="number" name="salePrice" placeholder="Nhập giá bán ra" th:value="${insertProduct.salePrice}"
+                <input class="form-control border-dark shadow-none" type="number" name="salePrice" placeholder="Nhập giá bán ra" th:value="${product.salePrice}"
                 	th:classappend="${mapErrors.get('salePrice') != null ? 'is-invalid' : ''}">
             </div>
             <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('salePrice') != null}" th:text= "${mapErrors.get('salePrice')}" >
@@ -85,7 +85,7 @@
                 <label class="">Số lượng tồn kho</label>
             </div>
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="number" min="0" name="inventoryQuantity" placeholder="Nhập số lượng" th:value="${insertProduct.inventoryQuantity}">
+                <input class="form-control border-dark shadow-none" type="number" min="0" name="inventoryQuantity" placeholder="Nhập số lượng" th:value="${product.inventoryQuantity}">
             </div>
         </div>
 
@@ -108,11 +108,11 @@
 </div>
 <script th:inline="javascript">
 	/*<![CDATA[*/
-	var errors = /*[[${errors}]]*/ '';
-	
-	if (!errors) {
-	    clearForm();
+	var successMessage = /*[[${successMessage}]]*/ '';
+	if (successMessage != null) {
+	    alert(successMessage);
 	}
+
 	/*]]>*/
 </script>
 <!-- Optional JavaScript -->

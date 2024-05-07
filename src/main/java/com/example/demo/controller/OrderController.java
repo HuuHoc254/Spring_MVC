@@ -49,20 +49,20 @@ public class OrderController {
     							){
     	HttpSession session = request.getSession();
     	session.setAttribute("currentPage", page);
-    	boolean checkFormatStart = false;
-    	boolean checkFormatEnd = false;
+    	boolean checkBeginDate = false;
+    	boolean checkEndDate = false;
     	try {
     		if(!beginOrderDate.isEmpty()) {
     			LocalDate.parse(beginOrderDate);
     		}
-    		checkFormatStart = true;
+    		checkBeginDate = true;
     		if(!endOrderDate.isEmpty()) {
     			LocalDate.parse(endOrderDate);
     		}
-    		checkFormatEnd = true;
+    		checkEndDate = true;
 		} catch (Exception e) {
-			if(checkFormatStart) {
-				checkFormatEnd = false;
+			if(checkBeginDate) {
+				checkEndDate = false;
 			}
 		} 
         int totalRecord = orderService.countSearch(accountName
@@ -71,8 +71,8 @@ public class OrderController {
 												,  productName
 												,  customerName
 												,  phoneNumberCustomer
-												,  checkFormatStart ? beginOrderDate : "9999-12-31"
-												,  checkFormatEnd ? endOrderDate : "9999-12-31"
+												,  checkBeginDate ? beginOrderDate : "9999-12-31"
+												,  checkEndDate ? endOrderDate : "9999-12-31"
 												,  orderStatus
 												,  allocationStatus
 												,  authService.getIdLogin()
@@ -82,20 +82,20 @@ public class OrderController {
         
         int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
         List<Order> orders 
-        					= orderService.searchCustomer( accountName
-														,  fullName
-														,  productCode
-														,  productName
-														,  customerName
-														,  phoneNumberCustomer
-														,  checkFormatStart ? beginOrderDate : "9999-12-31"
-														,  checkFormatEnd ? endOrderDate : "9999-12-31"
-														,  orderStatus
-														,  allocationStatus
-														,  authService.getIdLogin()
-														,  authService.isAdmin()
-														,  page
-										);
+        					= orderService.search( accountName
+												,  fullName
+												,  productCode
+												,  productName
+												,  customerName
+												,  phoneNumberCustomer
+												,  checkBeginDate ? beginOrderDate : "9999-12-31"
+												,  checkEndDate ? endOrderDate : "9999-12-31"
+												,  orderStatus
+												,  allocationStatus
+												,  authService.getIdLogin()
+												,  authService.isAdmin()
+												,  page
+												);
         model.addAttribute("isAdmin", authService.isAdmin());
         model.addAttribute("accountName", accountName);
         model.addAttribute("fullName", fullName);
@@ -115,24 +115,24 @@ public class OrderController {
         model.addAttribute("url","order");
         session.removeAttribute("message");
         session.removeAttribute("mapErrors");
-        return "order/order";
+        return "order/list";
     }
 
-	@GetMapping("/admin/allocation")
+	@GetMapping("/admin/create")
     private String showForm( HttpServletRequest request
 						   , Model model
 							){
 		model.addAttribute("allocaties", new ArrayList<Allocation>());
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("url","allocation");
-	    return "allocation/allocation";
+	    return "allocation/create";
     }
 	@PostMapping("/admin/allocation")
     private String allocation( HttpServletRequest request
 							,  Model model
 							,  @ModelAttribute("allocaties") List<Allocation> allocaties){
 
-		Map<Integer, Map<String, String>> mapErrors = validate.validateAllocation(allocaties);
+		Map<Integer, Map<String, String>> mapErrors = validate.allocation(allocaties);
 		if(mapErrors.size() >0) {
 			model.addAttribute("mapErrors", mapErrors);
 		}
@@ -141,5 +141,5 @@ public class OrderController {
     	model.addAttribute("url","allocation");
 	    return "allocation/allocation";
     }
-	
+
 }

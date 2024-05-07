@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.InsertAccount;
+import com.example.demo.dto.CreateAccount;
 import com.example.demo.dto.UpdateAccount;
 import com.example.demo.model.Account;
 import com.example.demo.model.Role;
@@ -78,13 +78,13 @@ public class AccountService implements IAccountService {
 		return accountMapper.existsByPhone(phone) > 0;
 	}
 	@Override
-	public boolean create(InsertAccount create) {
-		create.setPassword(encoder.encode(create.getPassword()));
-		return accountMapper.create(	create.getAccountName().trim()
-										  , create.getPassword()
-										  , create.getFullName().trim()
-										  , create.getPhoneNumber().trim()
-										  ) > 0;
+	public boolean create(CreateAccount account) {
+		account.setPassword(encoder.encode(account.getPassword()));
+		return accountMapper.create(account.getAccountName().trim()
+								  , account.getPassword()
+								  , account.getFullName().trim()
+								  , account.getPhoneNumber().trim()
+								  	) > 0;
 	}
 	@Override
 	public boolean existsByNameNotId(String name, Integer id) {
@@ -96,13 +96,13 @@ public class AccountService implements IAccountService {
 	}
 	@Override
 	public boolean update(UpdateAccount update) {
-		return accountMapper.update( update.getAccountId()
-										  , update.getAccountName().trim()
-										  , update.getFullName().trim()
-										  , encoder.encode(update.getPassword())
-										  , update.getPhoneNumber().trim()
-										  , update.getVersion()
-											) > 0;
+		return accountMapper.update(update.getId()
+								  , update.getName().trim()
+								  , update.getFullName().trim()
+								  , encoder.encode(update.getPassword())
+								  , update.getPhone().trim()
+								  , update.getVersion()
+									) > 0;
 	}
 	@Override
 	public boolean delete(int id) {

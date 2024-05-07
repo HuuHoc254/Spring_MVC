@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.InsertProduct;
+import com.example.demo.dto.CreateProduct;
 import com.example.demo.dto.UpdateProduct;
 import com.example.demo.model.Product;
 import com.example.demo.repository.ProductMapper;
@@ -23,8 +23,8 @@ public class ProductService implements IProductService {
 							, 	int		page
 								) {
 		List<Map<String, Object>> map = productMapper.search(
-													 	code
-													, 	productName
+													 	code.trim()
+													, 	productName.trim()
 													, 	(page - 1) * 3);
 		return map.stream().map(m ->{
 			return convertToModel(m);
@@ -34,22 +34,25 @@ public class ProductService implements IProductService {
 	@Override
 	public int countSearch( String 	code
 						 , 	String 	name) {
-		// TODO Auto-generated method stub
-		return productMapper.countSearch(code, name);
+		return productMapper.countSearch(code.trim(), name.trim());
 	}
 
 	private Product convertToModel(Map<String,Object> map){
-		Product product = new Product();
-		product.setProductId( (Integer) map.get("id"));
-		product.setProductCode( (String) map.get("code"));
-		product.setProductName( (String) map.get("name"));
-		product.setPurchasePrice( (Double) map.get("purchase_price"));
-		product.setSalePrice( (Double) map.get("sale_price"));
-		product.setInventoryQuantity( (Integer) map.get("inventory_quantity"));
-		if( map.containsKey("version")) {
-			product.setVersion( (Integer) map.get("version"));
+		try {
+			Product product = new Product();
+			product.setProductId( (Integer) map.get("id"));
+			product.setProductCode( (String) map.get("code"));
+			product.setProductName( (String) map.get("name"));
+			product.setPurchasePrice( (Double) map.get("purchase_price"));
+			product.setSalePrice( (Double) map.get("sale_price"));
+			product.setInventoryQuantity( (Integer) map.get("inventory_quantity"));
+			if( map.containsKey("version")) {
+				product.setVersion( (Integer) map.get("version"));
+			}
+			return product;
+		} catch (Exception e) {
+			throw new RuntimeException("Sản phẩm không tồn tại!");
 		}
-		return product;
 	}
 
 	@Override
@@ -68,12 +71,12 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public boolean create(InsertProduct create) {
-		return productMapper.create(create.getProductCode().trim()
-								 ,  create.getProductName().trim()
-								 , 	create.getPurchasePrice()
-								 , 	create.getSalePrice()
-								 , 	create.getInventoryQuantity()) > 0;
+	public boolean create(CreateProduct product) {
+		return productMapper.create(product.getCode().trim()
+								 ,  product.getName().trim()
+								 , 	product.getPurchasePrice()
+								 , 	product.getSalePrice()
+								 , 	product.getInventoryQuantity()) > 0;
 	}
 
 	@Override
@@ -87,9 +90,9 @@ public class ProductService implements IProductService {
 
 	@Override
 	public boolean update(UpdateProduct update) {
-		return productMapper.update(update.getProductId()   
-								 , 	update.getProductCode().trim()
-								 , 	update.getProductName().trim()
+		return productMapper.update(update.getId()   
+								 , 	update.getCode().trim()
+								 , 	update.getName().trim()
 								 , 	update.getPurchasePrice()
 								 , 	update.getSalePrice()
 								 , 	update.getVersion()) > 0;

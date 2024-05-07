@@ -22,7 +22,7 @@
                 <label class="">Mã sản phẩm</label>
             </div>
             <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="text" id="productCode" name="productCode" placeholder="Nhập mã sản phẩm" th:value = "${productCode}">
+                <input class="form-control border-dark shadow-none" type="text" name="code" placeholder="Nhập mã sản phẩm" th:value = "${code}">
             </div>
         </div>
 
@@ -32,7 +32,7 @@
                 <label class="">Tên sản phẩm</label>
             </div>
             <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="text" id="productName" name="productName" placeholder="Nhập tên sản phẩm" th:value = "${productName}">
+                <input class="form-control border-dark shadow-none" type="text" name="name" placeholder="Nhập tên sản phẩm" th:value = "${name}">
             </div>
         </div>
 
@@ -52,8 +52,8 @@
     </form>
 	<div class= "row m-3" th:if="${isAdmin}">
 		<div class="col-xl-2 col-0"></div>
-		<a href="/admin/product/insert" class="text-decoration-none text-light">
-		<button class="btn btn-primary " type="button"> Thêm mới</button>
+		<a href="/admin/product/create" class="text-decoration-none text-light">
+			<button class="btn btn-primary " type="button"> Thêm mới</button>
 		</a>
 	</div>
 	<table class="table table-hover mt-3 mx-auto col-xl-10">
@@ -77,12 +77,12 @@
 				<td th:text="${#numbers.formatDecimal(prod.salePrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
 		        <td class="text-center" th:text="${prod.inventoryQuantity}"></td>
 		        <td th:if = "${isAdmin}">
-		        	<a th:href="@{'/admin/product/update/' + ${prod.productId}}" class="text-decoration-none text-light">
+		        	<a th:href="@{'/admin/product/edit/' + ${prod.productId}}" class="text-decoration-none text-light">
 		        		<button class="btn btn-primary">Chỉnh sửa</button>
 	        		</a>
 	        	</td>
 	        	<td th:if = "${isAdmin}">
-			        <a th:href="@{'/admin/product/delete/' + ${prod.productId}}" class="text-decoration-none text-light" >
+			        <a th:href="@{'/admin/product/destroy/' + ${prod.productId}}" class="text-decoration-none text-light" >
 			        	<button class="btn btn-primary delete-btn" onclick="return confirm('Bạn có muốn xóa sản phẩm này không?')">Xóa</button>
 		        	</a>
 		        </td>
@@ -96,7 +96,7 @@
     <nav th:if = "${products.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
         <ul class="pagination">
         	<li class="page-item" th:if="${currentPage != 1}" >
-		      <a th:href="@{'/product?page=' +${currentPage - 1} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}" 
+		      <a th:href="@{'/product?page=' +${currentPage - 1} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}" 
 		      	class="page-link" aria-label="Previous">
 		        <span aria-hidden="true">&laquo;</span>
 		      </a>
@@ -104,7 +104,7 @@
    			 <th:block th:if="${totalPage <= 8}" th:each="i : ${#numbers.sequence(1, totalPage)}" >
    			 	<li class="page-item" th:if="${i != currentPage}">
 	                <a class="page-link" aria-current="page" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
@@ -118,13 +118,13 @@
    			 	<li class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
 	               	<a  th:if="${i < 6}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == totalPage-1 }">...</div>
 	               	<a  th:if="${i == totalPage}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
@@ -134,13 +134,13 @@
 				<li class="page-item" th:classappend="${i == currentPage ? 'active' : '' }">
 	               	<a  th:if="${i == 1}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == 2 }">...</div>
 	               	<a  th:if="${i > totalPage-5}"
 	                	class="page-link" 
-	                	th:href="@{ i != currentPage ? '/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' } : '#'}"
+	                	th:href="@{ i != currentPage ? '/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' } : '#'}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
@@ -150,13 +150,13 @@
             	<li  class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
 	               	<a  th:if="${i == 1}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link" th:if="${i == 2 }">...</div>
 	               	<a  th:if="${ i == currentPage -1 }"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<a  th:if="${ i == currentPage }"
@@ -166,20 +166,20 @@
 	               	</a>
 	               	<a  th:if="${i == currentPage + 1 }"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link" th:if="${i == totalPage -1 }">...</div>
 	               	<a  th:if="${i == totalPage}"
 	                	class="page-link" 
-	                	th:href="@{'/product?page=' +${i} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
 	                 	th:text="${i}">
 	               	</a>
            		</li>
             </th:block>
             
             <li th:if="${currentPage != totalPage}">
-        		<a  th:href="@{'/product?page=' +${currentPage + 1} + ${ productCode != '' ? '&productCode=' + productCode : '' } + ${ productName != '' ? '&productName=' + productName : '' }}" 
+        		<a  th:href="@{'/product?page=' +${currentPage + 1} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}" 
         			class="page-link" aria-label="Next">
         			<span aria-hidden="true">&raquo;</span>
         		</a>
@@ -189,7 +189,7 @@
 </div>
 <script th:inline="javascript">
 	/*<![CDATA[*/
-	var message = /*[[${message}]]*/ '';
+	var message = /*[[${successMessage}]]*/ '';
 	
 	if (message) {
 	    alert(message);

@@ -23,10 +23,10 @@ public class OrderRestController {
 	@Autowired
 	private IOrderService orderService;
 	@PostMapping
-	public ResponseEntity<Map<Integer, Map<String, String>>> saveOrder(@RequestBody List<SaveOrder> saveOrders) {
-	    Map<Integer, Map<String, String>> mapErrors = validate.validateSaveOrder(saveOrders);
+	public ResponseEntity<Map<Integer, Map<String, String>>> saveOrder(@RequestBody List<SaveOrder> orders) {
+	    Map<Integer, Map<String, String>> mapErrors = validate.save(orders);
 	    if(mapErrors.isEmpty()) {
-	    	orderService.saveOrder(saveOrders);
+	    	orderService.saveOrder(orders);
 	    	return ResponseEntity.status(HttpStatus.OK).body(mapErrors);
 	    }
 	    return ResponseEntity.status(HttpStatus.OK).body(mapErrors);

@@ -1,0 +1,25 @@
+ <!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>ERRORS</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+</head>
+<body>
+	<img alt="forbiden" width="100%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz-nsKp-fjFjJP_rP1HIsSmr5C67r9scflkv2K1YkzW-MgqCXggEUZ7TuMw3IOlZv9xvM&usqp=CAU">
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	var error = /*[[${errorMessage}]]*/ '';
+	
+	if (error) {
+	    alert(error);
+	}
+	/*]]>*/
+</script>
+</body>
+</html>

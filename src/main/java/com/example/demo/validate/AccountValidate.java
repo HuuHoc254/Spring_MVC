@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.dto.InsertAccount;
+import com.example.demo.dto.CreateAccount;
 import com.example.demo.dto.UpdateAccount;
 import com.example.demo.service.IAccountService;
 
@@ -16,7 +16,7 @@ public class AccountValidate {
 	@Autowired
     private IAccountService accountService;
 
-	public Map<String,String> create(InsertAccount create) {
+	public Map<String,String> create(CreateAccount create) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
         if(create.getAccountName().trim() == "") {
@@ -57,10 +57,10 @@ public class AccountValidate {
 	public Map<String,String> update(UpdateAccount update) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(update.getAccountName().trim() == "") {
+        if(update.getName().trim() == "") {
         	mapErrors.put("accountName", "Không được để trống tên đăng nhập!");
         }else {
-        	check = accountService.existsByNameNotId(update.getAccountName(), update.getAccountId());
+        	check = accountService.existsByNameNotId(update.getName(), update.getId());
         	if ( check ) {
 	            mapErrors.put("accountName", "Tên đăng nhập đã tồn tại!.");
 	        }
@@ -80,10 +80,10 @@ public class AccountValidate {
         	mapErrors.put("fullName", "Không được để tên nhân viên!");
         }
 
-        if(update.getPhoneNumber().trim() == "") {
+        if(update.getPhone().trim() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại!");
         } else {
-	        check = accountService.existsByPhoneNotId(update.getPhoneNumber(), update.getAccountId());
+	        check = accountService.existsByPhoneNotId(update.getPhone(), update.getId());
 	        if ( check ) {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }

@@ -11,10 +11,10 @@
 	    	products
 	    <where>
 	    	is_deleted = false
-	        <if test="code != null">
+	        <if test="code != ''">
 	            AND code LIKE CONCAT(#{code}, '%')
 	        </if>
-	        <if test="name != null">
+	        <if test="name != ''">
 	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
 	    </where>
@@ -27,10 +27,10 @@
 	    	products
 	    <where>
 	    	is_deleted = false
-	        <if test="code != null">
+	        <if test="code != ''">
 	            AND code LIKE CONCAT(#{code}, '%')
 	        </if>
-	        <if test="name != null">
+	        <if test="name != ''">
 	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
 	    </where>
@@ -80,7 +80,7 @@
 	    </where>
 	</select>
 
-	<insert id="insert">
+	<insert id="create">
 		INSERT INTO 
 				products( code, name, purchase_price, sale_price, inventory_quantity)
 		VALUES
@@ -104,8 +104,8 @@
 	    FROM
 	    	products
 	    <where>
-	    		name 	= #{name}
-	    	AND id 		!= #{id}
+	    		name 	= 	#{name}
+	    	AND id 		!= 	#{id}
 	    </where>
 	</select>
 

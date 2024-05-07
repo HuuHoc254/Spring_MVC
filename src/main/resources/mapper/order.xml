@@ -38,7 +38,7 @@
 	            AND o.order_date &gt; #{beginDate}
 	        </if>
 	        <if test="endDate != ''">
-	            AND o.date &lt; #{endDate}
+	            AND o.order_date &lt; #{endDate}
 	        </if>
 	        <if test="orderStatus and !allocationStatus">
 	            AND o.order_status_id = 1
@@ -108,7 +108,7 @@
 	        </if>
 	    </where>
 	    ORDER BY
-	    	o.date DESC
+	    	o.order_date DESC
     	LIMIT 3
 	    OFFSET #{offset}
 	</select>
@@ -122,7 +122,7 @@
 		,	quantity			= #{quantity}
 		,	customer_id			= #{customerId}
 		,	customer_address	= #{address}
-		,	customer_phone		= #{phoneNumber}
+		,	customer_phone		= #{phone}
 		,	version				= version + 1
 		<where>
 			id 					= #{id}
