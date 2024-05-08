@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.dto.Allocation;
+import com.example.demo.dto.AllocationList;
 import com.example.demo.model.Order;
 import com.example.demo.service.IOrderService;
 import com.example.demo.service.impl.AuthService;
@@ -34,18 +35,18 @@ public class OrderController {
 	private OrderValidate validate;
     @GetMapping("/order")
     private String searchOrder(HttpServletRequest request
-    							, Model model
-    							, @RequestParam(defaultValue = "") String accountName
-    							, @RequestParam(defaultValue = "") String fullName
-    							, @RequestParam(defaultValue = "") String productCode
-    							, @RequestParam(defaultValue = "") String productName
-    							, @RequestParam(defaultValue = "") String customerName
-    							, @RequestParam(defaultValue = "") String phoneNumberCustomer
-    							, @RequestParam(defaultValue = "") String beginOrderDate
-    							, @RequestParam(defaultValue = "") String endOrderDate
-    							, @RequestParam(defaultValue = "") String orderStatus
-    							, @RequestParam(defaultValue = "") String allocationStatus
-    							, @RequestParam(defaultValue = "1") int page
+							, Model model
+							, @RequestParam(defaultValue = "") String accountName
+							, @RequestParam(defaultValue = "") String fullName
+							, @RequestParam(defaultValue = "") String productCode
+							, @RequestParam(defaultValue = "") String productName
+							, @RequestParam(defaultValue = "") String customerName
+							, @RequestParam(defaultValue = "") String customerPhone
+							, @RequestParam(defaultValue = "") String beginOrderDate
+							, @RequestParam(defaultValue = "") String endOrderDate
+							, @RequestParam(defaultValue = "") String orderStatus
+							, @RequestParam(defaultValue = "") String allocationStatus
+							, @RequestParam(defaultValue = "1") int page
     							){
     	HttpSession session = request.getSession();
     	session.setAttribute("currentPage", page);
@@ -70,7 +71,7 @@ public class OrderController {
 												,  productCode
 												,  productName
 												,  customerName
-												,  phoneNumberCustomer
+												,  customerPhone
 												,  checkBeginDate ? beginOrderDate : "9999-12-31"
 												,  checkEndDate ? endOrderDate : "9999-12-31"
 												,  orderStatus
@@ -87,7 +88,7 @@ public class OrderController {
 												,  productCode
 												,  productName
 												,  customerName
-												,  phoneNumberCustomer
+												,  customerPhone
 												,  checkBeginDate ? beginOrderDate : "9999-12-31"
 												,  checkEndDate ? endOrderDate : "9999-12-31"
 												,  orderStatus
@@ -102,7 +103,7 @@ public class OrderController {
         model.addAttribute("productCode", productCode);
         model.addAttribute("productName", productName);
         model.addAttribute("customerName", customerName);
-        model.addAttribute("phoneNumberCustomer", phoneNumberCustomer);
+        model.addAttribute("customerPhone", customerPhone);
         model.addAttribute("beginOrderDate", beginOrderDate);
         model.addAttribute("endOrderDate", endOrderDate);
         model.addAttribute("orderStatus", orderStatus);
@@ -118,25 +119,25 @@ public class OrderController {
         return "order/list";
     }
 
-	@GetMapping("/admin/create")
+	@GetMapping("/admin/allocation")
     private String showForm( HttpServletRequest request
 						   , Model model
 							){
-		model.addAttribute("allocaties", new ArrayList<Allocation>());
+		model.addAttribute("allocaties", new AllocationList());
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("url","allocation");
-	    return "allocation/create";
+	    return "allocation/allocation";
     }
 	@PostMapping("/admin/allocation")
     private String allocation( HttpServletRequest request
 							,  Model model
-							,  @ModelAttribute("allocaties") List<Allocation> allocaties){
+							,  @ModelAttribute AllocationList allocationList){
 
-		Map<Integer, Map<String, String>> mapErrors = validate.allocation(allocaties);
+		Map<Integer, Map<String, String>> mapErrors = validate.allocation(allocationList.getAllocaties());
 		if(mapErrors.size() >0) {
 			model.addAttribute("mapErrors", mapErrors);
 		}
-		model.addAttribute("allocaties", allocaties);
+		model.addAttribute("allocaties", allocationList);
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("url","allocation");
 	    return "allocation/allocation";

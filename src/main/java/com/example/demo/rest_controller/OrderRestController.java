@@ -16,14 +16,14 @@ import com.example.demo.service.IOrderService;
 import com.example.demo.validate.OrderValidate;
 
 @RestController
-@RequestMapping("/api/order/save-order")
+@RequestMapping("/api/order/save")
 public class OrderRestController {
 	@Autowired
 	private OrderValidate validate;
 	@Autowired
 	private IOrderService orderService;
 	@PostMapping
-	public ResponseEntity<Map<Integer, Map<String, String>>> saveOrder(@RequestBody List<SaveOrder> orders) {
+	public ResponseEntity<Map<Integer, Map<String, String>>> save(@RequestBody List<SaveOrder> orders) {
 	    Map<Integer, Map<String, String>> mapErrors = validate.save(orders);
 	    if(mapErrors.isEmpty()) {
 	    	orderService.saveOrder(orders);

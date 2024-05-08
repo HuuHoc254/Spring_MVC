@@ -25,7 +25,7 @@ public class OrderValidate {
 		boolean check = false;
 		for (SaveOrder order: saveOrders) {
 			Map<String, String> errors = new HashMap<String, String>(); 
-			if (order.getProductCode().trim() == "") {
+			if (order.getProductCode() == "") {
 				errors.put("productCode", "Không được để trống!");
 			}else {
 				check = productService.getNameByCode(order.getProductCode()) == null;
@@ -35,12 +35,12 @@ public class OrderValidate {
 			}
 
 			check = false;
-			if (order.getPhoneNumber().trim() == ""){
+			if (order.getPhoneNumber() == ""){
 				errors.put("phoneNumber", "Không được để trống!");
 			}else {
 				check = customerService.getNameByPhone(order.getPhoneNumber()) == null;
 		        if ( check ) {
-		        	errors.put("phoneNumber", "Số điện thoại không tồn tại!");
+		        	errors.put("phone", "Số điện thoại không tồn tại!");
 		        }
 			}
 			if (order.getQuantity() < 1) {

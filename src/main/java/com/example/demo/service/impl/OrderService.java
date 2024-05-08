@@ -97,9 +97,9 @@ public class OrderService implements IOrderService {
 		order.setAccountName((String) map.get("account_name"));
 		order.setFullName((String) map.get("full_name"));
 		order.setCustomerName((String) map.get("customer_name"));
-		order.setPhoneNumberCustomer((String) map.get("customer_phone"));
-		order.setAddressCustomer((String) map.get("customer_address"));
-		order.setProductCode((String) map.get("product_code"));
+		order.setCustomerPhone((String) map.get("customer_phone"));
+		order.setCustomerAddress((String) map.get("customer_address"));
+		order.setProductCode((String) map.get("code"));
 		order.setProductName((String) map.get("product_name"));
 		order.setUnitPrice((Double) map.get("unit_price"));
 		order.setQuantity((Integer) map.get("quantity"));
@@ -119,12 +119,12 @@ public class OrderService implements IOrderService {
 			Product product = productService.getByCode(order.getProductCode());
 			Customer customer = customerService.getByPhone(order.getPhoneNumber());
 			if(order.getOrderId() != null) {
-				check = orderMapper.update(	product.getProductId()
+				check = orderMapper.update(	product.getId()
 										, 	product.getSalePrice()
 										,	order.getQuantity()
-										,	customer.getCustomerId()
+										,	customer.getId()
 										,	customer.getAddress()
-										,	customer.getPhoneNumber()
+										,	customer.getPhone()
 										,	order.getVersion()
 										,	order.getOrderId()) > 0;
 				if(!check) {
@@ -136,12 +136,12 @@ public class OrderService implements IOrderService {
 					throw new RuntimeException("Đã có lỗi xảy ra, vui lòng ktra lại!");
 				}
 			}else {
-				check = orderMapper.create(	product.getProductId()
+				check = orderMapper.create(	product.getId()
 										,	product.getSalePrice()
 										,	order.getQuantity()
-										,	customer.getCustomerId()
+										,	customer.getId()
 										,	customer.getAddress()
-										,	customer.getPhoneNumber()
+										,	customer.getPhone()
 										,	authService.getIdLogin()
 											) > 0;
 				if(!check) {

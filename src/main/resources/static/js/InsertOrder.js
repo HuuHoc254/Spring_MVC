@@ -65,7 +65,7 @@ function createNewRow() {
                     edit = true;
                     break;
                 case 6:
-                    cellClass = "phoneNumber";
+                    cellClass = "phone";
                     edit = true;
                     break;
             }

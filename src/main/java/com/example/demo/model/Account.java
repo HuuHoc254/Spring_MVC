@@ -1,22 +1,22 @@
 package com.example.demo.model;
 
 public class Account {   
-    private Integer accountId;
-    private String accountName;
+    private Integer id;
+    private String name;
     private String fullName;
     private String password;
-    private String phoneNumber;
+    private String phone;
     private Role role;
     private Boolean isOnline;
     private Integer version;
     private Boolean isDeleted;
-	public Account(Integer accountId, String accountName, String fullName, String password, String phoneNumber,
+	public Account(Integer id, String name, String fullName, String password, String phone,
 			Role role, Boolean isOnline, Integer version, Boolean isDeleted) {
-		this.accountId = accountId;
-		this.accountName = accountName;
+		this.id = id;
+		this.name = name;
 		this.fullName = fullName;
 		this.password = password;
-		this.phoneNumber = phoneNumber;
+		this.phone = phone;
 		this.role = role;
 		this.isOnline = isOnline;
 		this.version = version;
@@ -24,17 +24,17 @@ public class Account {
 	}
 	public Account() {
 	}
-	public Integer getAccountId() {
-		return accountId;
+	public Integer getId() {
+		return id;
 	}
-	public void setAccountId(Integer accountId) {
-		this.accountId = accountId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
-	public String getAccountName() {
-		return accountName;
+	public String getName() {
+		return name;
 	}
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getFullName() {
 		return fullName;
@@ -48,11 +48,11 @@ public class Account {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone() {
+		return phone;
 	}
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	public Role getRole() {
 		return role;

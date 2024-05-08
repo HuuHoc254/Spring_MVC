@@ -32,7 +32,7 @@
 	            AND c.name LIKE CONCAT(#{customerName}, '%')
 	        </if>
 	        <if test="phone != null">
-	            AND o.phone LIKE CONCAT(#{phone}, '%')
+	            AND o.customer_phone LIKE CONCAT(#{phone}, '%')
 	        </if>
 	        <if test="beginDate != ''">
 	            AND o.order_date &gt; #{beginDate}
@@ -60,11 +60,11 @@
 	    ,	 o.allocation_date
 	    ,	 o.version
 	    ,	 p.code
-	    ,	 p.name
-	    ,	 c.name
-	    ,	 a.name
+	    ,	 p.name as product_name
+	    ,	 c.name as customer_name
+	    ,	 a.name as account_name
 	    ,	 a.full_name
-	    ,	 ost.name
+	    ,	 ost.name as order_status_name
 	    
 	    FROM
 	    	 orders 		o
@@ -95,10 +95,10 @@
 	            AND o.customer_phone LIKE CONCAT(#{phone}, '%')
 	        </if>
 	        <if test="beginDate != ''">
-	            AND o.date &gt; #{beginDate}
+	            AND o.order_date &gt; #{beginDate}
 	        </if>
 	        <if test="endDate != ''">
-	            AND o.date &lt; #{endDate}
+	            AND o.order_date &lt; #{endDate}
 	        </if>
 	        <if test="orderStatus and !allocationStatus">
 	            AND o.order_status_id = 1

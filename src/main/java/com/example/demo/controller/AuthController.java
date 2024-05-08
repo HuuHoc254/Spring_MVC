@@ -24,7 +24,7 @@ public class AuthController {
 	 @GetMapping("/logout-action")
 	 public String logout(Model model) {
 		 UserDetailImpl userDetail = (UserDetailImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			accountService.setOnline(userDetail.getAccountId());
+			accountService.setOnline(userDetail.getId());
 		 SecurityContextHolder.getContext().setAuthentication(null);
 		 SecurityContextHolder.clearContext();
 		 return "redirect:/login?logout=true";

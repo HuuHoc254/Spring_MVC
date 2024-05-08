@@ -10,17 +10,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.demo.model.Account;
 
 public class UserDetailImpl implements UserDetails {
-    private Integer accountId;
-    private String accountName;
+    private Integer id;
+    private String name;
     private String password;
     private boolean isAccountNonLocked;
     private List<? extends GrantedAuthority> authorities;
 
     
-	public UserDetailImpl(Integer accountId, String accountName, String password, boolean isAccountNonLocked,
+	public UserDetailImpl(Integer id, String name, String password, boolean isAccountNonLocked,
 			List<? extends GrantedAuthority> authorities) {
-		this.accountId = accountId;
-		this.accountName = accountName;
+		this.id = id;
+		this.name = name;
 		this.password = password;
 		this.isAccountNonLocked = isAccountNonLocked;
 		this.authorities = authorities;
@@ -33,8 +33,8 @@ public class UserDetailImpl implements UserDetails {
 
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(account.getRole().getRoleName()));
         return new UserDetailImpl(
-                account.getAccountId(),
-                account.getAccountName(),
+                account.getId(),
+                account.getName(),
                 account.getPassword(),
                 !account.getIsDeleted(),
                 authorities
@@ -52,7 +52,7 @@ public class UserDetailImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return accountName;
+        return name;
     }
 
     @Override
@@ -75,20 +75,20 @@ public class UserDetailImpl implements UserDetails {
         return true;
     }
 
-	public Integer getAccountId() {
-		return accountId;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setAccountId(Integer accountId) {
-		this.accountId = accountId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	public String getAccountName() {
-		return accountName;
+	public String getName() {
+		return name;
 	}
 
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setPassword(String password) {

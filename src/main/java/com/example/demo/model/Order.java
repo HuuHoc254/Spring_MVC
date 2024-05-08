@@ -9,8 +9,8 @@ public class Order {
     private Double unitPrice;
     private Integer quantity;
     private String customerName;
-    private String addressCustomer;
-    private String phoneNumberCustomer;
+    private String customerAddress;
+    private String customerPhone;
     private String accountName;
     private String fullName;
     private LocalDateTime orderDate;
@@ -23,7 +23,7 @@ public class Order {
 	}
 
 	public Order(Integer orderId, String productCode, String productName, Double unitPrice, Integer quantity,
-			String customerName, String addressCustomer, String phoneNumberCustomer, String accountName,
+			String customerName, String customerAddress, String customerPhone, String accountName,
 			String fullName, LocalDateTime orderDate, LocalDateTime allocationDate, String orderStatusName,
 			Integer version) {
 		super();
@@ -33,8 +33,8 @@ public class Order {
 		this.unitPrice = unitPrice;
 		this.quantity = quantity;
 		this.customerName = customerName;
-		this.addressCustomer = addressCustomer;
-		this.phoneNumberCustomer = phoneNumberCustomer;
+		this.customerAddress = customerAddress;
+		this.customerPhone = customerPhone;
 		this.accountName = accountName;
 		this.fullName = fullName;
 		this.orderDate = orderDate;
@@ -91,20 +91,22 @@ public class Order {
 		this.customerName = customerName;
 	}
 
-	public String getAddressCustomer() {
-		return addressCustomer;
+
+
+	public String getCustomerAddress() {
+		return customerAddress;
 	}
 
-	public void setAddressCustomer(String addressCustomer) {
-		this.addressCustomer = addressCustomer;
+	public void setCustomerAddress(String customerAddress) {
+		this.customerAddress = customerAddress;
 	}
 
-	public String getPhoneNumberCustomer() {
-		return phoneNumberCustomer;
+	public String getCustomerPhone() {
+		return customerPhone;
 	}
 
-	public void setPhoneNumberCustomer(String phoneNumberCustomer) {
-		this.phoneNumberCustomer = phoneNumberCustomer;
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
 	}
 
 	public String getAccountName() {

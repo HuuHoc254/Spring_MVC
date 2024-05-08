@@ -2,9 +2,9 @@ package com.example.demo.model;
 
 public class Product {
    
-    private Integer productId;
-    private String productCode;
-    private String productName;
+    private Integer id;
+    private String code;
+    private String name;
     private Double purchasePrice;
     private Double salePrice;
     private Integer inventoryQuantity;
@@ -15,35 +15,35 @@ public class Product {
 	public Product() {
 	}
 	
-	public Product(Integer productId, String productCode, String productName, Double purchasePrice,
+	public Product(Integer id, String code, String name, Double purchasePrice,
 			Double salePrice, Integer inventoryQuantity, Integer version, Boolean isDeleted) {
-		this.productId = productId;
-		this.productCode = productCode;
-		this.productName = productName;
-		this.purchasePrice = purchasePrice;
-		this.salePrice = salePrice;
-		this.inventoryQuantity = inventoryQuantity;
-		this.version = version;
-		this.isDeleted = isDeleted;
+		this.id 				= id;
+		this.code 				= code;
+		this.name 				= name;
+		this.purchasePrice 		= purchasePrice;
+		this.salePrice 			= salePrice;
+		this.inventoryQuantity 	= inventoryQuantity;
+		this.version 			= version;
+		this.isDeleted 			= isDeleted;
 	}
 	
-	public Integer getProductId() {
-		return productId;
+	public Integer getId() {
+		return id;
 	}
-	public void setProductId(Integer productId) {
-		this.productId = productId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
-	public String getProductCode() {
-		return productCode;
+	public String getCode() {
+		return code;
 	}
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
-	public String getProductName() {
-		return productName;
+	public String getName() {
+		return name;
 	}
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public Double getPurchasePrice() {
 		return purchasePrice;

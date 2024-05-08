@@ -11,6 +11,7 @@ public interface AccountMapper {
 	Map<String, Object> findByName(String name);
 
 	int setOnline(Integer id);
+
     int countSearch(  String name
     				, String fullName
     				, String phone
@@ -27,10 +28,11 @@ public interface AccountMapper {
 
 	int existsByPhone(String phone);
 
-	int create(String name
-					, String password
-					, String fullName
-					, String phone);
+	int create(	String name
+			, 	String password
+			, 	String fullName
+			, 	String phone
+				);
 
 	int existsByNameNotId(String name, Integer id);
 

@@ -1,32 +1,32 @@
 package com.example.demo.dto;
 
 public class CreateAccount {
-    private String  accountName;
+    private String  name;
     private String  password;
     private String  confirmPassword;
     private String  fullName;
-    private String  phoneNumber;
+    private String  phone;
 
 	public CreateAccount() {
 	}
 
-	public CreateAccount(String accountName, String password, String confirmPassword, String fullName,
-			String phoneNumber) {
-		this.accountName = accountName;
+	public CreateAccount(String name, String password, String confirmPassword, String fullName,
+			String phone) {
+		this.name = name;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
 		this.fullName = fullName;
-		this.phoneNumber = phoneNumber;
+		this.phone = phone;
 	}
 
 
-	public String getAccountName() {
-		return accountName;
+	public String getName() {
+		return name;
 	}
 
 
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 
@@ -60,13 +60,13 @@ public class CreateAccount {
 	}
 
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone() {
+		return phone;
 	}
 
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 }

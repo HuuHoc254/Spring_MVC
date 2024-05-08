@@ -46,9 +46,9 @@ public class AccountController {
 							){
 		try {
 			HttpSession session = request.getSession();
-			session.setAttribute("name", name);
-			session.setAttribute("fullName", fullName);
-			session.setAttribute("phone", phone);
+			session.setAttribute("accountName", name.trim());
+			session.setAttribute("fullName", fullName.trim());
+			session.setAttribute("phone", phone.trim());
 			session.setAttribute("currentPage", page);
 
 			int totalRecord = accountService.countSearch( name, fullName, phone);
@@ -84,21 +84,26 @@ public class AccountController {
 	    	String phone = (String) session.getAttribute("phone");
 	    	int page = (int) session.getAttribute("currentPage");
 	    	String url = "redirect:/admin/account?page="+page;
-	    	if( !name.trim().equals("") ) {
+	    	if( !name.equals("") ) {
 	    		url += "&name="+name;
 	    	}
-	    	if( !fullName.trim().equals("") ) {
+	    	if( !fullName.equals("") ) {
 	    		url += "&fullName="+fullName;
 	    	}
-	    	if( !phone.trim().equals("") ) {
+	    	if( !phone.equals("") ) {
 	    		url += "&phone="+phone;
 	    	}
 	    	
 	    	Map<String, String> mapErrors = validate.update(account);
-			if( mapErrors.size() == 0 && accountService.update(account)) {
-				session.setAttribute("successMessage", "Cập nhật sản phẩm thành công!");
-				return url;
+			if( mapErrors.size() == 0) {
+				if( accountService.update(account) ) {
+					session.setAttribute("successMessage", "Cập nhật nhân viên thành công!");
+					return url;
+				}else {
+					throw new RuntimeException("Chỉnh sửa nhân viên không thành công!");
+				}
 			}
+			
 	    	model.addAttribute("account",account); 
 	    	model.addAttribute("mapErrors",mapErrors);
 	    	model.addAttribute("isAdmin", authService.isAdmin());
@@ -124,7 +129,7 @@ public class AccountController {
 	    	if(mapErrors.size() == 0) {
 	    		model.addAttribute("account", new CreateAccount());
 	    		if(accountService.create(account)) {
-	    			model.addAttribute("successMessage", "Thêm mới sản phẩm thành công!");
+	    			model.addAttribute("successMessage", "Thêm mới nhân viên thành công!");
 	    		};
 	    	} else {
 	    		model.addAttribute("account",account);
@@ -142,11 +147,19 @@ public class AccountController {
 
 	@GetMapping("/account/edit/{id}")
     private String showFormUpdate(Model model, @PathVariable("id") int id){
-    	Account account = accountService.getById(id);
-    	model.addAttribute("mapErrors",new HashMap<String, String>());
-    	model.addAttribute("account", account);
-    	model.addAttribute("isAdmin", authService.isAdmin());
-	    return "account/edit";
+		try {
+			Account account = accountService.getById(id);
+	    	UpdateAccount accountU = new UpdateAccount();
+	    	BeanUtils.copyProperties(account, accountU);
+	    	model.addAttribute("mapErrors",new HashMap<String, String>());
+	    	model.addAttribute("account", accountU);
+	    	model.addAttribute("isAdmin", authService.isAdmin());
+		    return "account/edit";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", e.getMessage());
+    		return "auth/errors";
+		}
+
     }
 
 	@GetMapping("/account/cancel")
@@ -160,13 +173,13 @@ public class AccountController {
     		page = (int) session.getAttribute("currentPage");
     	}
     	String url = "redirect:/admin/account?page="+page;
-    	if( !name.trim().equals("") ) {
+    	if( !name.equals("") ) {
     		url += "&name="+name;
     	}
-    	if( !fullName.trim().equals("") ) {
+    	if( !fullName.equals("") ) {
     		url += "&fullName="+fullName;
     	}
-    	if( !phone.trim().equals("") ) {
+    	if( !phone.equals("") ) {
     		url += "&phone="+phone;
     	}
 		return url;
@@ -189,13 +202,13 @@ public class AccountController {
         	String phone = (String) session.getAttribute("phone");
         	int page = (int) session.getAttribute("currentPage");
         	String url = "redirect:/admin/account?page="+page;
-        	if( !name.trim().equals("") ) {
+        	if( !name.equals("") ) {
         		url += "&name="+name;
         	}
-        	if( !fullName.trim().equals("") ) {
+        	if( !fullName.equals("") ) {
         		url += "&fullName="+fullName;
         	}
-        	if( !phone.trim().equals("") ) {
+        	if( !phone.equals("") ) {
         		url += "&phone="+phone;
         	}
     	    return url;

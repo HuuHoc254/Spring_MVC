@@ -12,14 +12,16 @@ $(document).ready(function() {
         if (columnName === "productCode" || columnName === "productName") {
             type = (columnName === "productCode") ? "name" : "code";
             fillDataProduct(cell, type).then(() => {
+				checkValue(cell);
             });
-        } else if (columnName === "customerName" || columnName === "phoneNumber") {
+        } else if (columnName === "customerName" || columnName === "phone") {
             type = (columnName === "customerName") ? "phone" : "name";
             fillDataCustomer(cell, type).then(() => {
+				checkValue(cell);
             });
-        }
-
-		checkValue(cell);
+        }else {
+			checkValue(cell);
+		}
     });
 
     
@@ -37,7 +39,7 @@ async function fillDataProduct(cellData, type) {
 	        url: `http://localhost:8080/api/product/${type}`,
 	        method: 'GET',
 	        data: {
-	            [type === 'name' ? 'productCode' : 'productName']: data
+	            [type === 'name' ? 'code' : 'name']: data
 	        }
 	    });
 	    cellInsert.text(response);
@@ -50,7 +52,7 @@ async function fillDataCustomer(cellData, type) {
     const data = $(cellData).text().trim();
 
 	if(type == 'phone'){
-		cellInsert = $(cellData).closest("tr").find(".phoneNumber");
+		cellInsert = $(cellData).closest("tr").find(".phone");
 	} else {
 		cellInsert = $(cellData).closest("tr").find(".customerName");
 	}
@@ -59,7 +61,7 @@ async function fillDataCustomer(cellData, type) {
 	        url: `http://localhost:8080/api/customer/${type}`,
 	        method: 'GET',
 	        data: {
-	            [type === 'name' ? 'phoneNumber' : 'customerName']: data
+	            [type === 'name' ? 'phone' : 'name']: data
 	        }
 	    });
 	

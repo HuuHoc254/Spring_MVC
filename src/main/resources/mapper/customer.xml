@@ -7,7 +7,7 @@
 
 	<select id="findById" resultType="java.util.Map">
 	    SELECT 
-	    	id, name, address, number ,administrator_id as account_id , version
+	    	id, name, address, phone ,administrator_id as account_id , version
 	    FROM
 	    	customers
 	    <where>
@@ -37,7 +37,7 @@
 	        <if test="name != null">
 	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
-	        <if test="number != null">
+	        <if test="phone != null">
 	            AND phone LIKE CONCAT(#{phone}, '%')
 	        </if>
 	    </where>
@@ -53,13 +53,13 @@
 	    	, a.full_name
 	    FROM
 	    	customers c 
-	    JOIN account a ON a.account_id = c.administrator_id
+	    JOIN accounts a ON a.id = c.administrator_id
 	    <where>
 	    	c.is_deleted = false
 	        <if test="name != null">
 	            AND c.name LIKE CONCAT(#{name}, '%')
 	        </if>
-	        <if test="phoneNumber != null">
+	        <if test="phone != null">
 	            AND c.phone LIKE CONCAT(#{phone}, '%')
 	        </if>
 	    </where>
@@ -90,24 +90,24 @@
 	    </where>
 	</select>
 	
-	<insert id="insert">
+	<insert id="create">
 		INSERT INTO 
-				customers( customer_name, phone_number, address, administrator_id)
+				customers( name, phone, address, administrator_id)
 		VALUES
-				(#{name},#{number},#{address},#{accountId})
+				(#{name},#{phone},#{address},#{accountId})
 	</insert>
 
 	<update id="update">
 		UPDATE
 			customers
 		SET
-				customer_name 	= #{customerName}
-			, 	phone_number 	= #{phoneNumber}
-			, 	address 		= #{address}
-			, 	version 		= version + 1
+				name 		= #{name}
+			, 	phone 		= #{phone}
+			, 	address 	= #{address}
+			, 	version 	= version + 1
 		<where>
-				id 				= #{id}
-			AND	version 		= #{version}
+				id 			= #{id}
+			AND	version 	= #{version}
 		</where>
 	</update>
 
@@ -116,7 +116,7 @@
 			customers
 		SET
 			is_deleted 	= TRUE
-		, 	version 		= version + 1
+		, 	version 	= version + 1
 		<where>
 			id 			= #{id}
 		</where>

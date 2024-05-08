@@ -33,8 +33,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr  th:each="allocate, allocateStat : ${allocaties}">
-						<td><input class="index text-center w-100" type="text" readonly="readonly" th:field="*{__${allocateStat.index}__}.index" /></td>
+					<tr  th:each="allocate, allocateStat : ${allocaties.allocaties}">
+						<td><input class="index text-center w-100" type="text" readonly th:field="*{__${allocateStat.index}__}.index" /></td>
 						<td><input class="productCode w-100" type="text" th:field="*{__${allocateStat.index}__}.productCode" /></td>
 						<td><input class="productName w-100" type="text" th:field="*{__${allocateStat.index}__}.productName" /></td>
 						<td><input class="quantity w-100" type="number" th:field="*{__${allocateStat.index}__}.quantity" /></td>
@@ -52,7 +52,7 @@
 
 <script th:inline="javascript">
 		/*<![CDATA[*/
-		var message = /*[[${message}]]*/'';
+		var message = /*[[${successMessage}]]*/'';
 
 		if (message) {
 			alert(message);
@@ -75,7 +75,7 @@
 	        url: `http://localhost:8080/api/product/${type}`,
 	        method: 'GET',
 	        data: {
-	            [type === 'name' ? 'productCode' : 'productName']: data
+	            [type === 'name' ? 'code' : 'name']: data
 	        }
 	    });
 	    cellInsert.val(response);
@@ -88,7 +88,7 @@ var table = $("tbody");
 $(document).ready(function() {
 	 displayErrors();
 	 createNewRow();
-	 $("tbody").on("focusout", "input[name='productCodes'], input[name='productNames'], input[name='quantities']", function() {
+	 $("tbody").on("focusout", "input", function() {
 		$(this).removeClass("bg-danger");
 		$(this).removeAttr("title");
 		$(this).removeAttr("data-original-title");
@@ -109,10 +109,10 @@ $(document).ready(function() {
 });
 function createNewRow() {
    var lastRow = table.find("tr:last");
-   var rowCount = table.find("tr").length - 1; // Số lượng hàng trong bảng
+   var rowCount = table.find("tr").length; // Số lượng hàng trong bảng
    // Kiểm tra các cột của hàng cuối cùng
    var isRowNotEmpty = false;
-   lastRow.find("input[name='productCodes'], input[name='productNames'], input[name='quantities']").each(function() {
+   lastRow.find("input:not(.index)").each(function() {
 	    if ($(this).val().trim()) {
 	        isRowNotEmpty = true;
 	        return false; // Thoát vòng lặp khi gặp ô không rỗng
@@ -133,7 +133,7 @@ function createNewRow() {
                "type": "text",
                "readonly": "readonly",
                "value": nextIndex,
-               "name": "allocaties[" + rowCount + "].index"
+               "name": "alocaties.allocaties[" + rowCount + "].index"
            })
        ).appendTo(newRow);
 
@@ -141,7 +141,7 @@ function createNewRow() {
            $('<input>', {
                "class": "productCode w-100",
                "type": "text",
-               "name": "allocaties[" + rowCount + "].productCode"
+               "name": "alocaties.allocaties[" + rowCount + "].productCode"
            })
        ).appendTo(newRow);
 
@@ -149,7 +149,7 @@ function createNewRow() {
            $('<input>', {
                "class": "productName w-100",
                "type": "text",
-               "name": "allocaties[" + rowCount + "].productName"
+               "name": "alocaties.allocaties[" + rowCount + "].productName"
            })
        ).appendTo(newRow);
 
@@ -157,7 +157,7 @@ function createNewRow() {
            $('<input>', {
                "class": "quantity w-100",
                "type": "number",
-               "name": "allocaties[" + rowCount + "].quantity"
+               "name": "alocaties.allocaties[" + rowCount + "].quantity"
            })
        ).appendTo(newRow);
    }

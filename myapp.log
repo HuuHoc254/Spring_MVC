@@ -7,3 +7,7 @@
 2024-04-19 14:54:59 ERROR CustomerController:145 - Account has ID= 1 request UPDATE customer HAS ID= 11
 2024-04-19 14:54:59 ERROR CustomerController:146 - Customer not exist
 2024-04-19 14:54:59 INFO  CustomerController:147 - ---------------END---------------
+2024-05-08 16:33:18 INFO  CustomerController:123 - ---------------BEGIN-------------
+2024-05-08 16:33:18 ERROR CustomerController:124 - Account has ID= 2 request UPDATE customer HAS ID= 3
+2024-05-08 16:33:18 ERROR CustomerController:125 - Account can't update this customer
+2024-05-08 16:33:18 INFO  CustomerController:126 - ---------------END---------------

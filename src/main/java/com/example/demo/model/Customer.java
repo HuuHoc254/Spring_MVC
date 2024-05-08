@@ -1,9 +1,9 @@
 package com.example.demo.model;
 
 public class Customer {
-    private Integer customerId;
-    private String customerName;
-    private String phoneNumber;
+    private Integer id;
+    private String name;
+    private String phone;
     private Account account;
     private String address;
     private Integer version;
@@ -11,33 +11,34 @@ public class Customer {
 	public Customer() {
 		super();
 	}
-	public Customer(Integer customerId, String customerName, String phoneNumber, Account account, String address,
+	public Customer(Integer id, String name, String phone, Account account, String address,
 			Integer version) {
 		super();
-		this.customerId = customerId;
-		this.customerName = customerName;
-		this.phoneNumber = phoneNumber;
+		this.id = id;
+		this.name = name;
+		this.phone = phone;
 		this.account = account;
 		this.address = address;
 		this.version = version;
 	}
-	public Integer getCustomerId() {
-		return customerId;
+
+	public Integer getId() {
+		return id;
 	}
-	public void setCustomerId(Integer customerId) {
-		this.customerId = customerId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
-	public String getCustomerName() {
-		return customerName;
+	public String getName() {
+		return name;
 	}
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone() {
+		return phone;
 	}
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	public Account getAccount() {
 		return account;

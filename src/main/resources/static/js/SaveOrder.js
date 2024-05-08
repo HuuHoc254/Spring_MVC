@@ -17,14 +17,14 @@ function checkValue(cell) {
 	let productCode 	= $currentRow.find(".productCode").text();
 	let productName 	= $currentRow.find(".productName").text();
 	let quantity 		= $currentRow.find(".quantity").text();
-	let phoneNumber 	= $currentRow.find(".phoneNumber").text();
+	let phone 			= $currentRow.find(".phone").text();
 	let customerName 	= $currentRow.find(".customerName").text();
 	let version 		= $currentRow.find(".version").text();
 	// Lấy ra các giá trị cũ (ẩn) tương ứng
 	let oldProductCode 	= $currentRow.find(".oldProductCode").text();
 	let oldQuantity 	= $currentRow.find(".oldQuantity").text();
 	let oldProductName 	= $currentRow.find(".oldProductName").text();
-	let oldPhoneNumber 	= $currentRow.find(".oldPhoneNumber").text();
+	let oldPhone 		= $currentRow.find(".oldPhone").text();
 	let oldCustomerName = $currentRow.find(".oldCustomerName").text();
 	let editedOrder = {
 		index: index,
@@ -32,7 +32,7 @@ function checkValue(cell) {
 		productCode: productCode,
 		productName: productName,
 		quantity: quantity,
-		phoneNumber: phoneNumber,
+		phone: phone,
 		customerName: customerName,
 		version: version
 	};
@@ -42,7 +42,7 @@ function checkValue(cell) {
 		productCode: oldProductCode,
 		productName: oldProductName,
 		quantity: oldQuantity,
-		phoneNumber: oldPhoneNumber,
+		phone: oldPhone,
 		customerName: oldCustomerName,
 	};
 	let existingPage = arrayPage.findIndex(order => order.page === currentPage);
@@ -101,8 +101,16 @@ function checkValue(cell) {
 	
 				}
 			}
-		}
-		if (existingIndex !== -1) {
+			if (existingIndex !== -1) {
+				// Nếu tồn tại, xóa khỏi mảng
+				editedOrders.splice(existingIndex, 1);
+				editedOrders.forEach(order =>{
+					if( order.index > index){
+						order.index --;
+					}
+				})			
+			}
+		}else if (existingIndex !== -1) {
 			// Nếu tồn tại, xóa khỏi mảng
 			editedOrders.splice(existingIndex, 1);			
 		}
@@ -116,7 +124,7 @@ function notEquals(editedOrder, oldOrder) {
 		|| (editedOrder.productName 	!== oldOrder.productName)
 		|| (editedOrder.quantity 		!== oldOrder.quantity)
 		|| (editedOrder.customerName 	!== oldOrder.customerName)
-		|| (editedOrder.phoneNumber 	!== oldOrder.phoneNumber)
+		|| (editedOrder.phone 			!== oldOrder.phone)
 	) {
 		return true;
 	}
@@ -149,7 +157,7 @@ function loadEditedOrders() {
 			$row.find(".productName").text(order.productName);
 			$row.find(".quantity").text(order.quantity);
 			$row.find(".customerName").text(order.customerName);
-			$row.find(".phoneNumber").text(order.phoneNumber);
+			$row.find(".phone").text(order.phone);
 		}
 	});
 }
@@ -211,7 +219,7 @@ function loadInsertOrders() {
 		$row.find(".productName").text(order.productName);
 		$row.find(".quantity").text(order.quantity);
 		$row.find(".customerName").text(order.customerName);
-		$row.find(".phoneNumber").text(order.phoneNumber);
+		$row.find(".phone").text(order.phone);
 		createNewRow();
 	}
 }
@@ -220,14 +228,14 @@ function saveOrder() {
 	// Lấy mảng editedOrders từ local storage
 	let editedOrders = localStorage.getItem("editedOrders") || [];
 
-	if(editedOrders == ""){
+	if( editedOrders == "" ){
 		alert("Không có sự thay đổi nào!");
 		return false;
 	}
 	// Sử dụng jQuery để gửi dữ liệu
 	$.ajax({
 		type: "POST",
-		url: "http://localhost:8080/api/order/save-order",
+		url: "http://localhost:8080/api/order/save",
 		data: editedOrders, // Chuyển đổi đối tượng thành chuỗi JSON
 		contentType: "application/json", // Đặt kiểu dữ liệu của yêu cầu là JSON
 		success: function(response) {

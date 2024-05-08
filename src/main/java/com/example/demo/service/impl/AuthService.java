@@ -14,6 +14,6 @@ public class AuthService{
 	}
 	public int getIdLogin() {
 		UserDetailImpl userDetail = (UserDetailImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return userDetail.getAccountId(); 
+		return userDetail.getId(); 
 	}
 }

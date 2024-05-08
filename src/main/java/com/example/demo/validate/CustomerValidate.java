@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.dto.InsertCustomer;
+import com.example.demo.dto.CreateCustomer;
 import com.example.demo.dto.UpdateCustomer;
 import com.example.demo.service.ICustomerService;
 
@@ -16,21 +16,23 @@ public class CustomerValidate {
 	@Autowired
     private ICustomerService customerService;
 
-	public Map<String,String> create(InsertCustomer create) {
+	public Map<String,String> create(CreateCustomer customer) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(create.getCustomerName().trim() == "") {
+        if(customer.getName().trim() == "") {
         	mapErrors.put("customerName", "Không được để trống tên khách hàng!");
         }
 
-        if(create.getAddress().trim() == "") {
+        if(customer.getAddress().trim() == "") {
         	mapErrors.put("address", "Không được để địa chỉ khách hàng!");
         }
 
-        if(create.getPhoneNumber().trim() == "") {
+        if(customer.getPhone().trim() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại của khách hàng!");
+        } else if(!customer.getPhone().matches( "^0\\d{9}$" )){
+        	mapErrors.put("phone", "Sai định dạng số điện thoại!");
         } else {
-	        check = customerService.existsByPhone(create.getPhoneNumber());
+	        check = customerService.existsByPhone(customer.getPhone());
 	        if ( check ) {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }
@@ -39,21 +41,23 @@ public class CustomerValidate {
         return mapErrors;
     }
 
-	public Map<String,String> update(UpdateCustomer update) {
+	public Map<String,String> update(UpdateCustomer customer) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(update.getCustomerName().trim() == "") {
+        if(customer.getName().trim() == "") {
         	mapErrors.put("customerName", "Không được để trống tên khách hàng!");
         }
 
-        if(update.getAddress().trim() == "") {
+        if(customer.getAddress().trim() == "") {
         	mapErrors.put("address", "Không được để địa chỉ khách hàng!");
         }
 
-        if(update.getPhoneNumber().trim() == "") {
+        if(customer.getPhone().trim() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại của khách hàng!");
+        } else if(!customer.getPhone().matches( "^0\\d{9}$" )){
+        	mapErrors.put("phone", "Sai định dạng số điện thoại!");
         } else {
-	        check = customerService.existsByPhoneNotId(update.getPhoneNumber(), update.getCustomerId());
+	        check = customerService.existsByPhoneNotId(customer.getPhone(), customer.getId());
 	        if ( check ) {
 	            mapErrors.put("phoneNumber", "Số điện thoại đã tồn tại!");
 	        }

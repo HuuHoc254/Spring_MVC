@@ -1,33 +1,20 @@
 package com.example.demo.dto;
 
-public class UpdateCustomer {
-	private Integer id;
+public class CreateCustomer {
     private String  name;
     private String  phone;
     private String  address;
     private Integer accountId;
-    private Integer version;
 
-	public UpdateCustomer() {
+	public CreateCustomer() {
 	}
 
-	public UpdateCustomer(Integer id, String name, String phone, String address,
-			Integer accountId, Integer version) {
+	public CreateCustomer(String name, String phone, String address, Integer accountId) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.phone = phone;
 		this.address = address;
 		this.accountId = accountId;
-		this.version = version;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -61,15 +48,5 @@ public class UpdateCustomer {
 	public void setAccountId(Integer accountId) {
 		this.accountId = accountId;
 	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	
 
 }

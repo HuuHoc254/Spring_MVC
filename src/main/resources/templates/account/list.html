@@ -22,7 +22,7 @@
                 <label class="">Tên đăng nhập</label>
             </div>
             <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="text" id="accountName" name="accountName" placeholder="Nhập tên đăng nhập" th:value = "${accountName}">
+                <input class="form-control border-dark shadow-none" type="text" id="name" name="name" placeholder="Nhập tên đăng nhập" th:value = "${name}">
             </div>
         </div>
         <div class="row input-group mb-3">
@@ -41,7 +41,7 @@
                 <label class="">Số điện thoại</label>
             </div>
              <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="text" id="phoneNumber" name="phoneNumber" placeholder="Nhập số điện thoại" th:value = "${phoneNumber}">
+                <input class="form-control border-dark shadow-none" type="text" id="phone" name="phone" placeholder="Nhập số điện thoại" th:value = "${phone}">
             </div>
         </div>
 
@@ -79,17 +79,17 @@
         <tbody>
 		    <tr th:if = "${accounts.size() != 0}" th:each="account, index : ${accounts}">
 		        <th scope="row" class="text-center" th:text=" ${index.index + 1 + (currentPage - 1) *3}"></th>
-		        <td th:text="${account.accountName}"></td>
+		        <td th:text="${account.name}"></td>
 		        <td th:text="${account.fullName}"></td>
-		        <td th:text="${account.phoneNumber}"></td>
-		        <td th:id="${ 'status' + account.accountId}" th:text="${account.isOnline ? 'Online' : 'Offline'}"> </td>
+		        <td th:text="${account.phone}"></td>
+		        <td th:id="${ 'status' + account.id}" th:text="${account.isOnline ? 'Online' : 'Offline'}"> </td>
 		        <td>
-		        	<a th:href="@{'/admin/account/update/' + ${account.accountId}}" class="text-decoration-none text-light">
+		        	<a th:href="@{'/admin/account/edit/' + ${account.id}}" class="text-decoration-none text-light">
 		        		<button class="btn btn-primary">Chỉnh sửa</button>
 	        		</a>
 	        	</td>
 	        	<td>
-			        <a th:href="@{'/admin/account/delete/' + ${account.accountId}}" class="text-decoration-none text-light" >
+			        <a th:href="@{'/admin/account/destroy/' + ${account.id}}" class="text-decoration-none text-light" >
 			        	<button class="btn btn-primary delete-btn" onclick="return confirm('Bạn có muốn xóa nhân viên này không?')">Xóa</button>
 		        	</a>
 		        </td>
@@ -103,7 +103,7 @@
     <nav th:if = "${accounts.size() != 0}" aria-label="Page navigation example " class="d-flex justify-content-center">
         <ul class="pagination">
         	<li class="page-item" th:if="${currentPage != 1}" >
-		      <a th:href="@{'/admin/account?page=' +${currentPage - 1} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}" 
+		      <a th:href="@{'/admin/account?page=' +${currentPage - 1} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}" 
 		      	class="page-link" aria-label="Previous">
 		        <span aria-hidden="true">&laquo;</span>
 		      </a>
@@ -111,7 +111,7 @@
    			 <th:block th:if="${totalPage <= 8}" th:each="i : ${#numbers.sequence(1, totalPage)}" >
    			 	<li class="page-item" th:if="${i != currentPage}">
 	                <a class="page-link" aria-current="page" 
-	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
@@ -125,13 +125,13 @@
    			 	<li class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
 	               	<a  th:if="${i < 6}"
 	                	class="page-link" 
-	                	th:href="@{'/admin/account?page=' +${i} +${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} +${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == totalPage-1 }">...</div>
 	               	<a  th:if="${i == totalPage}"
 	                	class="page-link" 
-	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
@@ -141,13 +141,13 @@
 				<li class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
 	               	<a  th:if="${i == 1}"
 	                	class="page-link" 
-						th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+						th:href="@{'/admin/account?page=' +${i} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == 2 }">...</div>
 	               	<a  th:if="${i > totalPage-5}"
 	                	class="page-link" 
-						th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+						th:href="@{'/admin/account?page=' +${i} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
@@ -157,13 +157,13 @@
             	<li  class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
 	               	<a  th:if="${i == 1}"
 	                	class="page-link" 
-	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == 2 }">...</div>
 	               	<a  th:if="${ i == currentPage -1 }"
 	                	class="page-link" 
-	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<a  th:if="${ i == currentPage }"
@@ -173,20 +173,20 @@
 	               	</a>
 	               	<a  th:if="${i == currentPage + 1 }"
 	                	class="page-link" 
-	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == totalPage -1 }">...</div>
 	               	<a  th:if="${i == totalPage}"
 	                	class="page-link" 
-	                	th:href="@{'/admin/account?page=' +${i} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+	                	th:href="@{'/admin/account?page=' +${i} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
 	                 	th:text="${i}">
 	               	</a>
             	</li>
             </th:block>
             
             <li th:if="${currentPage != totalPage}">
-        		<a  th:href="@{'/admin/account?page=' +${currentPage + 1} + ${ accountName != '' ? '&accountName=' + accountName : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phoneNumber != '' ? '&phoneNumber=' + phoneNumber : '' }}"
+        		<a  th:href="@{'/admin/account?page=' +${currentPage + 1} + ${ name != '' ? '&name=' + name : '' } + ${ fullName != '' ? '&fullName=' + fullName : '' } + ${ phone != '' ? '&phone=' + phone : '' }}"
         			class="page-link" aria-label="Next">
         			<span aria-hidden="true">&raquo;</span>
         		</a>
@@ -196,7 +196,7 @@
 </div>
 <script th:inline="javascript">
 	/*<![CDATA[*/
-	var message = /*[[${message}]]*/ '';
+	var message = /*[[${successMessage}]]*/ '';
 	
 	if (message) {
 	    alert(message);

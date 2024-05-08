@@ -52,10 +52,10 @@
 	        <if test="name != null">
 	            AND name LIKE CONCAT(#{name}, '%')
 	        </if>
-	        <if test="name != null">
+	        <if test="fullName != null">
 	            AND full_name LIKE CONCAT(#{fullName}, '%')
 	        </if>
-	        <if test="number != null">
+	        <if test="phone != null">
 	            AND phone LIKE CONCAT(#{phone}, '%')
 	        </if>
 	    </where>
@@ -150,7 +150,7 @@
 
 	<update id="delete">
 		UPDATE
-			account
+			accounts
 		SET
 			is_deleted 	= TRUE
 		, 	version 	= version + 1

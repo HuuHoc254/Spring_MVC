@@ -31,11 +31,14 @@ public class AccountService implements IAccountService {
 	}
 	private Account convertToModel(Map<String, Object> map) {
 		Account account = new Account();
+		if( map == null) {
+			throw new RuntimeException("Mã nhân viên không tồn tại!");
+		}
 		Role role = new Role();
-		account.setAccountId((Integer) map.get("id"));
-		account.setAccountName((String) map.get("name"));
+		account.setId((Integer) map.get("id"));
+		account.setName((String) map.get("name"));
 		account.setFullName((String) map.get("full_name"));
-		account.setPhoneNumber((String) map.get("phone"));
+		account.setPhone((String) map.get("phone"));
 		account.setIsOnline((Boolean) map.get("is_online"));
 		account.setPassword((String) map.get("password"));
 		account.setIsDeleted((Boolean) map.get("is_deleted"));
@@ -80,10 +83,10 @@ public class AccountService implements IAccountService {
 	@Override
 	public boolean create(CreateAccount account) {
 		account.setPassword(encoder.encode(account.getPassword()));
-		return accountMapper.create(account.getAccountName().trim()
+		return accountMapper.create(account.getName().trim()
 								  , account.getPassword()
 								  , account.getFullName().trim()
-								  , account.getPhoneNumber().trim()
+								  , account.getPhone().trim()
 								  	) > 0;
 	}
 	@Override

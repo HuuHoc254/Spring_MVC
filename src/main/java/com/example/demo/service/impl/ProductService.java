@@ -38,21 +38,20 @@ public class ProductService implements IProductService {
 	}
 
 	private Product convertToModel(Map<String,Object> map){
-		try {
-			Product product = new Product();
-			product.setProductId( (Integer) map.get("id"));
-			product.setProductCode( (String) map.get("code"));
-			product.setProductName( (String) map.get("name"));
-			product.setPurchasePrice( (Double) map.get("purchase_price"));
-			product.setSalePrice( (Double) map.get("sale_price"));
-			product.setInventoryQuantity( (Integer) map.get("inventory_quantity"));
-			if( map.containsKey("version")) {
-				product.setVersion( (Integer) map.get("version"));
-			}
-			return product;
-		} catch (Exception e) {
+		if(map == null) {
 			throw new RuntimeException("Sản phẩm không tồn tại!");
 		}
+		Product product = new Product();
+		product.setId( (Integer) map.get("id"));
+		product.setCode( (String) map.get("code"));
+		product.setName( (String) map.get("name"));
+		product.setPurchasePrice( (Double) map.get("purchase_price"));
+		product.setSalePrice( (Double) map.get("sale_price"));
+		product.setInventoryQuantity( (Integer) map.get("inventory_quantity"));
+		if( map.containsKey("version")) {
+			product.setVersion( (Integer) map.get("version"));
+		}
+		return product;
 	}
 
 	@Override

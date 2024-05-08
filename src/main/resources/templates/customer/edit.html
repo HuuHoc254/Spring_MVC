@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Customer Insert</title>
+    <title>Customer Update</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,13 +13,14 @@
 <th:block th:insert="~{tpl/navbar.html :: navbar}">
 </th:block>
 <div class="container mt-3">
- <h2 class=" mt-3 mb-3 text-center"> Thêm mới khách hàng</h2>
+ <h2 class=" mt-3 mb-3 text-center"> Cập nhật khách hàng</h2>
 	<div class="row" th:if = "${message !=null }">
 		<div class="col-3"></div>
 		<div class="col-5 mb-3 text-danger" th:text= "${message}"></div>
 	</div>
-    <form th:action="@{/customer/insert}" th:method="post" th:object="${insertCustomer}">
-    	
+    <form th:action="@{/customer/update}+'/'+${customer.id}" th:method="post" th:object="${customer}">
+    	<input type="hidden" name = "id" th:value = "${customer.id}">
+    	<input type="hidden" name = "version" th:value = "${customer.version}">
         <div class="row input-group mb-3">
             <div class="col-1"></div>
             <div class="col-2 mt-1">
@@ -27,7 +28,7 @@
             </div>
 
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="customerName" placeholder="Nhập tên khách hàng" th:value="${insertCustomer.customerName}" 
+                <input class="form-control border-dark shadow-none" type="text" name="name" required placeholder="Nhập tên khách hàng" th:value="${customer.name}" 
                 	th:classappend="${mapErrors.get('customerName') != null ? 'is-invalid' : ''}">
             </div>
 
@@ -42,11 +43,11 @@
             </div>
             
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="phoneNumber" placeholder="Nhập số điện thoại"  th:value="${insertCustomer.phoneNumber}"
-                	th:classappend="${mapErrors.get('phoneNumber') != null ? 'is-invalid' : ''}">
+                <input class="form-control border-dark shadow-none" type="text" name="phone" required placeholder="Nhập số điện thoại"  th:value="${customer.phone}"
+                	th:classappend="${mapErrors.get('phone') != null ? 'is-invalid' : ''}">
             </div>
             
-            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('phoneNumber') != null}" th:text= "${mapErrors.get('phoneNumber')}" >
+            <div class="col-4 mt-2 text-danger" th:if="${mapErrors.get('phone') != null}" th:text= "${mapErrors.get('phone')}" >
     		</div>
         </div>
         
@@ -57,7 +58,7 @@
             </div>
             
             <div class="col-5">
-                <input class="form-control border-dark shadow-none" type="text" name="address" placeholder="Nhập tên nhân viên"  th:value="${insertCustomer.address}"
+                <input class="form-control border-dark shadow-none" type="text" name="address" required placeholder="Nhập tên nhân viên"  th:value="${customer.address}"
                 	th:classappend="${mapErrors.get('address') != null ? 'is-invalid' : ''}">
             </div>
             
@@ -70,7 +71,7 @@
             <div class="col-3">
                 <div class="row">
                     <div class="col-6">
-                        <button type="submit" class="btn btn-primary"> Thêm mới</button>
+                        <button type="submit" class="btn btn-primary"> Chỉnh sửa</button>
                     </div>
                     <div class="col-6">
                         <a href="/customer/cancel" class="text-decoration-none text-light">

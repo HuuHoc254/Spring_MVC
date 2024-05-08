@@ -10,11 +10,11 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  </head>
- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+</head>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    crossorigin="anonymous">
+</script><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
 <th:block th:insert="~{tpl/navbar.html :: navbar}">
 </th:block>
@@ -71,7 +71,7 @@
                 <label class="">Số điện thoại</label>
             </div>
              <div class="col-xl-5 col-md-6 col-sm-7">
-                <input class="form-control border-dark shadow-none" type="text" id="phoneNumberCustomer" name="phoneNumberCustomer" placeholder="Nhập số điện thoại" th:value="${phoneNumberCustomer}">
+                <input class="form-control border-dark shadow-none" type="text" id="customerPhone" name="customerPhone" placeholder="Nhập số điện thoại" th:value="${customerPhone}">
             </div>
         </div>
 
@@ -150,16 +150,16 @@
           <td th:text="${#numbers.formatDecimal(order.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
           <td th:text="${order.quantity}" contenteditable="true" class="quantity text-center"></td>
           <td th:text="${order.customerName}" contenteditable="true" class="customerName"></td>
-          <td th:text="${order.phoneNumberCustomer}" contenteditable="true" class="phoneNumber"></td>
+          <td th:text="${order.customerPhone}" contenteditable="true" class="phone"></td>
           <td th:text="${order.version}"  class="version d-none"></td>
           
-          <td th:text="${order.addressCustomer}"></td>
+          <td th:text="${order.customerAddress}"></td>
           <td th:text="${order.orderStatusName}"></td>
           <td th:text="${order.productCode}" class="oldProductCode d-none"></td>
            <td th:text="${order.productName}" class="oldProductName d-none"></td>
 		  <td th:text="${order.quantity}" class="oldQuantity d-none text-center "></td>
           <td th:text="${order.customerName}" class="oldCustomerName d-none"></td>
-          <td th:text="${order.phoneNumberCustomer}" class="oldPhoneNumber d-none"></td>
+          <td th:text="${order.customerPhone}" class="oldPhone d-none"></td>
           <td th:text="${#temporals.format(order.allocationDate, 'yyyy/MM/dd HH:mm:ss')}"></td>
           <td th:text="${order.accountName}" th:if="${isAdmin}"></td>
           <td th:text="${order.fullName}" th:if="${isAdmin}"></td>
@@ -175,7 +175,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -194,7 +194,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -219,7 +219,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -236,7 +236,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -257,7 +257,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -274,7 +274,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -295,7 +295,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -312,7 +312,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -333,7 +333,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -350,7 +350,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }
@@ -368,7 +368,7 @@
 		      			+ ${ productCode 			!= '' ? '&productCode=' 		+ productCode : '' }
 		      			+ ${ productName 			!= '' ? '&productName=' 		+ productName : '' }
 		      			+ ${ customerName 			!= '' ? '&customerName=' 		+ customerName : '' }
-		      			+ ${ phoneNumberCustomer 	!= '' ? '&phoneNumberCustomer=' + phoneNumberCustomer : '' }
+		      			+ ${ customerPhone 			!= '' ? '&customerPhone=' 		+ customerPhone : '' }
 		      			+ ${ beginOrderDate 		!= '' ? '&beginOrderDate=' 		+ beginOrderDate : '' }
 		      			+ ${ endOrderDate 			!= '' ? '&endOrderDate=' 		+ endOrderDate : '' }
 		      			+ ${ orderStatus 			!= '' ? '&orderStatus=' 		+ orderStatus : '' }

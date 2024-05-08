@@ -95,6 +95,7 @@ public class ProductController {
     	model.addAttribute("product", new CreateProduct());
     	model.addAttribute("mapErrors",new HashMap<String, String>());
     	model.addAttribute("isAdmin", authService.isAdmin());
+    	model.addAttribute("url","product");
 	    return "product/create";
     }
 
@@ -126,8 +127,9 @@ public class ProductController {
     	try {
     		Product product = productService.getById(id);
         	model.addAttribute("mapErrors",new HashMap<String, String>());
-        	model.addAttribute("updateProduct", product);
+        	model.addAttribute("product", product);
         	model.addAttribute("isAdmin", authService.isAdmin());
+        	model.addAttribute("url","product");
     	    return "product/edit";
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", e.getMessage());
@@ -140,7 +142,7 @@ public class ProductController {
     private String update( 	HttpServletRequest request
 						, 	Model model
 						, 	@ModelAttribute UpdateProduct product
-						, 	@PathVariable int id
+						, 	@PathVariable("id") int id
 							){
     	try {
     		HttpSession session = request.getSession();
@@ -160,9 +162,10 @@ public class ProductController {
     			session.setAttribute("successMessage", "Cập nhật sản phẩm thành công!");
     			return url;
     		}
-        	model.addAttribute("updateProduct",product); 
+        	model.addAttribute("product",product); 
         	model.addAttribute("mapErrors",mapErrors);
         	model.addAttribute("isAdmin", authService.isAdmin());
+        	model.addAttribute("url","product");
         	return "product/edit";
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", e.getMessage());

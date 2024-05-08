@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.InsertCustomer;
+import com.example.demo.dto.CreateCustomer;
 import com.example.demo.dto.UpdateCustomer;
 import com.example.demo.model.Account;
 import com.example.demo.model.Customer;
@@ -19,17 +19,17 @@ public class CustomerService implements ICustomerService {
 	private CustomerMapper customerMapper;
 
 	private Customer convertToModel(Map<String, Object> map) {
+		if( map == null ) {
+			throw new RuntimeException("Khách hàng không tồn tại!");
+		}
 		Customer customer = new Customer();
 		Account account = new Account();
-		if(map==null) {
-			return null;
-		}
-		account.setAccountId((Integer) map.get("id"));
+		account.setId((Integer) map.get("id"));
 		account.setFullName((String) map.get("full_name"));
 		customer.setAccount(account);
-		customer.setCustomerId((Integer) map.get("id"));
-		customer.setCustomerName((String) map.get("name"));
-		customer.setPhoneNumber((String) map.get("phone"));
+		customer.setId((Integer) map.get("id"));
+		customer.setName((String) map.get("name"));
+		customer.setPhone((String) map.get("phone"));
 		customer.setAddress((String) map.get("address"));
 		customer.setVersion((Integer) map.get("version"));
 		return customer;
@@ -67,22 +67,22 @@ public class CustomerService implements ICustomerService {
 	}
 
 	@Override
-	public boolean create(InsertCustomer create) {
-		return customerMapper.create( create.getCustomerName().trim()
-											, create.getPhoneNumber().trim()
-											, create.getAddress().trim()
-											, create.getAccountId()
-											) >0;
+	public boolean create(CreateCustomer create) {
+		return customerMapper.create( create.getName().trim()
+									, create.getPhone().trim()
+									, create.getAddress().trim()
+									, create.getAccountId()
+									) >0;
 	}
 
 	@Override
 	public boolean update(UpdateCustomer update) {
-		return customerMapper.update( update.getCustomerId()
-											, update.getCustomerName().trim()
-											, update.getPhoneNumber().trim()
-											, update.getAddress().trim()
-											, update.getVersion()
-											) >0;
+		return customerMapper.update( update.getId()
+									, update.getName().trim()
+									, update.getPhone().trim()
+									, update.getAddress().trim()
+									, update.getVersion()
+									) >0;
 	}
 
 	@Override
