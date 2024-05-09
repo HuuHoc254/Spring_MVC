@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.controller.CustomerController;
+import com.example.demo.dto.Allocation;
 import com.example.demo.dto.SaveOrder;
 import com.example.demo.model.Customer;
 import com.example.demo.model.Order;
@@ -117,7 +118,7 @@ public class OrderService implements IOrderService {
 		boolean check = false;
 		for(SaveOrder order : orders) {
 			Product product = productService.getByCode(order.getProductCode());
-			Customer customer = customerService.getByPhone(order.getPhoneNumber());
+			Customer customer = customerService.getByPhone(order.getPhone());
 			if(order.getOrderId() != null) {
 				check = orderMapper.update(	product.getId()
 										, 	product.getSalePrice()
@@ -152,6 +153,14 @@ public class OrderService implements IOrderService {
 					throw new RuntimeException("Đã có lỗi xảy ra, vui lòng kiem tra lại!");
 				}
 			}
+		}
+	}
+
+	@Override
+	public void allocate(List<Allocation> allocaties) {
+		for(int i=0;i<allocaties.size()-1;i++) {
+			Product product = productService.getByCode(allocaties.get(i).getProductCode());
+			orderMapper.allocateInventory(product.getId(),allocaties.get(i).getQuantity());
 		}
 	}
 

@@ -1,26 +1,26 @@
 package com.example.demo.dto;
 
 public class Allocation {
-	private int			index;
+	private int			number;
     private String  	productName;
     private String  	productCode;
-    private int  		quantity;
+    private Integer  	quantity;
 
 	public Allocation() {
 		super();
 	}
-	public Allocation(int index, String productName, String productCode, int quantity) {
+	public Allocation(int number, String productName, String productCode, Integer quantity) {
 		super();
-		this.index = index;
+		this.number = number;
 		this.productName = productName;
 		this.productCode = productCode;
 		this.quantity = quantity;
 	}
-	public int getIndex() {
-		return index;
+	public int getNumber() {
+		return number;
 	}
-	public void setIndex(int index) {
-		this.index = index;
+	public void setNumber(int number) {
+		this.number = number;
 	}
 	public String getProductName() {
 		return productName;
@@ -34,10 +34,10 @@ public class Allocation {
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
 	}
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 

@@ -35,10 +35,10 @@ public class OrderValidate {
 			}
 
 			check = false;
-			if (order.getPhoneNumber() == ""){
-				errors.put("phoneNumber", "Không được để trống!");
+			if (order.getPhone() == ""){
+				errors.put("phone", "Không được để trống!");
 			}else {
-				check = customerService.getNameByPhone(order.getPhoneNumber()) == null;
+				check = customerService.getNameByPhone(order.getPhone()) == null;
 		        if ( check ) {
 		        	errors.put("phone", "Số điện thoại không tồn tại!");
 		        }
@@ -57,21 +57,23 @@ public class OrderValidate {
 	public Map<Integer,Map<String,String>> allocation(List<Allocation> allocaties) {
 		Map<Integer,Map<String,String>> mapErrors = new HashMap<Integer, Map<String,String>>();
 		boolean check = false;
-		for (Allocation allocate: allocaties) {
+		for(int i=0;i<allocaties.size()-1;i++) {
 			Map<String, String> errors = new HashMap<String, String>(); 
-			if (allocate.getProductCode().trim() == "") {
+			if (allocaties.get(i).getProductCode() == "") {
 				errors.put("productCode", "Không được để trống!");
 			}else {
-				check = productService.getNameByCode(allocate.getProductCode()) == null;
+				check = productService.getNameByCode(allocaties.get(i).getProductCode()) == null;
 		        if ( check ) {
 		        	errors.put("productCode", "Mã sản phẩm không tồn tại!");
 		        }
 			}
-			if (allocate.getQuantity() < 1) {
+			if (allocaties.get(i).getQuantity() == null) {
+				errors.put("quantity", "Không được để trống!");
+			}else if (allocaties.get(i).getQuantity() < 1) {
 				errors.put("quantity", "Số lượng không hợp lệ!");
 			}
 			if(!errors.isEmpty()) {
-				mapErrors.put(allocate.getIndex(), errors);
+				mapErrors.put(allocaties.get(i).getNumber(), errors);
 			}
 		}
         return mapErrors;

@@ -394,6 +394,15 @@
       </div>
     </div>
   </div>
+  <script th:inline="javascript">
+	/*<![CDATA[*/
+	var message = /*[[${successMessage}]]*/ '';
+	
+	if (message) {
+	    alert(message);
+	}
+	/*]]>*/
+</script>
     
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

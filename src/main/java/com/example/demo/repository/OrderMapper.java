@@ -48,6 +48,7 @@ public interface OrderMapper {
 			,	int 	quantity
 			,	int 	customerId
 			,	String 	address
-			,	String 	phoneNumber
+			,	String 	phone
 			,	int 	accountId);
+	void allocateInventory(int productId,int quantityToAdd );
 }

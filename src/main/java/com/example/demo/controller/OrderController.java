@@ -112,9 +112,9 @@ public class OrderController {
         model.addAttribute("currentPage", page);
         model.addAttribute("orders", orders);
         model.addAttribute("totalPage",totalPage);
-        model.addAttribute("message", session.getAttribute("message"));
+        model.addAttribute("successMessage", session.getAttribute("successMessage"));
         model.addAttribute("url","order");
-        session.removeAttribute("message");
+        session.removeAttribute("successMessage");
         session.removeAttribute("mapErrors");
         return "order/list";
     }
@@ -123,7 +123,7 @@ public class OrderController {
     private String showForm( HttpServletRequest request
 						   , Model model
 							){
-		model.addAttribute("allocaties", new AllocationList());
+		model.addAttribute("allocationList", new AllocationList());
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("url","allocation");
 	    return "allocation/allocation";
@@ -131,13 +131,19 @@ public class OrderController {
 	@PostMapping("/admin/allocation")
     private String allocation( HttpServletRequest request
 							,  Model model
-							,  @ModelAttribute AllocationList allocationList){
+							,  @ModelAttribute("allocationList") AllocationList allocationList){
 
 		Map<Integer, Map<String, String>> mapErrors = validate.allocation(allocationList.getAllocaties());
-		if(mapErrors.size() >0) {
+		System.out.println(mapErrors.toString());
+		if(mapErrors.size() > 0) {
 			model.addAttribute("mapErrors", mapErrors);
+		}else {
+			orderService.allocate(allocationList.getAllocaties());
+			HttpSession session = request.getSession();
+			session.setAttribute("successMessage", "Phân bổ thành công!");
+			return "redirect:/order";
 		}
-		model.addAttribute("allocaties", allocationList);
+		model.addAttribute("allocationList", allocationList);
     	model.addAttribute("isAdmin", authService.isAdmin());
     	model.addAttribute("url","allocation");
 	    return "allocation/allocation";

@@ -2,23 +2,23 @@ package com.example.demo.dto;
 
 public class SaveOrder {
     private int  	index;
-    private Integer 	orderId;
+    private Integer orderId;
     private String  productCode;
     private int 	quantity;
-    private String 	phoneNumber;
+    private String 	phone;
     private int		version;
     
 	public SaveOrder() {
 		super();
 	}
 
-	public SaveOrder(int index, Integer orderId, String productCode, int quantity, String phoneNumber, int version) {
+	public SaveOrder(int index, Integer orderId, String productCode, int quantity, String phone, int version) {
 		super();
 		this.index = index;
 		this.orderId = orderId;
 		this.productCode = productCode;
 		this.quantity = quantity;
-		this.phoneNumber = phoneNumber;
+		this.phone = phone;
 		this.version = version;
 	}
 
@@ -54,12 +54,12 @@ public class SaveOrder {
 		this.quantity = quantity;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public int getVersion() {

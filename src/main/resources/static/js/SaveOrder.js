@@ -239,11 +239,11 @@ function saveOrder() {
 		data: editedOrders, // Chuyển đổi đối tượng thành chuỗi JSON
 		contentType: "application/json", // Đặt kiểu dữ liệu của yêu cầu là JSON
 		success: function(response) {
-			if(response){
+			if(Object.keys(response).length > 0){
 				saveErrorToLocalStorage(response);
 				displayErrorFromLocalStorage();
+				console.log(response);
 			}else{
-				alert("Đơn hàng đã được lưu!");
            		resert();// Tải lại trang sau khi thành công
 			}
 		},

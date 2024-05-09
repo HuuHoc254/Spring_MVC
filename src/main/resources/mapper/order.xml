@@ -131,12 +131,188 @@
 		</where>
 	</update>
 
-	<insert id="insert">
+	<insert id="create">
 		INSERT INTO orders(product_id, unit_price, quantity, customer_id, customer_address, customer_phone, account_id )
 		VALUES(#{productId}, #{unitPrice}, #{quantity}, #{customerId}, #{address}, #{phone}, #{accountId})
 	</insert>
 
 	<select id="allocateInventory" statementType="CALLABLE">
     	{ call allocateInventory(#{productId, mode=IN, jdbcType=INTEGER}, #{quantityToAdd, mode=IN, jdbcType=INTEGER}) }
+	</select>
+
+	<select id="totalCustomerZeroOrder">
+		SELECT
+			COUNT(*)
+		FROM
+			customers c
+		LEFT JOIN (
+				SELECT
+					customer_id
+				    FROM
+						orders
+					<where>
+						1 = 1
+						<if test="beginDate != ''">
+						AND order_date &gt; #{beginDate}
+						</if>
+						<if test="endDate != ''">
+							AND order_date &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+						</if>
+					</where>
+    				)as temp
+			ON c.id = temp.customer_id
+		<where>
+			c.is_deleted = false
+		AND
+			temp.customer_id IS NULL
+		</where>
+	</select>
+
+	<select id="customerZeroOrder">
+		SELECT
+			c.id
+		,	c.name
+		,	c.phone
+		,	c.address
+		FROM
+			customers c
+		LEFT JOIN (
+				SELECT
+					customer_id
+				    FROM
+						orders
+					<where>
+						1 = 1
+						<if test="beginDate != ''">
+						AND order_date &gt; #{beginDate}
+						</if>
+						<if test="endDate != ''">
+							AND order_date &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+						</if>
+					</where>
+    				)as temp
+			ON c.id = temp.customer_id
+		<where>
+			c.is_deleted = false
+		AND
+			temp.customer_id IS NULL
+		</where>
+		ORDER BY
+			SUBSTRING_INDEX(c.name, ' ', -1)
+		LIMIT 3 OFFSET #{offset}
+	</select>
+
+	<select id="totalProductBestSeller">
+		SELECT
+			COUNT(*)
+		FROM
+			(
+				SELECT
+				p.id
+			,	p.code
+			,	p.name
+			,	SUM(o.quantity) as quantity
+			FROM
+				products p
+			JOIN orders o ON o.product_id = p.id
+			<where>
+					1 = 1
+					<if test="beginDate != ''">
+					AND order_date &gt; #{beginDate}
+					</if>
+					<if test="endDate != ''">
+						AND order_date &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+					</if>
+					AND p.is_deleted = FALSE
+			</where>
+			GROUP BY
+				o.product_id
+			) as sub_query
+	</select>
+
+	<select id="productBestSeller">
+		SELECT
+			p.id
+		,	p.code
+		,	p.name
+		,	SUM(o.quantity) as quantity
+		FROM
+			products p
+		JOIN orders o ON o.product_id = p.id
+		<where>
+				1 = 1
+				<if test="beginDate != ''">
+				AND order_date &gt; #{beginDate}
+				</if>
+				<if test="endDate != ''">
+					AND order_date &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+				</if>
+				AND p.is_deleted = FALSE
+		</where>
+		GROUP BY
+			o.product_id
+		ORDER BY
+			quantity DESC
+		,   p.id
+		LIMIT 3 OFFSET #{offset}
+	</select>
+
+	<select id="totalProductZeroOrder">
+		SELECT
+			COUNT(*)
+		FROM
+			products p
+		LEFT JOIN (
+			SELECT
+				product_id
+			FROM
+				orders
+			<where>
+				1 = 1
+				<if test="beginDate != ''">
+				AND order_date &gt; #{beginDate}
+				</if>
+				<if test="endDate != ''">
+					AND order_date &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+				</if>
+			</where>
+			) AS temp ON temp.product_id = p.id
+			<where>
+				p.is_deleted = FALSE
+			AND
+				temp.product_id IS NULL
+			</where>
+	</select>
+
+	<select id="productZeroOrder">
+		SELECT
+			p.id
+		,	p.code
+		,	p.name
+		FROM
+			products p
+		LEFT JOIN (
+			SELECT
+				product_id
+			FROM
+				orders
+			<where>
+				1 = 1
+				<if test="beginDate != ''">
+				AND order_date &gt; #{beginDate}
+				</if>
+				<if test="endDate != ''">
+					AND order_date &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+				</if>
+			</where>
+			) AS temp ON temp.product_id = p.id
+			<where>
+				p.is_deleted = FALSE
+			AND
+				temp.product_id IS NULL
+			</where>
+			ORDER BY
+				p.code
+			LIMIT 3 OFFSET #{offset}
 	</select>
   </mapper>
