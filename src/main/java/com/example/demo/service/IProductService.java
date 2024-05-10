@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.demo.dto.CreateProduct;
 import com.example.demo.dto.UpdateProduct;
@@ -25,4 +26,5 @@ public interface IProductService {
 	String  getCodeByName(String name);
 	String  getNameByCode(String code);
 	Product getByCode(String code);
+	Product convertToModel(Map<String,Object> map);
 }

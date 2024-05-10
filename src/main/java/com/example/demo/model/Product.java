@@ -11,7 +11,6 @@ public class Product {
     private Integer version;
     private Boolean isDeleted;
     
-    
 	public Product() {
 	}
 	

@@ -17,11 +17,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private IAccountService accountService;
     @Override
     @Transactional
-        public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        public UserDetails loadUserByUsername(String name)  {
         Account account =  accountService.findByName(name);
         if (account==null) { 
-        	new  UsernameNotFoundException("Account Not Found with accountName: " + name);
-        	return null;
+        	throw new UsernameNotFoundException("Account Not Found with accountName: " + name);
     	}
         return UserDetailImpl.convertAccountEntityToAccountDetail(account);
     }

@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.controller.CustomerController;
 import com.example.demo.dto.Allocation;
+import com.example.demo.dto.ProductBestSellerResponse;
 import com.example.demo.dto.SaveOrder;
 import com.example.demo.model.Customer;
 import com.example.demo.model.Order;
@@ -111,7 +113,17 @@ public class OrderService implements IOrderService {
 			order.setAllocationDate((LocalDateTime) map.get("allocation_date"));
 		}
 		return order;
-}
+	}
+
+	public ProductBestSellerResponse convertProductReponseToModel(Map<String,Object> map){
+		ProductBestSellerResponse product = new ProductBestSellerResponse();
+		product.setId( (Integer) map.get("id"));
+		product.setCode( (String) map.get("code"));
+		product.setName( (String) map.get("name"));
+		BigDecimal quantity = (BigDecimal) map.get("quantity");
+		product.setQuantity(quantity.intValue());
+		return product;
+	}
 
 	@Override
 	public void saveOrder(List<SaveOrder> orders) {
@@ -162,6 +174,39 @@ public class OrderService implements IOrderService {
 			Product product = productService.getByCode(allocaties.get(i).getProductCode());
 			orderMapper.allocateInventory(product.getId(),allocaties.get(i).getQuantity());
 		}
+	}
+
+	@Override
+	public List<Customer> customerZeroOrder(String beginDate, String endDate, int offset) {
+		List<Map<String, Object>> customers = orderMapper.customerZeroOrder(beginDate, endDate, offset);
+		return customers.stream().map(m-> {return customerService.convertToModel(m);}).toList();
+	}
+
+	@Override
+	public int totalCustomerZeroOrder(String beginDate, String endDate) {
+		return orderMapper.totalCustomerZeroOrder(beginDate, endDate);
+	}
+
+	@Override
+	public int totalProductBestSeller(String beginDate, String endDate) {
+		return orderMapper.totalProductBestSeller(beginDate, endDate);
+	}
+
+	@Override
+	public List<ProductBestSellerResponse> productBestSeller(String beginDate, String endDate, int offset) {
+		List<Map<String, Object>> products = orderMapper.productBestSeller(beginDate, endDate, offset);
+		return products.stream().map(m-> {return convertProductReponseToModel(m);}).toList();
+	}
+
+	@Override
+	public int totalProductZeroOrder(String beginDate, String endDate) {
+		return orderMapper.totalProductZeroOrder(beginDate, endDate);
+	}
+
+	@Override
+	public List<Product> productZeroOrder(String beginDate, String endDate, int offset) {
+		List<Map<String, Object>> products = orderMapper.productZeroOrder(beginDate, endDate, offset);
+		return products.stream().map(m-> {return productService.convertToModel(m);}).toList();
 	}
 
 	

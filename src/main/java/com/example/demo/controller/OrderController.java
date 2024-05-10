@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.dto.Allocation;
 import com.example.demo.dto.AllocationList;
+import com.example.demo.dto.ProductBestSellerResponse;
+import com.example.demo.model.Customer;
 import com.example.demo.model.Order;
+import com.example.demo.model.Product;
 import com.example.demo.service.IOrderService;
 import com.example.demo.service.impl.AuthService;
 import com.example.demo.validate.OrderValidate;
@@ -34,19 +37,19 @@ public class OrderController {
 	@Autowired
 	private OrderValidate validate;
     @GetMapping("/order")
-    private String searchOrder(HttpServletRequest request
-							, Model model
-							, @RequestParam(defaultValue = "") String accountName
-							, @RequestParam(defaultValue = "") String fullName
-							, @RequestParam(defaultValue = "") String productCode
-							, @RequestParam(defaultValue = "") String productName
-							, @RequestParam(defaultValue = "") String customerName
-							, @RequestParam(defaultValue = "") String customerPhone
-							, @RequestParam(defaultValue = "") String beginOrderDate
-							, @RequestParam(defaultValue = "") String endOrderDate
-							, @RequestParam(defaultValue = "") String orderStatus
-							, @RequestParam(defaultValue = "") String allocationStatus
-							, @RequestParam(defaultValue = "1") int page
+    private String searchOrder(	HttpServletRequest request
+							, 	Model model
+							, 	@RequestParam(defaultValue = "") String accountName
+							, 	@RequestParam(defaultValue = "") String fullName
+							, 	@RequestParam(defaultValue = "") String productCode
+							, 	@RequestParam(defaultValue = "") String productName
+							, 	@RequestParam(defaultValue = "") String customerName
+							, 	@RequestParam(defaultValue = "") String customerPhone
+							, 	@RequestParam(defaultValue = "") String beginOrderDate
+							, 	@RequestParam(defaultValue = "") String endOrderDate
+							, 	@RequestParam(defaultValue = "") String orderStatus
+							, 	@RequestParam(defaultValue = "") String allocationStatus
+							, 	@RequestParam(defaultValue = "1") int page
     							){
     	HttpSession session = request.getSession();
     	session.setAttribute("currentPage", page);
@@ -128,11 +131,12 @@ public class OrderController {
     	model.addAttribute("url","allocation");
 	    return "allocation/allocation";
     }
+
 	@PostMapping("/admin/allocation")
     private String allocation( HttpServletRequest request
 							,  Model model
-							,  @ModelAttribute("allocationList") AllocationList allocationList){
-
+							,  @ModelAttribute("allocationList") AllocationList allocationList
+								){
 		Map<Integer, Map<String, String>> mapErrors = validate.allocation(allocationList.getAllocaties());
 		System.out.println(mapErrors.toString());
 		if(mapErrors.size() > 0) {
@@ -149,4 +153,37 @@ public class OrderController {
 	    return "allocation/allocation";
     }
 
+	@GetMapping("/admin/report")
+	private String searchAnalytics(	Model model
+								, 	@RequestParam(defaultValue = "") 	String 	beginDate
+								, 	@RequestParam(defaultValue = "") 	String 	endDate
+								,	@RequestParam(defaultValue = "1") 	int		pageCustomer
+								,	@RequestParam(defaultValue = "1") 	int		pageProductBestSeller
+								,	@RequestParam(defaultValue = "1") 	int		pageProduct
+								, 	HttpServletRequest request
+									){
+		List<Customer> customers = orderService.customerZeroOrder(beginDate, endDate, (pageCustomer-1)*3);
+		List<ProductBestSellerResponse> productBestSeller = orderService.productBestSeller(beginDate, endDate, (pageProductBestSeller-1)*3);
+		List<Product> products = orderService.productZeroOrder(beginDate, endDate, (pageProduct-1)*3);
+		int totalRecord = orderService.totalCustomerZeroOrder(beginDate, endDate);
+		int totalCustomerZeroOrder = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+		totalRecord = orderService.totalProductBestSeller(beginDate, endDate);
+		int totalProductBestSeller =  totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+		totalRecord = orderService.totalProductZeroOrder(beginDate, endDate);
+		int totalProductZeroOrder =  totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+		model.addAttribute("customers", customers);
+		model.addAttribute("productBestSeller", productBestSeller);
+		model.addAttribute("products", products);
+		model.addAttribute("totalCustomerZeroOrder", totalCustomerZeroOrder);
+		model.addAttribute("totalProductBestSeller", totalProductBestSeller);
+		model.addAttribute("totalProductZeroOrder", totalProductZeroOrder);
+		model.addAttribute("isAdmin", authService.isAdmin());
+    	model.addAttribute("url","report");
+    	model.addAttribute("beginDate",beginDate);
+    	model.addAttribute("endDate",endDate);
+    	model.addAttribute("pageCustomer",pageCustomer);
+    	model.addAttribute("pageProductBestSeller",pageProductBestSeller);
+    	model.addAttribute("pageProduct",pageProduct);
+		return "analytics/show";
+	}
 }

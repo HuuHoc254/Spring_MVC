@@ -1,20 +1,115 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Title</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
 </head>
 <body>
-    <h1>Hello world</h1>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<h1>Hello world</h1>
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+<nav th:if="${products.size() != 0}"
+	aria-label="Page navigation example "
+	class="d-flex justify-content-center">
+	<ul class="pagination">
+		<li class="page-item" th:if="${pageProduct != 1}"><a
+			th:href="@{'/admin/report?pageProduct=' +${pageProduct - 1} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+			class="page-link" aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+		</a></li>
+		<th:block th:if="${totalProductZeroOrder <= 8}"
+			th:each="i : ${#numbers.sequence(1, totalProductZeroOrder)}">
+			<li class="page-item" th:if="${i != pageProduct}"><a
+				class="page-link" aria-current="page"
+				th:href="@{'/admin/report?pageProduct=' +${i} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a></li>
+			<li class="page-item active" th:if="${i == pageProduct}"><a
+				class="page-link" aria-current="page" href="#" th:text="${i}"> </a>
+			</li>
+		</th:block>
+
+		<th:block th:if="${totalProductZeroOrder > 8 and pageProduct < 5}"
+			th:each="i : ${#numbers.sequence(1, totalProductZeroOrder)}">
+			<li class="page-item"
+				th:classappend="${i == pageProduct ? 'active ' : '' }"><a
+				th:if="${i < 6}" class="page-link"
+				th:href="@{'/admin/report?pageProduct=' +${i} +${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a>
+				<div class="page-link" th:if="${i == totalProductZeroOrder-1 }">...</div>
+				<a th:if="${i == totalProductZeroOrder}" class="page-link"
+				th:href="@{'/admin/report?pageProduct=' +${i} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a></li>
+		</th:block>
+
+		<th:block
+			th:if="${totalProductZeroOrder > 8 and pageProduct > totalProductZeroOrder - 4 }"
+			th:each="i : ${#numbers.sequence(1, totalProductZeroOrder)}">
+			<li class="page-item"
+				th:classappend="${i == pageProduct ? 'active ' : '' }"><a
+				th:if="${i == 1}" class="page-link"
+				th:href="@{'/admin/report?pageProduct=' +${i} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a>
+				<div class="page-link" th:if="${i == 2 }">...</div> <a
+				th:if="${i > totalProductZeroOrder-5}" class="page-link"
+				th:href="@{'/admin/report?pageProduct=' +${i} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a></li>
+		</th:block>
+
+		<th:block
+			th:if="${totalProductZeroOrder > 8 and pageProduct < totalProductZeroOrder - 3 and pageProduct > 4 }"
+			th:each="i : ${#numbers.sequence(1, totalProductZeroOrder)}">
+			<li class="page-item"
+				th:classappend="${i == pageProduct ? 'active ' : '' }"><a
+				th:if="${i == 1}" class="page-link"
+				th:href="@{'/admin/report?pageProduct=' +${i} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a>
+				<div class="page-link" th:if="${i == 2 }">...</div> <a
+				th:if="${ i == pageProduct -1 }" class="page-link"
+				th:href="@{'/admin/report?pageProduct=' +${i} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a> <a th:if="${ i == pageProduct }"
+				class="page-link" href="#" th:text="${i}"> </a> <a
+				th:if="${i == pageProduct + 1 }" class="page-link"
+				th:href="@{'/admin/report?pageProduct=' +${i} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a>
+				<div class="page-link" th:if="${i == totalProductZeroOrder -1 }">...</div>
+				<a th:if="${i == totalProductZeroOrder}" class="page-link"
+				th:href="@{'/admin/report?pageProduct=' +${i} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+				th:text="${i}"> </a></li>
+		</th:block>
+
+		<li th:if="${pageProduct != totalProductZeroOrder}"><a
+			th:href="@{'/admin/report?pageProduct=' +${pageProduct + 1} + ${ beginDate != '' ? '&beginDate=' + beginDate : '' } + ${ endDate != '' ? '&endDate=' + endDate : '' } + '&pageCustomer=' + ${pageCustomer} + '&pageProductBestSeller=' + ${pageProductBestSeller} }"
+			class="page-link" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+		</a></li>
+	</ul>
+</nav>

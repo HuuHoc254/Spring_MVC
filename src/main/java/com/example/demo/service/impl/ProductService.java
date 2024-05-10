@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +37,8 @@ public class ProductService implements IProductService {
 						 , 	String 	name) {
 		return productMapper.countSearch(code.trim(), name.trim());
 	}
-
-	private Product convertToModel(Map<String,Object> map){
+	@Override
+	public Product convertToModel(Map<String,Object> map){
 		if(map == null) {
 			throw new RuntimeException("Sản phẩm không tồn tại!");
 		}

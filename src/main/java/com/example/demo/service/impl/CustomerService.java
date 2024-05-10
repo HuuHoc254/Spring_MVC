@@ -17,8 +17,9 @@ import com.example.demo.service.ICustomerService;
 public class CustomerService implements ICustomerService {
 	@Autowired
 	private CustomerMapper customerMapper;
-
-	private Customer convertToModel(Map<String, Object> map) {
+	
+	@Override
+	public Customer convertToModel(Map<String, Object> map) {
 		if( map == null ) {
 			throw new RuntimeException("Khách hàng không tồn tại!");
 		}

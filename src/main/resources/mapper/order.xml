@@ -199,6 +199,7 @@
 		</where>
 		ORDER BY
 			SUBSTRING_INDEX(c.name, ' ', -1)
+		,	c.id
 		LIMIT 3 OFFSET #{offset}
 	</select>
 

@@ -50,5 +50,12 @@ public interface OrderMapper {
 			,	String 	address
 			,	String 	phone
 			,	int 	accountId);
+
 	void allocateInventory(int productId,int quantityToAdd );
+	int totalCustomerZeroOrder(String beginDate, String endDate);
+	List<Map<String,Object>> customerZeroOrder(String beginDate, String endDate, int offset);
+	int totalProductBestSeller(String beginDate, String endDate);
+	List<Map<String,Object>> productBestSeller(String beginDate, String endDate, int offset);
+	int totalProductZeroOrder(String beginDate, String endDate);
+	List<Map<String,Object>> productZeroOrder(String beginDate, String endDate, int offset);
 }

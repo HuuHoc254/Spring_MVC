@@ -227,7 +227,7 @@ function loadInsertOrders() {
 function saveOrder() {
 	// Lấy mảng editedOrders từ local storage
 	let editedOrders = localStorage.getItem("editedOrders") || [];
-
+	console.log(editedOrders === "[]");
 	if( editedOrders == "" ){
 		alert("Không có sự thay đổi nào!");
 		return false;

@@ -21,6 +21,11 @@
                 Allocation Product
               </a>
             </li>
+            <li class="nav-item" th:if="${isAdmin}" th:classappend="${url== 'report' ? 'active' : ''}">
+              <a class="nav-link " href="/admin/report">
+                Report
+              </a>
+            </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
