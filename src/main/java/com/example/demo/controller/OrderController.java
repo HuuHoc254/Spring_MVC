@@ -30,6 +30,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping
 public class OrderController {
+	final int LIMIT = 3;
 	@Autowired
 	private AuthService authService;
 	@Autowired
@@ -51,6 +52,13 @@ public class OrderController {
 							, 	@RequestParam(defaultValue = "") String allocationStatus
 							, 	@RequestParam(defaultValue = "1") int page
     							){
+    	accountName = accountName.trim();
+    	fullName = fullName.trim();
+    	productCode = productCode.trim();
+    	productName = productName.trim();
+    	customerName = customerName.trim();
+    	customerPhone = customerPhone.trim();
+
     	HttpSession session = request.getSession();
     	session.setAttribute("currentPage", page);
     	boolean checkBeginDate = false;
@@ -84,7 +92,7 @@ public class OrderController {
 													);
         Map<Integer, Map<String,String>> mapErrors = null;
         
-        int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+        int totalPage = totalRecord % LIMIT == 0 ? totalRecord / LIMIT : totalRecord / LIMIT + 1;
         List<Order> orders 
         					= orderService.search( accountName
 												,  fullName
@@ -138,7 +146,6 @@ public class OrderController {
 							,  @ModelAttribute("allocationList") AllocationList allocationList
 								){
 		Map<Integer, Map<String, String>> mapErrors = validate.allocation(allocationList.getAllocaties());
-		System.out.println(mapErrors.toString());
 		if(mapErrors.size() > 0) {
 			model.addAttribute("mapErrors", mapErrors);
 		}else {
@@ -162,15 +169,18 @@ public class OrderController {
 								,	@RequestParam(defaultValue = "1") 	int		pageProduct
 								, 	HttpServletRequest request
 									){
-		List<Customer> customers = orderService.customerZeroOrder(beginDate, endDate, (pageCustomer-1)*3);
-		List<ProductBestSellerResponse> productBestSeller = orderService.productBestSeller(beginDate, endDate, (pageProductBestSeller-1)*3);
-		List<Product> products = orderService.productZeroOrder(beginDate, endDate, (pageProduct-1)*3);
+		
+		
+		
+		List<Customer> customers = orderService.customerZeroOrder(beginDate, endDate, (pageCustomer-1)*LIMIT);
+		List<ProductBestSellerResponse> productBestSeller = orderService.productBestSeller(beginDate, endDate, (pageProductBestSeller-1)*LIMIT);
+		List<Product> products = orderService.productZeroOrder(beginDate, endDate, (pageProduct-1)*LIMIT);
 		int totalRecord = orderService.totalCustomerZeroOrder(beginDate, endDate);
-		int totalCustomerZeroOrder = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+		int totalCustomerZeroOrder = totalRecord % LIMIT == 0 ? totalRecord / LIMIT : totalRecord / LIMIT + 1;
 		totalRecord = orderService.totalProductBestSeller(beginDate, endDate);
-		int totalProductBestSeller =  totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+		int totalProductBestSeller =  totalRecord % LIMIT == 0 ? totalRecord / LIMIT : totalRecord / LIMIT + 1;
 		totalRecord = orderService.totalProductZeroOrder(beginDate, endDate);
-		int totalProductZeroOrder =  totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+		int totalProductZeroOrder =  totalRecord % LIMIT == 0 ? totalRecord / LIMIT : totalRecord / LIMIT + 1;
 		model.addAttribute("customers", customers);
 		model.addAttribute("productBestSeller", productBestSeller);
 		model.addAttribute("products", products);

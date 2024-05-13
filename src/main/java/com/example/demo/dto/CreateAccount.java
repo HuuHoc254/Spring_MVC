@@ -26,7 +26,7 @@ public class CreateAccount {
 
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 
@@ -36,7 +36,7 @@ public class CreateAccount {
 
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = password.trim();
 	}
 
 
@@ -46,7 +46,7 @@ public class CreateAccount {
 
 
 	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
+		this.confirmPassword = confirmPassword.trim();
 	}
 
 
@@ -56,7 +56,7 @@ public class CreateAccount {
 
 
 	public void setFullName(String fullName) {
-		this.fullName = fullName;
+		this.fullName = fullName.trim();
 	}
 
 
@@ -66,7 +66,7 @@ public class CreateAccount {
 
 
 	public void setPhone(String phone) {
-		this.phone = phone;
+		this.phone = phone.trim();
 	}
 
 }

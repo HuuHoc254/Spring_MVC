@@ -24,8 +24,8 @@ public class ProductService implements IProductService {
 							, 	int		page
 								) {
 		List<Map<String, Object>> map = productMapper.search(
-													 	code.trim()
-													, 	productName.trim()
+													 	code
+													, 	productName
 													, 	(page - 1) * 3);
 		return map.stream().map(m ->{
 			return convertToModel(m);
@@ -35,7 +35,7 @@ public class ProductService implements IProductService {
 	@Override
 	public int countSearch( String 	code
 						 , 	String 	name) {
-		return productMapper.countSearch(code.trim(), name.trim());
+		return productMapper.countSearch(code, name);
 	}
 	@Override
 	public Product convertToModel(Map<String,Object> map){
@@ -72,8 +72,8 @@ public class ProductService implements IProductService {
 
 	@Override
 	public boolean create(CreateProduct product) {
-		return productMapper.create(product.getCode().trim()
-								 ,  product.getName().trim()
+		return productMapper.create(product.getCode()
+								 ,  product.getName()
 								 , 	product.getPurchasePrice()
 								 , 	product.getSalePrice()
 								 , 	product.getInventoryQuantity()) > 0;
@@ -91,8 +91,8 @@ public class ProductService implements IProductService {
 	@Override
 	public boolean update(UpdateProduct update) {
 		return productMapper.update(update.getId()   
-								 , 	update.getCode().trim()
-								 , 	update.getName().trim()
+								 , 	update.getCode()
+								 , 	update.getName()
 								 , 	update.getPurchasePrice()
 								 , 	update.getSalePrice()
 								 , 	update.getVersion()) > 0;

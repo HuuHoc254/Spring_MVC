@@ -69,9 +69,9 @@ public class CustomerService implements ICustomerService {
 
 	@Override
 	public boolean create(CreateCustomer create) {
-		return customerMapper.create( create.getName().trim()
-									, create.getPhone().trim()
-									, create.getAddress().trim()
+		return customerMapper.create( create.getName()
+									, create.getPhone()
+									, create.getAddress()
 									, create.getAccountId()
 									) >0;
 	}
@@ -79,9 +79,9 @@ public class CustomerService implements ICustomerService {
 	@Override
 	public boolean update(UpdateCustomer update) {
 		return customerMapper.update( update.getId()
-									, update.getName().trim()
-									, update.getPhone().trim()
-									, update.getAddress().trim()
+									, update.getName()
+									, update.getPhone()
+									, update.getAddress()
 									, update.getVersion()
 									) >0;
 	}

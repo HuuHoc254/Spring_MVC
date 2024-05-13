@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/admin")
 public class AccountController {
-
+	final int LIMIT = 3;
 	@Autowired
 	private IAccountService accountService;
 	@Autowired
@@ -45,14 +45,19 @@ public class AccountController {
 						, @RequestParam(defaultValue = "1") int page
 							){
 		try {
+			name = name.trim();
+			fullName = fullName.trim();
+			phone = phone.trim();
+			
+			
 			HttpSession session = request.getSession();
-			session.setAttribute("accountName", name.trim());
-			session.setAttribute("fullName", fullName.trim());
-			session.setAttribute("phone", phone.trim());
+			session.setAttribute("accountName", name);
+			session.setAttribute("fullName", fullName);
+			session.setAttribute("phone", phone);
 			session.setAttribute("currentPage", page);
 
 			int totalRecord = accountService.countSearch( name, fullName, phone);
-			int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+			int totalPage = totalRecord % LIMIT == 0 ? totalRecord / LIMIT : totalRecord / LIMIT + 1;
 			List<Account> accounts = accountService.search(name, fullName, phone, page);
 			model.addAttribute("isAdmin", authService.isAdmin());
 			model.addAttribute("name", name);
@@ -150,7 +155,12 @@ public class AccountController {
 		try {
 			Account account = accountService.getById(id);
 	    	UpdateAccount accountU = new UpdateAccount();
-	    	BeanUtils.copyProperties(account, accountU);
+	    	accountU.setId(account.getId());
+	    	accountU.setName(account.getName());
+	    	accountU.setFullName(account.getFullName());
+	    	accountU.setPhone(account.getPhone());
+	    	accountU.setVersion(account.getVersion());
+
 	    	model.addAttribute("mapErrors",new HashMap<String, String>());
 	    	model.addAttribute("account", accountU);
 	    	model.addAttribute("isAdmin", authService.isAdmin());

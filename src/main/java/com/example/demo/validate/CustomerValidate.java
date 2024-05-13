@@ -19,15 +19,15 @@ public class CustomerValidate {
 	public Map<String,String> create(CreateCustomer customer) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(customer.getName().trim() == "") {
+        if(customer.getName() == "") {
         	mapErrors.put("customerName", "Không được để trống tên khách hàng!");
         }
 
-        if(customer.getAddress().trim() == "") {
+        if(customer.getAddress() == "") {
         	mapErrors.put("address", "Không được để địa chỉ khách hàng!");
         }
 
-        if(customer.getPhone().trim() == "") {
+        if(customer.getPhone() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại của khách hàng!");
         } else if(!customer.getPhone().matches( "^0\\d{9}$" )){
         	mapErrors.put("phone", "Sai định dạng số điện thoại!");
@@ -44,15 +44,15 @@ public class CustomerValidate {
 	public Map<String,String> update(UpdateCustomer customer) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(customer.getName().trim() == "") {
+        if(customer.getName() == "") {
         	mapErrors.put("customerName", "Không được để trống tên khách hàng!");
         }
 
-        if(customer.getAddress().trim() == "") {
+        if(customer.getAddress() == "") {
         	mapErrors.put("address", "Không được để địa chỉ khách hàng!");
         }
 
-        if(customer.getPhone().trim() == "") {
+        if(customer.getPhone() == "") {
         	mapErrors.put("phoneNumber", "Không được để trống số điện thoại của khách hàng!");
         } else if(!customer.getPhone().matches( "^0\\d{9}$" )){
         	mapErrors.put("phone", "Sai định dạng số điện thoại!");

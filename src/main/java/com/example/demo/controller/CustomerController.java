@@ -29,6 +29,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {
+	final int LIMIT = 3;
 	@Autowired
 	private CustomerValidate validate;
 	@Autowired
@@ -44,13 +45,16 @@ public class CustomerController {
 						, @RequestParam(defaultValue = "") String phone
 						, @RequestParam(defaultValue = "1") int page
 						){
+    	name = name.trim();
+    	phone = phone.trim();
+
     	HttpSession session = request.getSession();
-    	session.setAttribute("customerName", name.trim());
-    	session.setAttribute("phoneCustomer", phone.trim());
+    	session.setAttribute("customerName", name);
+    	session.setAttribute("phoneCustomer", phone);
     	session.setAttribute("currentPage", page);
     	
         int totalRecord = customerService.countSearch( name, phone);
-        int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+        int totalPage = totalRecord % LIMIT == 0 ? totalRecord / LIMIT : totalRecord / LIMIT + 1;
         List<Customer> customers 
         					= customerService.search( name
 													, phone

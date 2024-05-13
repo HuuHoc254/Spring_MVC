@@ -27,6 +27,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 @RequestMapping
 public class ProductController {
+	final int LIMIT = 3;
 	@Autowired
 	private AuthService authService;
 	
@@ -44,6 +45,8 @@ public class ProductController {
     							, @RequestParam(defaultValue = "1") int page
     							){
     	try {
+    		code = code.trim();
+    		name = name.trim();
     		HttpSession session = request.getSession();
         	if(page < 1) {
         		page = 1;
@@ -53,7 +56,7 @@ public class ProductController {
         	session.setAttribute("currentPage", page);
 
             int totalRecord = productService.countSearch( code, name );
-            int totalPage = totalRecord % 3 == 0 ? totalRecord / 3 : totalRecord / 3 + 1;
+            int totalPage = totalRecord % LIMIT == 0 ? totalRecord / LIMIT : totalRecord / LIMIT + 1;
             List<Product> products = productService.search(code, name, page);
             model.addAttribute("isAdmin", authService.isAdmin());
             model.addAttribute("code", code);
@@ -148,19 +151,26 @@ public class ProductController {
     		HttpSession session = request.getSession();
         	String code = (String) session.getAttribute("productCode");
         	String name = (String) session.getAttribute("productName");
-        	int page = (int) session.getAttribute("currentPage") ;
+        	int page = 1;
+        	if(session.getAttribute("currentPage") !=null ) {
+        		page = (int) session.getAttribute("currentPage");
+        	}
         	String url = "redirect:/product?page="+page;
-        	if( !code.trim().equals("") ) {
+        	if( !code.equals("") ) {
         		url += "&code="+code;
         	}
-        	if( !name.trim().equals("") ) {
+        	if( !name.equals("") ) {
         		url += "&name="+name;
         	}
 
         	Map<String, String> mapErrors = validate.update(product);
-    		if( mapErrors.size() == 0 && productService.update(product)) {
-    			session.setAttribute("successMessage", "Cập nhật sản phẩm thành công!");
-    			return url;
+    		if( mapErrors.size() == 0) {
+    			if (productService.update(product)) {
+	    			session.setAttribute("successMessage", "Cập nhật sản phẩm thành công!");
+	    			return url;
+	    		} else {
+	    			throw new Exception("Đã có sự thay đổi dữ liệu, xin vui vòng thử lại!");
+	    		}
     		}
         	model.addAttribute("product",product); 
         	model.addAttribute("mapErrors",mapErrors);
@@ -171,7 +181,6 @@ public class ProductController {
 			model.addAttribute("errorMessage", e.getMessage());
     		return "auth/errors";
 		}
-
     }
     
     @GetMapping("/admin/product/destroy/{id}")

@@ -22,7 +22,7 @@ public class CreateCustomer {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	public String getPhone() {
@@ -30,7 +30,7 @@ public class CreateCustomer {
 	}
 
 	public void setPhone(String phone) {
-		this.phone = phone;
+		this.phone = phone.trim();
 	}
 
 	public String getAddress() {
@@ -38,7 +38,7 @@ public class CreateCustomer {
 	}
 
 	public void setAddress(String address) {
-		this.address = address;
+		this.address = address.trim();
 	}
 
 	public Integer getAccountId() {

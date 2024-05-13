@@ -19,7 +19,7 @@ public class AccountValidate {
 	public Map<String,String> create(CreateAccount account) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(account.getName().trim() == "") {
+        if(account.getName() == "") {
         	mapErrors.put("accountName", "Không được để trống tên đăng nhập!");
         }else {
 	        check = accountService.existsByName(account.getName());
@@ -28,7 +28,7 @@ public class AccountValidate {
 	        }
         }
 
-        if(account.getPassword().trim() == "") {
+        if(account.getPassword() == "") {
         	mapErrors.put("password", "Không được để trống mật khẩu!");
         }else if(!account.getPassword().matches( "^(?=.*[A-Z])(?=.*\\d).+{8,}$" )){
         	mapErrors.put("password", "Sai định dạng mật khẩu!");
@@ -38,7 +38,7 @@ public class AccountValidate {
         	mapErrors.put("confirmPassword", "Xác nhận mật khẩu không trùng khớp!");
         }
 
-        if(account.getFullName().trim() == "") {
+        if(account.getFullName() == "") {
         	mapErrors.put("fullName", "Không được để tên nhân viên!");
         }
 
@@ -59,7 +59,7 @@ public class AccountValidate {
 	public Map<String,String> update(UpdateAccount account) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(account.getName().trim() == "") {
+        if(account.getName() == "") {
         	mapErrors.put("accountName", "Không được để trống tên đăng nhập!");
         }else {
         	check = accountService.existsByNameNotId(account.getName(), account.getId());
@@ -68,7 +68,7 @@ public class AccountValidate {
 	        }
         }
 
-        if(account.getPassword().trim() == "") {
+        if(account.getPassword() == "") {
         	mapErrors.put("password", "Không được để trống mật khẩu!");
         }else if(!account.getPassword().matches( "^(?=.*[A-Z])(?=.*\\d).+{8,}$" )){
         	mapErrors.put("password", "Sai định dạng mật khẩu!");
@@ -78,11 +78,11 @@ public class AccountValidate {
         	mapErrors.put("confirmPassword", "Xác nhận mật khẩu không trùng khớp!");
         }
 
-        if(account.getFullName().trim() == "") {
+        if(account.getFullName() == "") {
         	mapErrors.put("fullName", "Không được để tên nhân viên!");
         }
 
-        if(account.getPhone().trim() == "") {
+        if(account.getPhone() == "") {
         	mapErrors.put("phone", "Không được để trống số điện thoại!");
         } else if(!account.getPhone().matches( "^0\\d{9}$" )){
         	mapErrors.put("phone", "Sai định dạng số điện thoại!");

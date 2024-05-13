@@ -32,31 +32,31 @@ public class UpdateAccount {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
-		this.password = password;
+		this.password = password.trim();
 	}
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
 	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
+		this.confirmPassword = confirmPassword.trim();
 	}
 	public String getFullName() {
 		return fullName;
 	}
 	public void setFullName(String fullName) {
-		this.fullName = fullName;
+		this.fullName = fullName.trim();
 	}
 	public String getPhone() {
 		return phone;
 	}
 	public void setPhone(String phone) {
-		this.phone = phone;
+		this.phone = phone.trim();
 	}
 	public Integer getVersion() {
 		return version;

@@ -115,10 +115,16 @@
    			 </th:block>
 
    			 <th:block th:if="${totalPage > 8 and currentPage < 5}" th:each="i : ${#numbers.sequence(1, totalPage)}">
+   			 	<th:block th:if="${i > 5 and i != currentPage}"></th:block>
    			 	<li class="page-item" th:classappend="${i == currentPage ? 'active ' : '' }">
-	               	<a  th:if="${i < 6}"
+	               	<a  th:if="${i < 6 and i != currentPage}"
 	                	class="page-link" 
 	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
+	                 	th:text="${i}">
+	               	</a>
+	               	<a  th:if="${i == currentPage}"
+	                	class="page-link" 
+	                	href="#"
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == totalPage-1 }">...</div>
@@ -138,9 +144,14 @@
 	                 	th:text="${i}">
 	               	</a>
 	               	<div class="page-link"  th:if="${i == 2 }">...</div>
-	               	<a  th:if="${i > totalPage-5}"
+	               	<a  th:if="${i > totalPage-5 and i != currentPage}"
 	                	class="page-link" 
-	                	th:href="@{ i != currentPage ? '/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' } : '#'}"
+	                	th:href="@{'/product?page=' +${i} + ${ code != '' ? '&code=' + code : '' } + ${ name != '' ? '&name=' + name : '' }}"
+	                 	th:text="${i}">
+	               	</a>
+	               	<a  th:if="${i == currentPage}"
+	                	class="page-link" 
+	                	href="#"
 	                 	th:text="${i}">
 	               	</a>
             	</li>

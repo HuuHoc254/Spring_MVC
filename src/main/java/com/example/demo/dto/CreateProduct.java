@@ -22,13 +22,13 @@ public class CreateProduct {
 		return code;
 	}
 	public void setCode(String code) {
-		this.code = code;
+		this.code = code.trim();
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	public Double getPurchasePrice() {

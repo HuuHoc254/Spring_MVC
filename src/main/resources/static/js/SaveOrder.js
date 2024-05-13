@@ -106,7 +106,7 @@ function checkValue(cell) {
 				editedOrders.splice(existingIndex, 1);
 				editedOrders.forEach(order =>{
 					if( order.index > index){
-						order.index --;
+						order.index = (parseInt(order.index) - 1).toString();
 					}
 				})			
 			}
@@ -215,6 +215,7 @@ function loadInsertOrders() {
 		let $row = $table.find("tr").filter(function() {
 			return $(this).find(".index").text() === rowIndex.toString();//Lấy ra dòng chứa đơn hàng
 		});
+		
 		$row.find(".productCode").text(order.productCode);
 		$row.find(".productName").text(order.productName);
 		$row.find(".quantity").text(order.quantity);

@@ -83,10 +83,10 @@ public class AccountService implements IAccountService {
 	@Override
 	public boolean create(CreateAccount account) {
 		account.setPassword(encoder.encode(account.getPassword()));
-		return accountMapper.create(account.getName().trim()
+		return accountMapper.create(account.getName()
 								  , account.getPassword()
-								  , account.getFullName().trim()
-								  , account.getPhone().trim()
+								  , account.getFullName()
+								  , account.getPhone()
 								  	) > 0;
 	}
 	@Override
@@ -100,10 +100,10 @@ public class AccountService implements IAccountService {
 	@Override
 	public boolean update(UpdateAccount update) {
 		return accountMapper.update(update.getId()
-								  , update.getName().trim()
-								  , update.getFullName().trim()
+								  , update.getName()
+								  , update.getFullName()
 								  , encoder.encode(update.getPassword())
-								  , update.getPhone().trim()
+								  , update.getPhone()
 								  , update.getVersion()
 									) > 0;
 	}

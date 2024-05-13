@@ -19,7 +19,7 @@ public class ProductValidate {
 	public Map<String,String> create(CreateProduct create) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(create.getCode().trim() == "") {
+        if(create.getCode() == "") {
         	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
         }else {
 	        check = productService.existsByCode(create.getCode());
@@ -28,7 +28,7 @@ public class ProductValidate {
 	        }
         }
 
-        if(create.getName().trim()== "") {
+        if(create.getName()== "") {
         	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
         }else {
 	        check = productService.existsByName(create.getName());
@@ -57,7 +57,7 @@ public class ProductValidate {
 	public Map<String,String> update(UpdateProduct update) {
         Map<String, String> mapErrors = new HashMap<String, String>();
         boolean check = false;
-        if(update.getCode().trim() == "") {
+        if(update.getCode() == "") {
         	mapErrors.put("productCode", "Không được để trống mã sản phẩm!.");
         }else {
 	        check = productService.existsByCodeNotId(update.getCode(),update.getId());
@@ -66,7 +66,7 @@ public class ProductValidate {
 	        }
         }
 
-        if(update.getName().trim() == "") {
+        if(update.getName() == "") {
         	mapErrors.put("productName", "Không được để trống tên sản phẩm!.");
         }else {
 	        check = productService.existsByNameNotId(update.getName(),update.getId());
