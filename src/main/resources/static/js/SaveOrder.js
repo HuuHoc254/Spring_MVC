@@ -34,7 +34,8 @@ function checkValue(cell) {
 		quantity: quantity,
 		phone: phone,
 		customerName: customerName,
-		version: version
+		version: version,
+		page: currentPage
 	};
 	let oldOrder = {
 		index: index,
@@ -228,30 +229,60 @@ function loadInsertOrders() {
 function saveOrder() {
 	// Lấy mảng editedOrders từ local storage
 	let editedOrders = localStorage.getItem("editedOrders") || [];
-	console.log(editedOrders === "[]");
 	if( editedOrders == "" ){
 		alert("Không có sự thay đổi nào!");
 		return false;
 	}
-	// Sử dụng jQuery để gửi dữ liệu
-	$.ajax({
-		type: "POST",
-		url: "http://localhost:8080/api/order/save",
-		data: editedOrders, // Chuyển đổi đối tượng thành chuỗi JSON
-		contentType: "application/json", // Đặt kiểu dữ liệu của yêu cầu là JSON
-		success: function(response) {
-			if(Object.keys(response).length > 0){
-				saveErrorToLocalStorage(response);
-				displayErrorFromLocalStorage();
-				console.log(response);
-			}else{
-           		resert();// Tải lại trang sau khi thành công
-			}
-		},
-		error: function(xhr, status, error) {
-			alert("Lỗi khi gửi yêu cầu:", error);
-		}
+	editedOrders = JSON.parse(editedOrders);
+	var mapErrors = {};
+
+	//Validate
+	editedOrders.forEach(order =>{
+		let stt = order.index;
+	    let errors = {};
+	    if (order.productCode == "") {
+	        errors.productCode = "Không được để trống mã sản phẩm!";
+	    }
+	    if (order.phone == "") {
+	        errors.phone = "Không được để trống số điện thoại!"; 
+	    }
+	    if (order.quantity == "") {
+	        errors.quantity = "Không được để trống số lượng!"; 
+	    } else if (order.quantity < 1) {
+	        errors.quantity = "Số lượng không hợp lệ!"; 
+	    }
+	    
+	    if (Object.keys(errors).length > 0) {
+			errors.page = order.page;
+	        mapErrors[stt] = errors;
+	    }
 	});
+	editedOrders = JSON.stringify(editedOrders);
+	if(Object.keys(mapErrors).length > 0){
+		console.log(mapErrors);
+		saveErrorToLocalStorage(mapErrors);
+		displayErrorFromLocalStorage();
+		redirectURL(mapErrors);
+	}else{
+		// Sử dụng jQuery để gửi dữ liệu
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:8080/api/order/save",
+			data: editedOrders, // Chuyển đổi đối tượng thành chuỗi JSON
+			contentType: "application/json", // Đặt kiểu dữ liệu của yêu cầu là JSON
+			success: function(response) {
+				if(Object.keys(response).length > 0){
+					/*saveErrorToLocalStorage(response);
+					displayErrorFromLocalStorage();*/
+				}else{
+	           		resert();// Tải lại trang sau khi thành công
+				}
+			},
+			error: function(xhr, status, error) {
+				alert("Lỗi khi gửi yêu cầu:", error);
+			}
+		});
+	}
 }
 // Hàm lưu thông tin lỗi vào local storage
 function saveErrorToLocalStorage(errorData) {
@@ -263,7 +294,7 @@ function displayErrorFromLocalStorage() {
 	var lastRow = table.find("tr:last");
     var errorData = JSON.parse(localStorage.getItem("errorData"));
     if (errorData) {
-        for (const key in errorData) {
+        for (const [key] in errorData) {
             if (errorData.hasOwnProperty(key)) {
                 const mapErrorField = errorData[key];
                 const $row = table.find("tr").filter(function() {
@@ -287,4 +318,10 @@ function displayErrorFromLocalStorage() {
             }
         }
     }
+
+}
+function redirectURL(mapErrors){
+	let page = Object.values(mapErrors)[0].page;
+	//alert(page);
+	window.location.href = "http://localhost:8080/order?page="+page;
 }

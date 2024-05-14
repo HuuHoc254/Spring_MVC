@@ -15,3 +15,8 @@
 2024-05-10 16:04:45 ERROR CustomerController:124 - Account has ID= 2 request UPDATE customer HAS ID= 1
 2024-05-10 16:04:45 ERROR CustomerController:125 - Account can't update this customer
 2024-05-10 16:04:45 INFO  CustomerController:126 - ---------------END---------------
+2024-05-14 13:54:30 INFO  CustomerController:144 - ---------------BEGIN-------------
+2024-05-14 13:54:30 ERROR CustomerController:145 - OrderID not exits or Version do not match!
+2024-05-14 13:54:30 ERROR CustomerController:146 - OrderID: 25
+2024-05-14 13:54:30 ERROR CustomerController:147 - Version: 4
+2024-05-14 13:54:30 INFO  CustomerController:148 - ---------------END---------------
