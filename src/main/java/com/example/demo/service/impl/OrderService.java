@@ -106,6 +106,7 @@ public class OrderService implements IOrderService {
 		order.setProductName((String) map.get("product_name"));
 		order.setUnitPrice((Double) map.get("unit_price"));
 		order.setQuantity((Integer) map.get("quantity"));
+		order.setOrderStatusId((Integer) map.get("order_status_id"));
 		order.setOrderStatusName((String) map.get("order_status_name"));
 		order.setOrderDate((LocalDateTime) map.get("order_date"));
 		order.setVersion((int) map.get("version"));

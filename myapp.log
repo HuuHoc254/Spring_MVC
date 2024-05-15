@@ -20,3 +20,7 @@
 2024-05-14 13:54:30 ERROR CustomerController:146 - OrderID: 25
 2024-05-14 13:54:30 ERROR CustomerController:147 - Version: 4
 2024-05-14 13:54:30 INFO  CustomerController:148 - ---------------END---------------
+2024-05-15 11:21:37 INFO  CustomerController:127 - ---------------BEGIN-------------
+2024-05-15 11:21:37 ERROR CustomerController:128 - Account has ID= 2 request UPDATE customer HAS ID= 1
+2024-05-15 11:21:37 ERROR CustomerController:129 - Account can't update this customer
+2024-05-15 11:21:37 INFO  CustomerController:130 - ---------------END---------------

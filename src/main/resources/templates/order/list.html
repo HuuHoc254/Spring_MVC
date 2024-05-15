@@ -144,13 +144,12 @@
           <td class="text-center index"></td>
           <td th:text="${order.orderId}" class="orderId d-none" ></td>
           <td th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm:ss')}" ></td>
-          <td th:text="${order.productCode}" contenteditable="true" class="productCode" ></td>
-
-          <td th:text="${order.productName}" contenteditable="true" class="productName"></td>
+          <td th:text="${order.productCode}" th:contenteditable="${order.orderStatusId == 1 ? 'true' : 'false'}" class="productCode" ></td>
+          <td th:text="${order.productName}" th:contenteditable="${order.orderStatusId == 1 ? 'true' : 'false'}" class="productName"></td>
           <td th:text="${#numbers.formatDecimal(order.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
-          <td th:text="${order.quantity}" contenteditable="true" class="quantity text-center"></td>
-          <td th:text="${order.customerName}" contenteditable="true" class="customerName"></td>
-          <td th:text="${order.customerPhone}" contenteditable="true" class="phone"></td>
+          <td th:text="${order.quantity}" th:contenteditable="${order.orderStatusId == 1 ? 'true' : 'false'}" class="quantity text-center"></td>
+          <td th:text="${order.customerName}" th:contenteditable="${order.orderStatusId == 1 ? 'true' : 'false'}" class="customerName"></td>
+          <td th:text="${order.customerPhone}" th:contenteditable="${order.orderStatusId == 1 ? 'true' : 'false'}" class="phone"></td>
           <td th:text="${order.version}"  class="version d-none"></td>
           
           <td th:text="${order.customerAddress}"></td>

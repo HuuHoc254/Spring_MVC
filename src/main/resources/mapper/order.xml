@@ -64,8 +64,8 @@
 	    ,	 c.name as customer_name
 	    ,	 a.name as account_name
 	    ,	 a.full_name
+	    ,	 ost.id as order_status_id
 	    ,	 ost.name as order_status_name
-	    
 	    FROM
 	    	 orders 		o
 	    JOIN products 		p 	ON p.id 	= o.product_id

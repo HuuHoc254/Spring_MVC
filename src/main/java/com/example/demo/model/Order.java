@@ -15,6 +15,7 @@ public class Order {
     private String fullName;
     private LocalDateTime orderDate;
     private LocalDateTime allocationDate;
+    private Integer orderStatusId;
     private String orderStatusName;
     private Integer version;
     
@@ -23,8 +24,8 @@ public class Order {
 	}
 
 	public Order(Integer orderId, String productCode, String productName, Double unitPrice, Integer quantity,
-			String customerName, String customerAddress, String customerPhone, String accountName,
-			String fullName, LocalDateTime orderDate, LocalDateTime allocationDate, String orderStatusName,
+			String customerName, String customerAddress, String customerPhone, String accountName, String fullName,
+			LocalDateTime orderDate, LocalDateTime allocationDate, Integer orderStatusId, String orderStatusName,
 			Integer version) {
 		super();
 		this.orderId = orderId;
@@ -39,6 +40,7 @@ public class Order {
 		this.fullName = fullName;
 		this.orderDate = orderDate;
 		this.allocationDate = allocationDate;
+		this.orderStatusId = orderStatusId;
 		this.orderStatusName = orderStatusName;
 		this.version = version;
 	}
@@ -91,8 +93,6 @@ public class Order {
 		this.customerName = customerName;
 	}
 
-
-
 	public String getCustomerAddress() {
 		return customerAddress;
 	}
@@ -141,6 +141,14 @@ public class Order {
 		this.allocationDate = allocationDate;
 	}
 
+	public Integer getOrderStatusId() {
+		return orderStatusId;
+	}
+
+	public void setOrderStatusId(Integer orderStatusId) {
+		this.orderStatusId = orderStatusId;
+	}
+
 	public String getOrderStatusName() {
 		return orderStatusName;
 	}
@@ -156,5 +164,6 @@ public class Order {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
+
 	
 }

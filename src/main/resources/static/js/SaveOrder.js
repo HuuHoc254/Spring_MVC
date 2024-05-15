@@ -229,7 +229,7 @@ function loadInsertOrders() {
 function saveOrder() {
 	// Lấy mảng editedOrders từ local storage
 	let editedOrders = localStorage.getItem("editedOrders") || [];
-	if( editedOrders == "" ){
+	if( editedOrders == "" || editedOrders == '[]'){
 		alert("Không có sự thay đổi nào!");
 		return false;
 	}
@@ -259,7 +259,6 @@ function saveOrder() {
 	});
 	editedOrders = JSON.stringify(editedOrders);
 	if(Object.keys(mapErrors).length > 0){
-		console.log(mapErrors);
 		saveErrorToLocalStorage(mapErrors);
 		displayErrorFromLocalStorage();
 		redirectURL(mapErrors);
@@ -294,7 +293,8 @@ function displayErrorFromLocalStorage() {
 	var lastRow = table.find("tr:last");
     var errorData = JSON.parse(localStorage.getItem("errorData"));
     if (errorData) {
-        for (const [key] in errorData) {
+        for (const key in errorData) {
+			console.log(key);
             if (errorData.hasOwnProperty(key)) {
                 const mapErrorField = errorData[key];
                 const $row = table.find("tr").filter(function() {
@@ -323,5 +323,5 @@ function displayErrorFromLocalStorage() {
 function redirectURL(mapErrors){
 	let page = Object.values(mapErrors)[0].page;
 	//alert(page);
-	window.location.href = "http://localhost:8080/order?page="+page;
+	window.location.href = window.location.href.replace('page='+currentPage,'page='+page);
 }
