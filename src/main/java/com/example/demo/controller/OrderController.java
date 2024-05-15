@@ -198,4 +198,12 @@ public class OrderController {
     	model.addAttribute("pageProduct",pageProduct);
 		return "analytics/show";
 	}
+	@GetMapping("/admin/analytics")
+	private String analytics(	Model model
+							, 	@RequestParam(defaultValue = "") 	String 	beginDate
+							, 	@RequestParam(defaultValue = "") 	String 	endDate
+							, 	HttpServletRequest request
+								){
+		return "analytics/list";
+	}
 }
