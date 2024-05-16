@@ -60,7 +60,7 @@
             <table width="100%" class="table-bordered mb-3">
                 <thead>
                 <tr class="bg-dark text-light">
-                    <th scope="col" class="text-center col-1">Số thứ tự</th>
+                    <th scope="col" class="text-center col-1">STT</th>
                     <th scope="col" class="col-3" >Tên khách hàng</th>
                     <th scope="col" class="col-3" >Số điện thoại</th>
                     <th scope="col" class="col-3" >Địa chỉ</th>
@@ -79,10 +79,10 @@
             <table width="100%" class="table-bordered mb-3">
                 <thead>
                 <tr class="bg-dark text-light">
-                    <th scope="col" class="text-center">Số thứ tự</th>
-                    <th scope="col">Mã sản phẩm</th>
-                    <th scope="col">Tên sản phẩm</th>
-                    <th scope="col" class="text-center">Số lượng</th>
+                    <th scope="col" class="text-center col-1">STT</th>
+                    <th scope="col" class="col-3" >Mã sản phẩm</th>
+                    <th scope="col" class="col-3" >Tên sản phẩm</th>
+                    <th scope="col" class="text-center col-2">Số lượng</th>
                     </tr>
                 </thead>
                 <tbody id="product">
@@ -97,9 +97,9 @@
             <table width="100%" class="table-bordered mb-3">
                 <thead>
                 <tr class="bg-dark text-light">
-                    <th scope="col" class="text-center">Số thứ tự</th>
-                    <th scope="col">Mã sản phẩm</th>
-                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col" class="text-center col-2">STT</th>
+                    <th scope="col" class="col-4" >Mã sản phẩm</th>
+                    <th scope="col" class="col-4" >Tên sản phẩm</th>
                     </tr>
                 </thead>
                 <tbody id="productZeroOrder">
@@ -167,11 +167,13 @@
 					if( totalPage <=8 ) {
 						for( let i=1;i<=totalPage;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#customer').empty();
-								$('#customerPage').empty();
-					            customerZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#customer').empty();
+									$('#customerPage').empty();
+						            customerZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -182,11 +184,13 @@
 					} else if ( totalPage>8 && page<5) {
 						for( let i=1;i<=5;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#customer').empty();
-								$('#customerPage').empty();
-					            customerZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#customer').empty();
+									$('#customerPage').empty();
+						            customerZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -206,7 +210,7 @@
 						li = $('<li>').addClass('page-item').append(pageLink);
 						ul.append(li);
 					} else if ( totalPage>8 && page>(totalPage-4) ) {
-						pageLink = $('<p>').addClass('page-link').text(totalPage);
+						pageLink = $('<p>').addClass('page-link').text(1);
 						pageLink.click( function() {
 							$('#customer').empty();
 							$('#customerPage').empty();
@@ -219,13 +223,15 @@
 						li = $('<li>').addClass('page-item').append(pageLink);
 						ul.append(li);
 
-						for( let i=(totalPage-5);i<=totalPage;i++ ) {
+						for( let i=(totalPage-4);i<=totalPage;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#customer').empty();
-								$('#customerPage').empty();
-					            customerZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#customer').empty();
+									$('#customerPage').empty();
+						            customerZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -233,6 +239,48 @@
 					        ul.append(li);
 						}
 
+					} else {
+						pageLink = $('<p>').addClass('page-link').text(1);
+						pageLink.click( function() {
+							$('#customer').empty();
+							$('#customerPage').empty();
+				            customerZeroOrder(1); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+				        });
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						pageLink = $('<p>').addClass('page-link').text('...');
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						for( let i=(page-1);i<=page+1;i++ ) {
+							let pageLink = $('<p>').addClass('page-link').text(i);
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#customer').empty();
+									$('#customerPage').empty();
+						            customerZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+					       		});
+							}
+							let li = $('<li>').addClass('page-item').append(pageLink);
+							if ( i==page ){
+								li.addClass('active');
+							}
+					        ul.append(li);
+						}
+
+						pageLink = $('<p>').addClass('page-link').text('...');
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						pageLink = $('<p>').addClass('page-link').text(totalPage);
+						pageLink.click( function() {
+							$('#customer').empty();
+							$('#customerPage').empty();
+				            customerZeroOrder(totalPage); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+				        });
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
 					}
 
 					if(page<totalPage){
@@ -296,11 +344,13 @@
 					if( totalPage <=8 ) {
 						for( let i=1;i<=totalPage;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#product').empty();
-								$('#productPage').empty();
-					            productBestSeller(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#product').empty();
+									$('#productPage').empty();
+									productBestSeller(i);
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -311,11 +361,13 @@
 					} else if ( totalPage>8 && page<5) {
 						for( let i=1;i<=5;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#product').empty();
-								$('#productPage').empty();
-					            productBestSeller(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#product').empty();
+									$('#productPage').empty();
+									productBestSeller(i);
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -330,7 +382,7 @@
 						pageLink.click( function() {
 							$('#product').empty();
 							$('#productPage').empty();
-				            productBestSeller(totalPage); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+				            productBestSeller(totalPage);
 				        });
 						li = $('<li>').addClass('page-item').append(pageLink);
 						ul.append(li);
@@ -339,7 +391,7 @@
 						pageLink.click( function() {
 							$('#product').empty();
 							$('#productPage').empty();
-				            productBestSeller(1); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+				            productBestSeller(1);
 				        });
 						li = $('<li>').addClass('page-item').append(pageLink);
 						ul.append(li);
@@ -348,13 +400,15 @@
 						li = $('<li>').addClass('page-item').append(pageLink);
 						ul.append(li);
 
-						for( let i=(totalPage-5);i<=totalPage;i++ ) {
+						for( let i=(totalPage-4);i<=totalPage;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#product').empty();
-								$('#productPage').empty();
-					            productBestSeller(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#product').empty();
+									$('#productPage').empty();
+									productBestSeller(i);
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -362,6 +416,48 @@
 					        ul.append(li);
 						}
 
+					} else {
+						pageLink = $('<p>').addClass('page-link').text(1);
+						pageLink.click( function() {
+							$('#product').empty();
+							$('#productPage').empty();
+				            productBestSeller(1);
+				        });
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						pageLink = $('<p>').addClass('page-link').text('...');
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						for( let i=(page-1);i<=page+1;i++ ) {
+							let pageLink = $('<p>').addClass('page-link').text(i);
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#product').empty();
+									$('#productPage').empty();
+									productBestSeller(i);
+					       		});
+							}
+							let li = $('<li>').addClass('page-item').append(pageLink);
+							if ( i==page ){
+								li.addClass('active');
+							}
+					        ul.append(li);
+						}
+
+						pageLink = $('<p>').addClass('page-link').text('...');
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						pageLink = $('<p>').addClass('page-link').text(totalPage);
+						pageLink.click( function() {
+							$('#product').empty();
+							$('#productPage').empty();
+				            productBestSeller(totalPage);
+				        });
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
 					}
 
 					if(page<totalPage){
@@ -425,11 +521,13 @@
 					if( totalPage <=8 ) {
 						for( let i=1;i<=totalPage;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#productZeroOrder').empty();
-								$('#productZeroOrderPage').empty();
-					            productBestSeller(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#productZeroOrder').empty();
+									$('#productZeroOrderPage').empty();
+									productZeroOrder(i);
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -440,11 +538,13 @@
 					} else if ( totalPage>8 && page<5) {
 						for( let i=1;i<=5;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#productZeroOrder').empty();
-								$('#productZeroOrderPage').empty();
-								productZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#productZeroOrder').empty();
+									$('#productZeroOrderPage').empty();
+									productZeroOrder(i);
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -459,7 +559,7 @@
 						pageLink.click( function() {
 							$('#productZeroOrder').empty();
 							$('#productZeroOrderPage').empty();
-							productZeroOrder(totalPage); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+							productZeroOrder(totalPage);
 				        });
 						li = $('<li>').addClass('page-item').append(pageLink);
 						ul.append(li);
@@ -468,7 +568,7 @@
 						pageLink.click( function() {
 							$('#productZeroOrder').empty();
 							$('#productZeroOrderPage').empty();
-							productZeroOrder(1); // Gọi hàm customerZeroOrder với giá trị page tương ứng
+							productZeroOrder(1);
 				        });
 						li = $('<li>').addClass('page-item').append(pageLink);
 						ul.append(li);
@@ -477,13 +577,15 @@
 						li = $('<li>').addClass('page-item').append(pageLink);
 						ul.append(li);
 
-						for( let i=(totalPage-5);i<=totalPage;i++ ) {
+						for( let i=(totalPage-4);i<=totalPage;i++ ) {
 							let pageLink = $('<p>').addClass('page-link').text(i);
-							pageLink.click( function() {
-								$('#productZeroOrder').empty();
-								$('#productZeroOrderPage').empty();
-								productZeroOrder(i); // Gọi hàm customerZeroOrder với giá trị page tương ứng
-					        });
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#productZeroOrder').empty();
+									$('#productZeroOrderPage').empty();
+									productZeroOrder(i);
+					       		});
+							}
 							let li = $('<li>').addClass('page-item').append(pageLink);
 							if ( i==page ){
 								li.addClass('active');
@@ -491,6 +593,48 @@
 					        ul.append(li);
 						}
 
+					} else {
+						pageLink = $('<p>').addClass('page-link').text(1);
+						pageLink.click( function() {
+							$('#productZeroOrder').empty();
+							$('#productZeroOrderPage').empty();
+							productZeroOrder(1);
+				        });
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						pageLink = $('<p>').addClass('page-link').text('...');
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						for( let i=(page-1);i<=page+1;i++ ) {
+							let pageLink = $('<p>').addClass('page-link').text(i);
+							if( page!=i ){
+								pageLink.click( function() {
+									$('#productZeroOrder').empty();
+									$('#productZeroOrderPage').empty();
+									productZeroOrder(i);
+					       		});
+							}
+							let li = $('<li>').addClass('page-item').append(pageLink);
+							if ( i==page ){
+								li.addClass('active');
+							}
+					        ul.append(li);
+						}
+
+						pageLink = $('<p>').addClass('page-link').text('...');
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
+
+						pageLink = $('<p>').addClass('page-link').text(totalPage);
+						pageLink.click( function() {
+							$('#productZeroOrder').empty();
+							$('#productZeroOrderPage').empty();
+							productZeroOrder(totalPage);
+				        });
+						li = $('<li>').addClass('page-item').append(pageLink);
+						ul.append(li);
 					}
 
 					if(page<totalPage){

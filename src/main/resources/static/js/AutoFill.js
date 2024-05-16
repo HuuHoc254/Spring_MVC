@@ -43,6 +43,9 @@ async function fillDataProduct(cellData, type) {
 	        }
 	    });
 	    cellInsert.text(response);
+	    if(response==""){
+			cellData.text("");
+		}
     } catch (error) {
         console.error('Error:', error);
     }
@@ -64,7 +67,9 @@ async function fillDataCustomer(cellData, type) {
 	            [type === 'name' ? 'phone' : 'name']: data
 	        }
 	    });
-	
+		if(response==""){
+			cellData.text("");
+		}
 	    cellInsert.text(response);
     } catch (error) {
         console.error('Error:', error);

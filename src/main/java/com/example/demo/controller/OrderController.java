@@ -204,6 +204,9 @@ public class OrderController {
 							, 	@RequestParam(defaultValue = "") 	String 	endDate
 							, 	HttpServletRequest request
 								){
+    	model.addAttribute("beginDate",beginDate);
+    	model.addAttribute("endDate",endDate);
+		model.addAttribute("isAdmin", authService.isAdmin());
 		return "analytics/list";
 	}
 }
